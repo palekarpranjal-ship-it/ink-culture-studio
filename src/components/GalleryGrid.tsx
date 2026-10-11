@@ -134,9 +134,9 @@ export function GalleryGrid() {
         <div className="-mx-5 overflow-x-auto px-5 pb-1 md:mx-0 md:px-0" role="tablist" aria-label="Filter by artist">
           <div className="flex w-max items-center gap-2 md:flex-wrap md:w-auto">
             <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-bone/35">Artist</span>
-            {["All", "Karan", "Lucky"].map((a) => (
-              <Chip key={a} active={artist === a} onClick={() => setArtist(a)}>
-                {a}
+            {[["All", "All"], ["karan", "Karan Parmar"], ["lucky", "Lucky Solanki"]].map(([id, label]) => (
+              <Chip key={id} active={artist === id} onClick={() => setArtist(id)}>
+                {label}
               </Chip>
             ))}
             {artist !== "All" && (
