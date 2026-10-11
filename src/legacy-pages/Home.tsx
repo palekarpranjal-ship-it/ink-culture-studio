@@ -226,7 +226,12 @@ function ArtistsSection() {
         <SectionHeading index="02" kicker="The Roster" title={<>Meet your<br />artists.</>} />
         <div className="grid gap-8 md:grid-cols-2 md:gap-10">
           {artists.map((a, i) => (
-            <ArtistCard key={a.id} artist={a} index={i} />
+            <ArtistCard
+              key={a.id}
+              artist={a}
+              index={i}
+              cardImage={a.id === "lucky" ? "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Monochrome%20Glasses%20Avatar%20Sketch-k0nw9prg4yUrUYVdmoqHeF5PYINsNi.png" : "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Monochrome%20Glasses%20Avatar%20Sketch-3NVNcVABvhFqpHoG65Zze9r4uuwHkp.png"}
+            />
           ))}
         </div>
         <Reveal className="mt-10 text-center">

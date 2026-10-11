@@ -170,7 +170,7 @@ function PowerAura({ accent, active }: { accent: Artist["accent"]; active: boole
 /* ==================== CARD ==================== */
 
 /** Large collectible artist card with flip-to-details interaction. */
-export function ArtistCard({ artist, index, showPhoto = false }: { artist: Artist; index: number; showPhoto?: boolean }) {
+export function ArtistCard({ artist, index, showPhoto = false, cardImage }: { artist: Artist; index: number; showPhoto?: boolean; cardImage?: string }) {
   const [flipped, setFlipped] = useState(false);
   const reduce = useReducedMotion();
 
@@ -233,7 +233,14 @@ export function ArtistCard({ artist, index, showPhoto = false }: { artist: Artis
             >
               <div className="pointer-events-none absolute inset-0 grain opacity-40" aria-hidden />
               <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]">
-                {showPhoto ? (
+                {cardImage ? (
+                  <img
+                    src={cardImage}
+                    alt={`${artist.name} stick-figure artist illustration`}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                ) : showPhoto ? (
                   <img
                     src={artist.image}
                     alt={`${artist.name}, tattoo artist at Street Culture`}
