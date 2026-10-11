@@ -199,7 +199,7 @@ function Philosophy() {
             <MaskReveal>
               <div className="relative aspect-[4/5] border border-bone/10 bg-gradient-to-br from-[#1b1b1b] to-[#0f0f0f]">
                 <div className="absolute inset-0 grain opacity-50" aria-hidden />
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Ink%20Studio%20Companions-ipVsCVVIZ1Ot6G7H2lcZDHcoIG4tyU.png" alt="Street Culture Tattoo Studio artists" className="absolute inset-0 h-full w-full object-contain object-bottom" />
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Stick-Figure%20Tattoo%20Studio%20Scene-YW6ESIggoXU96TPI5TB4ITu6csp9QT.png" alt="Street Culture Tattoo Studio artists" className="absolute inset-0 h-full w-full object-contain object-bottom" />
                 <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
                   <p className="font-marker text-2xl text-cream/80">every line means something</p>
                   <EyeMotif className="h-10 w-16 text-blood/50" />
@@ -315,7 +315,7 @@ function InkLabTeaser() {
                   <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blood">Concept Brief · Draft 01</p>
                   <p className="mt-3 font-display text-2xl uppercase text-bone">“Monsoon Moth”</p>
                   <div className="mt-4 space-y-2 font-body text-sm text-bone/70">
-                    <p><span className="text-blood">THE IDEA —</span> A black & grey moth cradling a tiny umbrella, riding a downpour of fine-line rain…</p>
+                    <p><span className="text-blood">THE IDEA —</span> A black & grey moth cradling a tiny umbrella, riding a downpour of fine-line rain���</p>
                     <p><span className="text-blood">PLACEMENT —</span> Wraps the forearm; wings open with the muscle.</p>
                     <p><span className="text-blood">ARTIST MATCH —</span> Karan. Whip-shaded gradients, single-needle rain.</p>
                   </div>
