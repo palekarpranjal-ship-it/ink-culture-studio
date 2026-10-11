@@ -5,7 +5,7 @@ import { CursorLabel } from "@/components/CursorLabel";
 import { PlaceholderImage } from "@/components/PlaceholderImage";
 import { InkButton, MaskReveal, PageHero, Reveal, SectionHeading } from "@/components/ui-kit";
 import { breadcrumbSchema, pageMeta, personSchema } from "@/config/seo";
-import { galleryItems } from "@/data/gallery";
+import { artistPortfolioItems } from "@/data/gallery";
 import { getArtist, statLabelsFor } from "@/data/artists";
 import { useJsonLd, useSeo } from "@/hooks/use-seo";
 import { cn } from "@/lib/utils";
@@ -48,7 +48,7 @@ export default function Portfolio() {
           title:
             pageMeta[artist.id as "karan" | "lucky"]?.title ??
             `${artist.name} — Portfolio | Street Culture Tattoo Studio & Academy`,
-          description: `${artist.name}'s tattoo portfolio — ${artist.style} work from Street Culture Tattoo Studio & Academy, Kandivali West, Mumbai. Browse pieces and book a session.`,
+          description: `${artist.name === "Lucky" ? "Lucky Solanki" : "Karan Parmar"}'s tattoo portfolio — ${artist.style} work from Street Culture Tattoo Studio & Academy, Kandivali West, Mumbai. Browse pieces and book a session.`,
           path: `/artists/${artist.id}/portfolio`,
         }
       : null,
@@ -67,7 +67,7 @@ export default function Portfolio() {
       : null,
   );
 
-  const work = useMemo(() => galleryItems.filter((g) => g.artistId === artist?.id), [artist?.id]);
+  const work = useMemo(() => artistPortfolioItems[artist?.id ?? ""] ?? [], [artist?.id]);
 
   if (!artist) return <NotFound />;
 

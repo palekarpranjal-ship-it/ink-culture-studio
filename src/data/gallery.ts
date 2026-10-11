@@ -196,6 +196,47 @@ const uploadedCategories = Object.entries(uploadedPhotos).flatMap(([category, ph
   photos.map((src, index) => ({ category, src, index })),
 );
 
+const imageRange = (folder: string, prefix: string, numbers: number[]) =>
+  numbers.map((number) => `/images/placeholder/${folder}/${prefix}${number}.jpg`);
+
+const artistPortfolioSources = {
+  lucky: [
+    ...imageRange("lucky portfolio", "Website clr ", Array.from({ length: 27 }, (_, i) => i + 1).filter((n) => n !== 26)),
+    ...imageRange("lucky portfolio", "Website Realistic ", Array.from({ length: 25 }, (_, i) => i + 1)),
+    ...imageRange("lucky portfolio", "Website Animal ", [2, 3, 4, 5, 6, 7]),
+    ...imageRange("lucky portfolio", "Website LINE ART ", [6, 17, 18, 25, 26]),
+    ...imageRange("lucky portfolio", "Website Religeous ", [1, 5, 6, 7, 8, 21, 22]),
+    ...imageRange("lucky portfolio", "Website SCRIPT ", [6, 7, 9]),
+    ...imageRange("lucky portfolio", "Website WOMENS IDEA ", [4, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]),
+  ],
+  karan: [
+    ...imageRange("Karan portfolio", "Website LINE ART ", [8, 9, 10, 11, 12, 14, 15, 16, 19, 20, 21, 22, 23, 24]),
+    ...imageRange("Karan portfolio", "Website SCRIPT ", [1, 2, 3, 4, 5]),
+    ...imageRange("Karan portfolio", "Website Animal ", [10]),
+    ...imageRange("Karan portfolio", "Website WOMENS IDEA ", [26, 27, 28, 29]),
+  ],
+} as const;
+
+export const artistPortfolioItems: Record<string, GalleryItem[]> = Object.entries(artistPortfolioSources).reduce(
+  (all, [artistId, sources]) => {
+    all[artistId] = sources.map((src, index) => ({
+      id: `portfolio-${artistId}-${index + 1}`,
+      title: `${artistId} portfolio ${index + 1}`,
+      category: artistId === "lucky" ? "Colour Tattoos" : "Line Art",
+      inkColor: artistId === "lucky" ? "Colour" : "Black & Grey",
+      artistId,
+      artistName: artistId === "lucky" ? "Lucky Solanki" : "Karan Parmar",
+      src,
+      alt: `${artistId === "lucky" ? "Lucky Solanki" : "Karan Parmar"} tattoo portfolio artwork at Street Culture Tattoo Studio, Kandivali West`,
+      ratio: 1,
+    }));
+    return all;
+  },
+  {} as Record<string, GalleryItem[]>,
+);
+
+const portfolioItems = Object.values(artistPortfolioItems).flat();
+
 const titles = [
   "Saint of Streets",
   "Mumbai Monsoon",
@@ -234,4 +275,4 @@ const artistsShim = [
   { id: "lucky", name: "Lucky" },
 ];
 
-export const galleryItems: GalleryItem[] = build();
+export const galleryItems: GalleryItem[] = [...build(), ...portfolioItems];

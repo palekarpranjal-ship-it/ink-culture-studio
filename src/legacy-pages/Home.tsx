@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
-import { ArtistPortrait, EyeMotif, HandMotif, InkStroke, LocalTrainMotif, QuestionBlock, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
+import { EyeMotif, HandMotif, InkStroke, LocalTrainMotif, QuestionBlock, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
 import { GalleryGridMini } from "@/components/GalleryGridMini";
 import { InkButton, MaskReveal, Reveal, SectionHeading } from "@/components/ui-kit";
@@ -199,7 +199,7 @@ function Philosophy() {
             <MaskReveal>
               <div className="relative aspect-[4/5] border border-bone/10 bg-gradient-to-br from-[#1b1b1b] to-[#0f0f0f]">
                 <div className="absolute inset-0 grain opacity-50" aria-hidden />
-                <ArtistPortrait who="karan" className="absolute inset-0 m-auto h-3/4 text-bone/20" />
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Monochrome%20Tattoo%20Studio%20Duo-EbmxCaViIqulJM85ZVQKfTNy1tLUy9.png" alt="Street Culture Tattoo Studio artists" className="absolute inset-0 h-full w-full object-contain object-bottom" />
                 <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
                   <p className="font-marker text-2xl text-cream/80">every line means something</p>
                   <EyeMotif className="h-10 w-16 text-blood/50" />
@@ -226,7 +226,7 @@ function ArtistsSection() {
         <SectionHeading index="02" kicker="The Roster" title={<>Meet your<br />artists.</>} />
         <div className="grid gap-8 md:grid-cols-2 md:gap-10">
           {artists.map((a, i) => (
-            <ArtistCard key={a.id} artist={a} index={i} />
+            <ArtistCard key={a.id} artist={a} index={i} showPhoto />
           ))}
         </div>
         <Reveal className="mt-10 text-center">
