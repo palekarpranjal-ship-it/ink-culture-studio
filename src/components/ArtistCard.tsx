@@ -238,7 +238,7 @@ export function ArtistCard({ artist, index, showPhoto = false }: { artist: Artis
                     src={artist.image}
                     alt={`${artist.name}, tattoo artist at Street Culture`}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover object-center grayscale-[0.15] transition-transform duration-500 group-hover:scale-[1.03]"
+                    className="absolute inset-0 h-full w-full object-contain object-center grayscale-[0.15] transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 ) : (
                   <StickArtistFigure who={artist.portrait} className="absolute inset-0 m-auto h-4/5 text-bone/80" />
