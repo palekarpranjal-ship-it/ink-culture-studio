@@ -32,7 +32,7 @@ export function StreetCultureBot() {
           <Link to="/gallery" className="border border-acid/50 px-3 py-2 text-[10px] uppercase tracking-[0.14em] text-acid hover:bg-acid hover:text-ink">Browse gallery</Link>
           <Link to="/book" className="border border-blood px-3 py-2 text-[10px] uppercase tracking-[0.14em] text-blood hover:bg-blood hover:text-ink">Book a session</Link>
         </div> : null}
-        <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={open ? "Close Street Culture Bot menu" : "Open Street Culture Bot menu"} className="flex items-center gap-3 border-2 border-bone/25 bg-[#101b2d] px-3 py-2 text-left text-bone shadow-[4px_4px_0_0_var(--blood)]">
+        <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={open ? "Close Street Culture Bot menu" : "Open Street Culture Bot menu"} title="Street Culture Bot" className="group relative grid size-16 place-items-center rounded-full border-2 border-acid/80 bg-[#101b2d] text-acid shadow-[0_0_22px_rgba(43,183,255,0.35)] transition hover:scale-110 hover:bg-[#162945] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-acid">
 
         <div className="relative grid size-12 place-items-center border border-acid/70 bg-ink text-acid shadow-[0_0_18px_rgba(255,255,255,0.22)]">
           <span aria-hidden className="absolute -left-5 top-2 h-4 w-8 rounded-full bg-white/90 blur-[1px] animate-[cloud-drift_4s_ease-in-out_infinite]" />
@@ -42,12 +42,7 @@ export function StreetCultureBot() {
           <span aria-hidden className="absolute bottom-1 left-1 h-1 w-2 bg-acid" />
           <span aria-hidden className="absolute bottom-1 right-1 h-1 w-2 bg-acid" />
         </div>
-        <div>
-          <p className="font-display text-[10px] font-bold uppercase tracking-[0.18em]">Street Culture Bot</p>
-          <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-bone/55">
-            {count === 0 ? "ready for your idea" : `${count} booking${count === 1 ? "" : "s"} in the book`}
-          </p>
-        </div>
+        <span className="sr-only">Street Culture Bot{count > 0 ? `, ${count} bookings in the book` : ", ready for your idea"}</span>
         </button>
       </div>
     </aside>
