@@ -267,7 +267,7 @@ export function ArtistCard({ artist, index, showPhoto = false, cardImage }: { ar
 
             <div className="mt-5">
               <div className="mb-2 flex items-center justify-between">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.25em] text-bone/45">Portfolio work</p>
+                <p className="text-[9px] font-semibold uppercase tracking-[0.25em] text-bone/45">See their work</p>
                 <Link to={`/artists/${artist.id}/portfolio`} className="text-[9px] uppercase tracking-[0.2em] text-blood hover:text-bone">
                   View all
                 </Link>
