@@ -15,6 +15,15 @@ const why = [
   { icon: ShieldIcon, title: "Hygiene From Day One", body: "Sterile discipline is a module, not a footnote. It's the difference between a tattooist and a liability." },
 ];
 
+const masterCover = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Standy%20B%26G-KLch8cQN0JADEb9RxnOeTVpowQY0o7.jpg";
+const courseCovers = [
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Drawing%2001-6Sbxe1KMzSRFhywLMI8ifhB5tyNsx6.jpg",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Tattooing%2002-sypZl7pBaU9VFvROVOfeFCuhd4wiuZ.jpg",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Colour%20Tat%2003-D5wb4KSQHWlhQO7GntoAGMPEUN20hS.jpg",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Designing%2004-0udHYxs2qhoXrJ7kNRpb0kcpfpdsqN.jpg",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Mngmant%2005-GojGjLmcYHT62r3aV66f4G0yOeJJbb.jpg",
+];
+
 const audiences = [
   "Complete beginners who want the craft done properly",
   "Artists from other mediums moving into tattoo",
@@ -93,8 +102,23 @@ function CurriculumSection() {
     <section className="border-t border-bone/10 py-20 md:py-28" aria-labelledby="curriculum-heading">
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
         <SectionHeading index="03" kicker="Course Structure" title={<>Four ways in.<br />Choose your path.</>} />
+        <div className="mb-8 overflow-hidden border-2 border-[#2bb7ff]/60 bg-black shadow-[8px_8px_0_0_#efbe3a]">
+          <button type="button" onClick={() => setSelectedCourse(selectedCourse === "master-course" ? null : "master-course")} className="group grid w-full text-left md:grid-cols-[0.9fr_1.1fr]" aria-expanded={selectedCourse === "master-course"}>
+            <div className="relative min-h-[360px] overflow-hidden">
+              <img src={masterCover} alt="Master in Black and Grey Tattooing course cover" className="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+              <span className="absolute bottom-5 left-5 border border-[#2bb7ff] bg-black/70 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#2bb7ff]">Primary course</span>
+            </div>
+            <div className="flex flex-col justify-center p-7 md:p-10">
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#2bb7ff]">01 / The complete pathway</p>
+              <h3 className="mt-3 font-display text-4xl font-bold uppercase leading-none text-bone md:text-6xl">Master in<br />Black & Grey</h3>
+              <p className="mt-5 max-w-lg font-body text-sm leading-relaxed text-bone/65">Open the cover to explore the full master course pamphlet: drawing, tattooing, colour, designing and studio management.</p>
+              <span className="mt-7 inline-flex w-fit border-2 border-[#2bb7ff] px-4 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#2bb7ff] transition group-hover:bg-[#2bb7ff] group-hover:text-ink">{selectedCourse === "master-course" ? "Close pamphlet" : "Open pamphlet"}</span>
+            </div>
+          </button>
+        </div>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {academyCourses.map((c, i) => (
+          {academyCourses.filter((course) => course.id !== "master-course").map((c, i) => (
             <Fragment key={`${c.id}-group`}>
             <motion.article
               key={c.id}
@@ -114,6 +138,10 @@ function CurriculumSection() {
               tabIndex={0}
               aria-expanded={selectedCourse === c.id}
             >
+              <div className="relative mb-5 h-36 overflow-hidden border border-bone/10">
+                <img src={courseCovers[i % courseCovers.length]} alt={`${c.title} course reference`} className="size-full object-cover opacity-75 transition duration-500 group-hover:scale-105 group-hover:opacity-100" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
+              </div>
               <div className="pointer-events-none absolute right-5 top-5 opacity-60 transition duration-500 group-hover:rotate-12 group-hover:scale-110" aria-hidden>
                 <span className="block size-9 rounded-full border border-[#2bb7ff]/50" />
                 <span className="absolute left-1/2 top-[-6px] h-12 w-px -translate-x-1/2 rotate-45 bg-[#2bb7ff]/50" />

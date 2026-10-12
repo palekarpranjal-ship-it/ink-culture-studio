@@ -164,6 +164,11 @@
   50% { transform: translateY(-4px) rotate(-0.35deg); }
 }
 
+@keyframes cloud-drift {
+  0%, 100% { transform: translateX(-4px) translateY(0); opacity: 0.45; }
+  50% { transform: translateX(7px) translateY(-3px); opacity: 0.9; }
+}
+
 @keyframes ticker-scroll {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
