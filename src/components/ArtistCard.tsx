@@ -3,6 +3,7 @@ import { ArrowUpRight, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { Link } from "@/next/Link";
 import { statLabelsFor, type Artist } from "@/data/artists";
+import { artistPortfolioItems } from "@/data/gallery";
 import { cn } from "@/lib/utils";
 import { BoltMotif, SparkMotif, StarMotif, StickArtistFigure } from "./art";
 import { CursorLabel } from "./CursorLabel";
@@ -264,6 +265,22 @@ export function ArtistCard({ artist, index, showPhoto = false, cardImage }: { ar
               </div>
             </Link>
 
+            <div className="mt-5">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.25em] text-bone/45">Portfolio work</p>
+                <Link to={`/artists/${artist.id}/portfolio`} className="text-[9px] uppercase tracking-[0.2em] text-blood hover:text-bone">
+                  View all
+                </Link>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {(artistPortfolioItems[artist.id] ?? []).slice(0, 3).map((item) => (
+                  <Link key={item.id} to={`/artists/${artist.id}/portfolio`} className="block aspect-square overflow-hidden border border-bone/10 bg-[#111]">
+                    <img src={item.src} alt={item.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             {/* specialties chips */}
             <div className="mt-4 flex flex-wrap gap-1.5">
               {artist.specialties.map((s) => (
@@ -303,12 +320,12 @@ export function ArtistCard({ artist, index, showPhoto = false, cardImage }: { ar
 
             <div className="mt-5 flex items-center gap-3">
               <Link
-                to={`/artists/${artist.id}`}
+                to={`/artists/${artist.id}/portfolio`}
                 tabIndex={flipped ? -1 : undefined}
-                aria-label={`View ${artist.name}'s profile and portfolio`}
+                aria-label={`View ${artist.name}'s portfolio`}
                 className="group/v flex flex-1 items-center justify-center gap-2 border border-bone/25 bg-bone/5 py-3 font-display text-xs font-bold uppercase tracking-[0.2em] text-bone transition-colors hover:bg-bone/10"
               >
-  View Profile
+  View Portfolio
                 <ArrowUpRight className="size-4 transition-transform group-hover/v:translate-x-0.5 group-hover/v:-translate-y-0.5" />
               </Link>
               <button
