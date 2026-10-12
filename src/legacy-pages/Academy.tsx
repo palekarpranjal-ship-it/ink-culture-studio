@@ -42,12 +42,12 @@ export default function Academy() {
       >
         <Reveal delay={0.3} className="mt-8 flex flex-wrap items-center gap-6">
           <InkButton href="#enquire" size="lg">Enquire Now</InkButton>
-          <div className="hidden items-center gap-3 border-l border-acid/40 pl-5 sm:flex" aria-label="Academy learning path graphic">
-            <span className="size-3 rounded-full bg-acid" />
-            <span className="h-px w-12 bg-acid/60" />
-            <span className="size-2 rounded-full border border-acid" />
-            <span className="h-px w-8 bg-acid/60" />
-            <span className="size-3 rotate-45 border border-acid" />
+          <div className="hidden items-center gap-3 border-l border-[#2bb7ff]/40 pl-5 sm:flex" aria-label="Academy learning path graphic">
+            <span className="size-3 rounded-full bg-[#2bb7ff]" />
+            <span className="h-px w-12 bg-[#2bb7ff]/60" />
+            <span className="size-2 rounded-full border border-[#2bb7ff]" />
+            <span className="h-px w-8 bg-[#2bb7ff]/60" />
+            <span className="size-3 rotate-45 border border-[#2bb7ff]" />
           </div>
         </Reveal>
       </PageHero>
@@ -74,7 +74,7 @@ function WhySection() {
           {why.map((w, i) => (
             <Reveal key={w.title} delay={i * 0.08}>
               <div className="h-full border border-bone/12 bg-white/[0.02] p-7">
-                <w.icon className="size-7 text-acid/80" />
+                <w.icon className="size-7 text-[#2bb7ff]/80" />
                 <h3 className="mt-4 font-display text-xl font-bold uppercase tracking-tight text-bone">{w.title}</h3>
                 <p className="mt-3 font-body text-sm leading-relaxed text-bone/65">{w.body}</p>
               </div>
@@ -102,7 +102,7 @@ function CurriculumSection() {
               animate={reduce ? undefined : { y: [0, -5, 0], rotate: [0, i % 2 ? 0.3 : -0.3, 0] }}
               whileHover={reduce ? undefined : { scale: 1.015, rotate: 0 }}
               transition={{ duration: 4.8, repeat: Infinity, delay: (i % 3) * 0.25, ease: "easeInOut" }}
-              className={`group relative flex cursor-pointer flex-col border border-bone/12 bg-white/[0.02] p-6 transition-colors hover:-translate-y-2 hover:border-acid/60 hover:bg-white/[0.04] hover:shadow-[0_18px_0_rgba(239,190,58,0.12)] ${selectedCourse === c.id ? "border-acid/70 bg-white/[0.05] shadow-[0_12px_0_rgba(239,190,58,0.18)]" : ""}`}
+              className={`group relative flex cursor-pointer flex-col border border-bone/12 bg-white/[0.02] p-6 transition-colors hover:-translate-y-2 hover:border-[#2bb7ff]/60 hover:bg-white/[0.04] hover:shadow-[0_18px_0_rgba(239,190,58,0.12)] ${selectedCourse === c.id ? "border-[#2bb7ff]/70 bg-white/[0.05] shadow-[0_12px_0_rgba(239,190,58,0.18)]" : ""}`}
               onClick={() => setSelectedCourse(selectedCourse === c.id ? null : c.id)}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -115,12 +115,12 @@ function CurriculumSection() {
               aria-expanded={selectedCourse === c.id}
             >
               <div className="pointer-events-none absolute right-5 top-5 opacity-60 transition duration-500 group-hover:rotate-12 group-hover:scale-110" aria-hidden>
-                <span className="block size-9 rounded-full border border-acid/50" />
-                <span className="absolute left-1/2 top-[-6px] h-12 w-px -translate-x-1/2 rotate-45 bg-acid/50" />
-                <span className="absolute left-1/2 top-1/2 h-px w-12 -translate-x-1/2 bg-acid/50" />
+                <span className="block size-9 rounded-full border border-[#2bb7ff]/50" />
+                <span className="absolute left-1/2 top-[-6px] h-12 w-px -translate-x-1/2 rotate-45 bg-[#2bb7ff]/50" />
+                <span className="absolute left-1/2 top-1/2 h-px w-12 -translate-x-1/2 bg-[#2bb7ff]/50" />
               </div>
               <div className="flex items-baseline justify-between pr-14">
-                <span className="font-mono text-[11px] text-acid/70">{c.number}</span>
+                <span className="font-mono text-[11px] text-[#2bb7ff]/70">{c.number}</span>
                 <span className="border border-bone/15 px-2 py-0.5 text-[9px] uppercase tracking-[0.18em] text-bone/50">
                   {c.level}
                 </span>
@@ -130,12 +130,12 @@ function CurriculumSection() {
               <ul className="mt-4 space-y-1.5 border-t border-bone/10 pt-4">
                 {c.outcomes.map((o) => (
                   <li key={o} className="flex items-start gap-2 text-[12px] leading-snug text-bone/70">
-                    <span className="mt-1.5 size-1 shrink-0 rounded-full bg-acid/70" aria-hidden />
+                    <span className="mt-1.5 size-1 shrink-0 rounded-full bg-[#2bb7ff]/70" aria-hidden />
                     {o}
                   </li>
                 ))}
               </ul>
-              {c.instructor ? <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.12em] text-acid/80">{c.instructor}</p> : null}
+              {c.instructor ? <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.12em] text-[#2bb7ff]/80">{c.instructor}</p> : null}
               <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-bone/40">{c.duration}</p>
               <button
                 type="button"
@@ -143,7 +143,7 @@ function CurriculumSection() {
                   event.stopPropagation();
                   openWhatsApp(`Hello Street Culture Academy! I would like to enquire about the ${c.title} (${c.duration}) and request the current price. Please share the details.`);
                 }}
-                className="group/mario relative mt-5 overflow-hidden border border-acid/70 px-4 py-3 text-left font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-acid transition-colors hover:bg-acid hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acid"
+                className="group/mario relative mt-5 overflow-hidden border border-[#2bb7ff]/70 px-4 py-3 text-left font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#2bb7ff] transition-colors hover:bg-[#2bb7ff] hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2bb7ff]"
               >
                 <span className="inline-flex items-center gap-2 transition-transform duration-300 group-hover/mario:-translate-y-1 group-hover/mario:translate-x-1">Enquire for price <span aria-hidden>↗</span></span>
               </button>
@@ -154,15 +154,15 @@ function CurriculumSection() {
                 initial={{ opacity: 0, height: 0, y: -12 }}
                 animate={{ opacity: 1, height: "auto", y: 0 }}
                 exit={{ opacity: 0, height: 0, y: -12 }}
-                className="-mt-5 border-x border-b border-acid/40 bg-ink/80 p-6 md:col-span-2 lg:col-span-3"
+                className="-mt-5 border-x border-b border-[#2bb7ff]/40 bg-ink/80 p-6 md:col-span-2 lg:col-span-3"
               >
                 <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-acid">Course breakdown</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#2bb7ff]">Course breakdown</p>
                     <h4 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight text-bone">{c.title}</h4>
                     <p className="mt-3 max-w-2xl font-body text-sm leading-relaxed text-bone/70">{c.summary}</p>
                   </div>
-                  <span className="shrink-0 border border-acid/50 px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-acid">{c.duration}</span>
+                  <span className="shrink-0 border border-[#2bb7ff]/50 px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#2bb7ff]">{c.duration}</span>
                 </div>
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
                   {c.outcomes.map((outcome) => (
@@ -177,7 +177,7 @@ function CurriculumSection() {
         <Reveal className="mt-8">
           <p className="text-center font-body text-xs leading-relaxed text-bone/45">
             Course fees and enrolment details are shared during the application —{" "}
-            <a href="#enquire" className="text-acid underline underline-offset-4">enquire for current information</a>.
+            <a href="#enquire" className="text-[#2bb7ff] underline underline-offset-4">enquire for current information</a>.
           </p>
         </Reveal>
       </div>
@@ -223,7 +223,7 @@ function WhoSection() {
             <ul className="space-y-4">
               {audiences.map((a) => (
                 <li key={a} className="flex items-start gap-3 border border-bone/12 p-4 font-body text-sm text-bone/75">
-                  <PenToolIcon className="mt-0.5 size-4 shrink-0 text-acid/80" />
+                  <PenToolIcon className="mt-0.5 size-4 shrink-0 text-[#2bb7ff]/80" />
                   {a}
                 </li>
               ))}
@@ -293,7 +293,7 @@ function FaqSection() {
             <details key={f.question} className="group py-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-body text-sm font-semibold text-bone/85 md:text-base">
                 {f.question}
-                <span className="font-mono text-acid transition-transform duration-300 group-open:rotate-45">+</span>
+                <span className="font-mono text-[#2bb7ff] transition-transform duration-300 group-open:rotate-45">+</span>
               </summary>
               <p className="mt-3 font-body text-sm leading-relaxed text-bone/60">{f.answer}</p>
             </details>
@@ -352,7 +352,7 @@ function EnquireSection() {
         <SectionHeading index="08" kicker="Enquire Now" title={<>Claim your<br />seat.</>} align="center" />
         {sent ? (
           <Reveal>
-            <div className="border border-acid/40 bg-[#131a12] p-8 text-center">
+            <div className="border border-[#2bb7ff]/40 bg-[#111111] p-8 text-center">
               <p className="font-display text-2xl uppercase text-bone">Enquiry ready to send.</p>
               <p className="mt-3 font-body text-sm text-bone/65">
                 Tap the button below to send your enquiry on WhatsApp. Seats are limited
@@ -419,7 +419,7 @@ function EnquireSection() {
 }
 
 const inputCls =
-  "w-full border border-bone/20 bg-ink px-3.5 py-3 font-body text-sm text-bone placeholder:text-bone/30 focus:border-acid/60 focus:outline-none";
+  "w-full border border-bone/20 bg-ink px-3.5 py-3 font-body text-sm text-bone placeholder:text-bone/30 focus:border-[#2bb7ff]/60 focus:outline-none";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
