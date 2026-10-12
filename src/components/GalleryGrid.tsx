@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, MessageCircle, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/next/Link";
-import { galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
+import { artistPortfolioItems, galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
 import { contact } from "@/config/contact";
 import { cn } from "@/lib/utils";
 import { trackFunnelEvent } from "@/lib/funnel";
@@ -85,6 +85,7 @@ export function GalleryGrid() {
   const [artist, setArtist] = useState<string>("All");
   const [ink, setInk] = useState<string>("All");
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
+  const [portfolioOpen, setPortfolioOpen] = useState(false);
 
   useEffect(() => {
     if (filter !== "All") trackFunnelEvent("style_viewed", filter);
@@ -160,6 +161,24 @@ export function GalleryGrid() {
           </div>
         </div>
       </div>
+
+      <div className="mt-5 flex flex-wrap items-center gap-3">
+        <button type="button" onClick={() => setPortfolioOpen((value) => !value)} aria-expanded={portfolioOpen} className="border-2 border-blood bg-blood px-4 py-2 font-display text-[10px] uppercase tracking-[0.16em] text-ink shadow-[3px_3px_0_0_#e8e2d5]">Portfolio</button>
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-bone/40">Choose an artist stack</span>
+      </div>
+      {portfolioOpen ? (
+        <div className="mt-5 grid gap-4 border-2 border-bone/15 bg-white/[0.02] p-4 md:grid-cols-2">
+          {(["lucky", "karan"] as const).map((artistId) => {
+            const work = artistPortfolioItems[artistId] ?? [];
+            const name = artistId === "lucky" ? "Lucky Solanki" : "Karan Parmar";
+            return <Link key={artistId} to={`/artists/${artistId}/portfolio`} className="group border border-bone/15 p-3 hover:border-blood">
+              <div className="grid grid-cols-3 gap-2">{work.slice(0, 3).map((item) => <img key={item.id} src={item.src} alt={item.alt} className="aspect-square w-full object-cover" loading="lazy" />)}</div>
+              <p className="mt-3 font-display text-lg uppercase text-bone group-hover:text-blood">{name}</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-bone/45">Open portfolio stack</p>
+            </Link>;
+          })}
+        </div>
+      ) : null}
 
       <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-bone/40">
         {items.length} piece{items.length === 1 ? "" : "s"} showing
