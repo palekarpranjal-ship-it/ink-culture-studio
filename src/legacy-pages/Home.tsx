@@ -192,7 +192,7 @@ function Philosophy() {
             <MaskReveal>
               <div className="relative aspect-[4/5] border border-bone/10 bg-gradient-to-br from-[#1b1b1b] to-[#0f0f0f]">
                 <div className="absolute inset-0 grain opacity-50" aria-hidden />
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Stick-Figure%20Tattoo%20Studio%20Scene-YW6ESIggoXU96TPI5TB4ITu6csp9QT.png" alt="Street Culture Tattoo Studio artists" className="absolute inset-0 h-full w-full object-contain object-bottom" />
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Website%20ESTD-NVqTam8FqKqgIeFpnYL2vqlpHVeB1O.png" alt="Street Culture Tattoo Studio artists" className="absolute inset-0 h-full w-full object-contain object-bottom" />
                 <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
                   <p className="font-marker text-2xl text-cream/80">every line means something</p>
                   <EyeMotif className="h-10 w-16 text-blood/50" />

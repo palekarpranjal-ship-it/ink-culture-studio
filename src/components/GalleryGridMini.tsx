@@ -9,8 +9,10 @@ export function GalleryGridMini() {
     <CursorLabel label="DRAG">
       <div className="-mx-5 flex snap-x gap-4 overflow-x-auto px-5 pb-4 md:mx-0 md:px-0 [scrollbar-width:thin]">
         {[...galleryItems]
-          .sort((a, b) => a.category.localeCompare(b.category) || a.id.localeCompare(b.id))
-          .filter((item, index, items) => index === items.findIndex((candidate) => candidate.category === item.category) || index < 10)
+          .sort((a, b) => {
+            const score = (id: string) => id.split("").reduce((total, char) => total + char.charCodeAt(0), 0) % 17;
+            return score(a.id) - score(b.id) || a.id.localeCompare(b.id);
+          })
           .slice(0, 10)
           .map((item, i) => (
           <motion.div
