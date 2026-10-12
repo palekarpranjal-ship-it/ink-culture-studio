@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { StickyBookBar } from "@/components/StickyBookBar";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { SocialDock } from "@/components/SocialDock";
+import { StreetCultureBot } from "@/components/StreetCultureBot";
 import { Intro } from "@/components/Intro";
 import { ClickSound } from "@/components/ClickSound";
 import { PixelCloud } from "@/components/PixelCloud";
@@ -79,6 +80,7 @@ export default function NativeRoutePage({ routePath = "/" }: { routePath?: strin
         <Footer />
         <StickyBookBar />
         <SocialDock />
+        <StreetCultureBot />
       </MemoryRouter>
       <Toaster />
       <SpeedInsights />

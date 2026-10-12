@@ -3,6 +3,7 @@ import { ArrowUpRight, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { Link } from "@/next/Link";
 import { statLabelsFor, type Artist } from "@/data/artists";
+import { artistPortfolioItems } from "@/data/gallery";
 import { cn } from "@/lib/utils";
 import { BoltMotif, SparkMotif, StarMotif, StickArtistFigure } from "./art";
 import { CursorLabel } from "./CursorLabel";
@@ -170,7 +171,7 @@ function PowerAura({ accent, active }: { accent: Artist["accent"]; active: boole
 /* ==================== CARD ==================== */
 
 /** Large collectible artist card with flip-to-details interaction. */
-export function ArtistCard({ artist, index, showPhoto = false }: { artist: Artist; index: number; showPhoto?: boolean }) {
+export function ArtistCard({ artist, index, showPhoto = false, cardImage }: { artist: Artist; index: number; showPhoto?: boolean; cardImage?: string }) {
   const [flipped, setFlipped] = useState(false);
   const reduce = useReducedMotion();
 
@@ -233,7 +234,14 @@ export function ArtistCard({ artist, index, showPhoto = false }: { artist: Artis
             >
               <div className="pointer-events-none absolute inset-0 grain opacity-40" aria-hidden />
               <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]">
-                {showPhoto ? (
+                {cardImage ? (
+                  <img
+                    src={cardImage}
+                    alt={`${artist.name} stick-figure artist illustration`}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                ) : showPhoto ? (
                   <img
                     src={artist.image}
                     alt={`${artist.name}, tattoo artist at Street Culture`}
@@ -256,6 +264,22 @@ export function ArtistCard({ artist, index, showPhoto = false }: { artist: Artis
                 <span className="text-blood">tap for full profile →</span>
               </div>
             </Link>
+
+            <div className="mt-5">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.25em] text-bone/45">Portfolio work</p>
+                <Link to={`/artists/${artist.id}/portfolio`} className="text-[9px] uppercase tracking-[0.2em] text-blood hover:text-bone">
+                  View all
+                </Link>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {(artistPortfolioItems[artist.id] ?? []).slice(0, 3).map((item) => (
+                  <Link key={item.id} to={`/artists/${artist.id}/portfolio`} className="block aspect-square overflow-hidden border border-bone/10 bg-[#111]">
+                    <img src={item.src} alt={item.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" />
+                  </Link>
+                ))}
+              </div>
+            </div>
 
             {/* specialties chips */}
             <div className="mt-4 flex flex-wrap gap-1.5">
@@ -296,12 +320,12 @@ export function ArtistCard({ artist, index, showPhoto = false }: { artist: Artis
 
             <div className="mt-5 flex items-center gap-3">
               <Link
-                to={`/artists/${artist.id}`}
+                to={`/artists/${artist.id}/portfolio`}
                 tabIndex={flipped ? -1 : undefined}
-                aria-label={`View ${artist.name}'s profile and portfolio`}
+                aria-label={`View ${artist.name}'s portfolio`}
                 className="group/v flex flex-1 items-center justify-center gap-2 border border-bone/25 bg-bone/5 py-3 font-display text-xs font-bold uppercase tracking-[0.2em] text-bone transition-colors hover:bg-bone/10"
               >
-  View Profile
+  View Portfolio
                 <ArrowUpRight className="size-4 transition-transform group-hover/v:translate-x-0.5 group-hover/v:-translate-y-0.5" />
               </Link>
               <button
