@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import { InkStroke, StarMotif, StickArtistFigure } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
-import { PlaceholderImage } from "@/components/PlaceholderImage";
 import { InkButton, MaskReveal, PageHero, Reveal, SectionHeading } from "@/components/ui-kit";
 import { breadcrumbSchema, pageMeta, personSchema } from "@/config/seo";
 import { artistPortfolioItems } from "@/data/gallery";
@@ -186,12 +185,13 @@ export default function Portfolio() {
             {work.map((g, i) => (
               <Reveal key={g.id} delay={(i % 6) * 0.05} className="mb-4 break-inside-avoid">
                 <CursorLabel label="VIEW">
-                  <Link to="/gallery" className="group block border-2 border-bone/10 transition-colors hover:border-blood/60">
+                  <Link to={`/gallery?artist=${artist.id}`} className="group block border-2 border-bone/10 transition-colors hover:border-blood/60">
                     <div className="aspect-[3/4] overflow-hidden">
-                      <PlaceholderImage
-                        seed={g.id}
-                        label={g.category}
-                        className="transition-transform duration-700 ease-out group-hover:scale-105"
+                      <img
+                        src={g.src}
+                        alt={g.alt}
+                        loading="lazy"
+                        className="h-full w-full object-contain bg-[#111] p-2 transition-transform duration-700 ease-out group-hover:scale-105"
                       />
                     </div>
                     <div className="flex items-center justify-between border-t-2 border-bone/10 px-3 py-2.5">
