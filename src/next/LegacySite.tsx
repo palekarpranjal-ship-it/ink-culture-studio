@@ -15,6 +15,7 @@ import { StickyBookBar } from "@/components/StickyBookBar";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { Intro } from "@/components/Intro";
 import { SocialDock } from "@/components/SocialDock";
+import { StreetCultureBot } from "@/components/StreetCultureBot";
 
 const Landing = lazy(() => import("../legacy-pages/Home"));
 const About = lazy(() => import("../legacy-pages/About"));
@@ -78,6 +79,7 @@ function SiteLayout() {
       <Footer />
       <StickyBookBar />
       <SocialDock />
+      <StreetCultureBot />
     </CursorProvider>
   );
 }

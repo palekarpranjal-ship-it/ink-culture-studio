@@ -16,6 +16,7 @@ import { StickyBookBar } from "@/components/StickyBookBar";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { Intro } from "@/components/Intro";
 import { SocialDock } from "@/components/SocialDock";
+import { StreetCultureBot } from "@/components/StreetCultureBot";
 
 // Lazy load route components for better code splitting
 const Landing = lazy(() => import("./legacy-pages/Home.tsx"));
@@ -175,8 +176,9 @@ function SiteLayout() {
       </div>
       <Footer />
       <StickyBookBar />
-      <SocialDock />
-    </>
+  <SocialDock />
+  <StreetCultureBot />
+  </>
   );
 }
 
