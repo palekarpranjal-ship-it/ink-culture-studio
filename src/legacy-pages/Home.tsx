@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
-import { EyeMotif, HandMotif, InkStroke, LocalTrainMotif, QuestionBlock, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
+import { EyeMotif, HandMotif, InkStroke, LocalTrainMotif, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
 import { GalleryGridMini } from "@/components/GalleryGridMini";
 import { InkButton, MaskReveal, Reveal, SectionHeading } from "@/components/ui-kit";
@@ -129,14 +129,7 @@ function Hero() {
         </motion.div>
 
         {/* hit the block — quiet arcade easter egg */}
-        <motion.div
-          initial={reduce ? false : { opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.16, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-auto absolute right-4 top-28 z-10 sm:right-5 sm:top-40 md:right-8 md:top-44"
-        >
-          <QuestionBlock className="h-11 w-11 md:h-14 md:w-14" />
-        </motion.div>
+
       </motion.div>
 
       {/* scroll cue */}
@@ -230,7 +223,7 @@ function ArtistsSection() {
               key={a.id}
               artist={a}
               index={i}
-              cardImage={a.id === "lucky" ? "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Monochrome%20Glasses%20Avatar%20Sketch-k0nw9prg4yUrUYVdmoqHeF5PYINsNi.png" : "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Monochrome%20Glasses%20Avatar%20Sketch-3NVNcVABvhFqpHoG65Zze9r4uuwHkp.png"}
+              cardImage={a.id === "lucky" ? "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Cheerful%20Bearded%20Streetwear%20Character-m04iLzwBnCqJxxuASvUqQbfma6r06F.png" : "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Monochrome%20Glasses%20Avatar%20Sketch-gquz2dNuyHOz4Vi7iNISPN9D2xewXB.png"}
             />
           ))}
         </div>

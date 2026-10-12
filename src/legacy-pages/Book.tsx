@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Calendar, Check, Clock, MessageCircle, Upload } 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { SparkMotif } from "@/components/art";
+import { notifyStreetCultureBooking } from "@/components/StreetCultureBot";
 import { InkButton, PageHero, Reveal } from "@/components/ui-kit";
 import { breadcrumbSchema, pageMeta } from "@/config/seo";
 import { useJsonLd, useSeo } from "@/hooks/use-seo";
@@ -430,6 +431,7 @@ export default function Book() {
     // No Google Form endpoint configured yet — don't silently swallow the
     // booking. The confirmation screen hands the user one explicit WhatsApp
     // button so they choose when to send it.
+    notifyStreetCultureBooking();
     setDone(true);
   };
 
