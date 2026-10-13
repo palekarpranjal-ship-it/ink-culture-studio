@@ -61,7 +61,7 @@ export default function Academy() {
         </Reveal>
       </PageHero>
 
-  <div className="bg-[#303030] bg-cover bg-fixed bg-center" style={{ backgroundImage: "linear-gradient(rgba(38,38,38,0.84), rgba(38,38,38,0.94)), url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Website%20copy-RsHENyU1t4x569bgRwMjxPBcBTlaL1.jpeg')" }}>
+  <div className="bg-black">
   <WhySection />
   <AcademyGameFeatures />
         <CurriculumSection />
@@ -119,7 +119,7 @@ function CurriculumSection() {
   return (
     <section className="border-t border-bone/10 py-20 md:py-28" aria-labelledby="curriculum-heading">
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
-        <SectionHeading index="03" kicker="Course Structure" title={<>Four ways in.<br />Choose your path.</>} />
+        <SectionHeading index="03" kicker="Course Structure" title={<>Five ways in.<br />Choose your path.</>} />
         <div className="grid gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
           <div className="order-2 md:order-1">
             {selectedCourse ? (() => { const active = academyCourses.find((course) => course.id === selectedCourse); return active ? (

@@ -192,11 +192,11 @@ export const academyCourses: Course[] = [
   {
     id: "primary-course",
     number: "02",
-    title: "Master in Black & Grey Tattooing",
+    title: "Tattooing Foundations",
     level: "All Levels",
     duration: "3 months",
-    summary: "A focused black and grey foundation for students ready to build disciplined tattoo fundamentals across every starting level.",
-    outcomes: ["All levels welcome", "Drawing and composition", "Black and grey technique", "Hygiene and studio practice"],
+    summary: "A complete all-levels foundation across drawing, tattooing, designing and management studies.",
+    outcomes: ["Drawing: shapes, grey value, dimension, light, perspective, proportion, anatomy and texture", "Tattooing: history, tools, needle theory, hygiene, lining, colour packing, realism, shading and placement", "Designing: quick designs, Photoshop, Illustrator, iPad sketching, concepts and composition", "Management: mindset, etiquette, clients, communication, studio systems, marketing and social media"],
   },
   {
     id: "colour-course",
