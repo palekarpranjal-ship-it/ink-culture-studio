@@ -61,8 +61,9 @@ export default function Academy() {
         </Reveal>
       </PageHero>
 
-      <div className="bg-charcoal">
-        <WhySection />
+  <div className="bg-[#303030] bg-cover bg-fixed bg-center" style={{ backgroundImage: "linear-gradient(rgba(38,38,38,0.84), rgba(38,38,38,0.94)), url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Website%20copy-RsHENyU1t4x569bgRwMjxPBcBTlaL1.jpeg')" }}>
+  <WhySection />
+  <AcademyGameFeatures />
         <CurriculumSection />
         <WorkshopSection />
         <WhoSection />
@@ -93,6 +94,23 @@ function WhySection() {
       </div>
     </section>
   );
+}
+
+function AcademyGameFeatures() {
+  return <section className="mx-auto max-w-6xl px-5 pb-10 md:px-8" aria-label="Academy game features">
+    <div className="grid gap-4 sm:grid-cols-2">
+      <div className="border-2 border-[#ffcb05]/70 bg-[#365fa8]/80 p-5 shadow-[5px_5px_0_0_#ffcb05]">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#ffcb05]">Training deck</p>
+        <h3 className="mt-2 font-display text-2xl uppercase text-bone">Catch your next skill</h3>
+        <p className="mt-2 font-body text-sm text-bone/70">Unlock course badges as you collect drawing, lining, colour and studio-management skills.</p>
+      </div>
+      <div className="border-2 border-[#e53b35]/70 bg-[#e53b35]/70 p-5 shadow-[5px_5px_0_0_#2bb7ff]">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-bone">Level-up route</p>
+        <h3 className="mt-2 font-display text-2xl uppercase text-bone">Coins for consistency</h3>
+        <p className="mt-2 font-body text-sm text-bone/70">Complete practice missions, collect studio coins and move from sketchbook start to confident artist.</p>
+      </div>
+    </div>
+  </section>;
 }
 
 function CurriculumSection() {
