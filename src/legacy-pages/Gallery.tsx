@@ -25,7 +25,7 @@ export default function Gallery() {
         </Reveal>
       </PageHero>
 
-      <section className="py-16 md:py-24">
+      <section className="bg-charcoal py-16 md:py-24">
         <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
           <GalleryGrid />
           <Reveal className="mt-16 border border-dashed border-bone/20 p-6 text-center md:p-10">
