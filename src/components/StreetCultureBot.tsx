@@ -37,7 +37,7 @@ export function StreetCultureBot() {
         <div className="relative grid size-20 place-items-center">
           <span aria-hidden className="absolute -left-5 top-2 h-4 w-8 rounded-full bg-white/90 blur-[1px] animate-[cloud-drift_4s_ease-in-out_infinite]" />
           <span aria-hidden className="absolute -top-2 left-2 h-3 w-7 rounded-full bg-white/80 blur-[1px] animate-[cloud-drift_5s_ease-in-out_infinite_reverse]" />
-          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/images-13-hVtg4LqbkqzakOt0pt9JCA52YwQHr0.jpeg" alt="" className="relative z-10 h-20 w-20 object-contain mix-blend-multiply drop-shadow-[0_5px_2px_rgba(0,0,0,0.4)]" />
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/images-13-hVtg4LqbkqzakOt0pt9JCA52YwQHr0.jpeg" alt="" className="relative z-10 h-20 w-20 object-contain mix-blend-screen opacity-95 drop-shadow-[0_0_8px_rgba(255,255,255,0.75)]" />
           <Wrench aria-hidden className="absolute z-20 h-4 w-4 rotate-12 text-acid" />
           <span aria-hidden className="absolute bottom-1 left-1 h-1 w-2 bg-acid" />
           <span aria-hidden className="absolute bottom-1 right-1 h-1 w-2 bg-acid" />
