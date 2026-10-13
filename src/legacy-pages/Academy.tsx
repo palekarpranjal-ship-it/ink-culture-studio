@@ -15,6 +15,15 @@ const why = [
   { icon: ShieldIcon, title: "Hygiene From Day One", body: "Sterile discipline is a module, not a footnote. It's the difference between a tattooist and a liability." },
 ];
 
+const masterCover = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Standy%20B%26G-KLch8cQN0JADEb9RxnOeTVpowQY0o7.jpg";
+const courseCovers = [
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Drawing%2001-6Sbxe1KMzSRFhywLMI8ifhB5tyNsx6.jpg",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Tattooing%2002-sypZl7pBaU9VFvROVOfeFCuhd4wiuZ.jpg",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Colour%20Tat%2003-D5wb4KSQHWlhQO7GntoAGMPEUN20hS.jpg",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Designing%2004-0udHYxs2qhoXrJ7kNRpb0kcpfpdsqN.jpg",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Mngmant%2005-GojGjLmcYHT62r3aV66f4G0yOeJJbb.jpg",
+];
+
 const audiences = [
   "Complete beginners who want the craft done properly",
   "Artists from other mediums moving into tattoo",
@@ -93,7 +102,19 @@ function CurriculumSection() {
     <section className="border-t border-bone/10 py-20 md:py-28" aria-labelledby="curriculum-heading">
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
         <SectionHeading index="03" kicker="Course Structure" title={<>Four ways in.<br />Choose your path.</>} />
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+          <div className="order-2 md:order-1">
+            {selectedCourse ? (() => { const active = academyCourses.find((course) => course.id === selectedCourse); return active ? (
+              <motion.div layout initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} className="sticky top-24 rounded-xl border-2 border-[#2bb7ff]/40 bg-charcoal p-6 shadow-[6px_6px_0_0_rgba(239,190,58,0.65)]">
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#2bb7ff]">Course pamphlet</p>
+                <h4 className="mt-3 font-display text-3xl font-bold uppercase leading-none text-bone">{active.title}</h4>
+                <p className="mt-4 font-body text-sm leading-relaxed text-bone/70">{active.summary}</p>
+                <div className="mt-6 space-y-2">{active.outcomes.map((outcome) => <p key={outcome} className="border-l-2 border-[#2bb7ff] pl-3 font-body text-sm text-bone/75">{outcome}</p>)}</div>
+                <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-[#2bb7ff]">{active.duration} · {active.level}</p>
+              </motion.div>
+            ) : null; })() : <div className="sticky top-24 rounded-xl border border-dashed border-bone/20 p-6 text-bone/45"><p className="font-mono text-[10px] uppercase tracking-[0.18em]">Select a card</p><p className="mt-3 font-body text-sm">Choose a course to open its pamphlet here.</p></div>}
+          </div>
+          <div className="order-1 grid gap-6 sm:grid-cols-2 md:order-2">
           {academyCourses.map((c, i) => (
             <Fragment key={`${c.id}-group`}>
             <motion.article
@@ -102,7 +123,7 @@ function CurriculumSection() {
               animate={reduce ? undefined : { y: [0, -5, 0], rotate: [0, i % 2 ? 0.3 : -0.3, 0] }}
               whileHover={reduce ? undefined : { scale: 1.015, rotate: 0 }}
               transition={{ duration: 4.8, repeat: Infinity, delay: (i % 3) * 0.25, ease: "easeInOut" }}
-              className={`group relative flex cursor-pointer flex-col border border-bone/12 bg-white/[0.02] p-6 transition-colors hover:-translate-y-2 hover:border-[#2bb7ff]/60 hover:bg-white/[0.04] hover:shadow-[0_18px_0_rgba(239,190,58,0.12)] ${selectedCourse === c.id ? "border-[#2bb7ff]/70 bg-white/[0.05] shadow-[0_12px_0_rgba(239,190,58,0.18)]" : ""}`}
+              className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-[1.25rem] border-2 border-[#2bb7ff]/35 bg-ink p-3 shadow-[5px_5px_0_0_rgba(239,190,58,0.8)] transition-all hover:-translate-y-2 hover:border-[#2bb7ff] hover:bg-charcoal hover:shadow-[8px_8px_0_0_rgba(239,190,58,0.9)] ${selectedCourse === c.id ? "border-[#2bb7ff] bg-charcoal ring-2 ring-[#2bb7ff]/30" : ""}`}
               onClick={() => setSelectedCourse(selectedCourse === c.id ? null : c.id)}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -114,6 +135,10 @@ function CurriculumSection() {
               tabIndex={0}
               aria-expanded={selectedCourse === c.id}
             >
+              <div className="mb-4 flex aspect-[4/5] flex-col justify-between rounded-xl border border-[#2bb7ff]/25 bg-[#0b1422] p-4">
+                <span className="font-display text-5xl font-bold text-[#2bb7ff]/20">{c.number}</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#2bb7ff]">Street Culture Academy</span>
+              </div>
               <div className="pointer-events-none absolute right-5 top-5 opacity-60 transition duration-500 group-hover:rotate-12 group-hover:scale-110" aria-hidden>
                 <span className="block size-9 rounded-full border border-[#2bb7ff]/50" />
                 <span className="absolute left-1/2 top-[-6px] h-12 w-px -translate-x-1/2 rotate-45 bg-[#2bb7ff]/50" />
@@ -148,31 +173,9 @@ function CurriculumSection() {
                 <span className="inline-flex items-center gap-2 transition-transform duration-300 group-hover/mario:-translate-y-1 group-hover/mario:translate-x-1">Enquire for price <span aria-hidden>↗</span></span>
               </button>
             </motion.article>
-            {selectedCourse === c.id ? (
-              <motion.div
-                layout
-                initial={{ opacity: 0, height: 0, y: -12 }}
-                animate={{ opacity: 1, height: "auto", y: 0 }}
-                exit={{ opacity: 0, height: 0, y: -12 }}
-                className="-mt-5 border-x border-b border-[#2bb7ff]/40 bg-ink/80 p-6 md:col-span-2 lg:col-span-3"
-              >
-                <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#2bb7ff]">Course breakdown</p>
-                    <h4 className="mt-2 font-display text-3xl font-bold uppercase tracking-tight text-bone">{c.title}</h4>
-                    <p className="mt-3 max-w-2xl font-body text-sm leading-relaxed text-bone/70">{c.summary}</p>
-                  </div>
-                  <span className="shrink-0 border border-[#2bb7ff]/50 px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#2bb7ff]">{c.duration}</span>
-                </div>
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  {c.outcomes.map((outcome) => (
-                    <div key={outcome} className="border border-bone/12 p-4 font-body text-sm text-bone/75">{outcome}</div>
-                  ))}
-                </div>
-              </motion.div>
-            ) : null}
             </Fragment>
           ))}
+          </div>
         </div>
         <Reveal className="mt-8">
           <p className="text-center font-body text-xs leading-relaxed text-bone/45">

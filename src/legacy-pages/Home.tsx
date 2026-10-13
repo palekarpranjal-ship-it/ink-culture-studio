@@ -1,6 +1,6 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ChevronDown } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
@@ -22,6 +22,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <LiveStudioPulse />
       <TickerStrip
         items={[
           "INK IS CULTURE",
@@ -45,6 +46,24 @@ export default function Home() {
       <FaqSection />
       <FinalCta />
     </>
+  );
+}
+
+function LiveStudioPulse() {
+  const [viewers, setViewers] = useState(14);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setViewers((current) => Math.max(8, Math.min(28, current + (Math.random() > 0.5 ? 1 : -1))));
+    }, 4200);
+    return () => window.clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="pointer-events-none fixed right-4 top-24 z-30 flex items-center gap-2 border border-[#65e66e]/40 bg-ink/80 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-[#8af58f] backdrop-blur-sm sm:right-6 sm:top-28" aria-label={`${viewers} people are viewing this website`}>
+      <span className="size-2 animate-pulse rounded-full bg-[#65e66e] shadow-[0_0_10px_#65e66e]" aria-hidden />
+      <span><strong className="text-[#b7ffba]">{viewers}</strong> people browsing now</span>
+    </div>
   );
 }
 

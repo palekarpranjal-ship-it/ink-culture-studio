@@ -78,7 +78,7 @@ function MysteryBoxTeaser() {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.85 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="pointer-events-auto fixed bottom-4 right-4 z-40 w-[13.5rem] border-2 border-ink bg-[#141414] p-4 text-center shadow-[6px_6px_0_0_var(--blood)] sm:bottom-6 sm:right-6 md:w-60"
+      className="pointer-events-auto relative mx-auto mb-6 w-full max-w-[15rem] border-2 border-ink bg-[#141414] p-3 text-center shadow-[4px_4px_0_0_var(--blood)] md:absolute md:right-0 md:top-0 md:mb-0 md:w-52"
     >
       <button
         type="button"
@@ -478,14 +478,12 @@ export default function Book() {
         lead="Tattoo or piercing — pick your artist, grab a time slot and tell us the idea. No payment now, ever."
       />
 
-      {/* The Mystery Box appears the moment they land on /book — finish the
-          booking to open it. Pointer-events confined to the card itself. */}
-      <AnimatePresence>
-        <MysteryBoxTeaser />
-      </AnimatePresence>
-
-      <section className="py-14 md:py-20">
-        <div className="mx-auto w-full max-w-3xl px-5 md:px-8">
+  <section className="relative py-14 md:py-20">
+  <div className="mx-auto w-full max-w-5xl px-5 md:px-8">
+  {/* The Mystery Box sits beside the booking form on larger screens and stacks above it on mobile. */}
+  <AnimatePresence>
+ <MysteryBoxTeaser />
+  </AnimatePresence>
           {/* stepper */}
           <ol className="mb-10 flex items-center justify-between" aria-label="Booking progress">
             {steps.map((s, i) => (
