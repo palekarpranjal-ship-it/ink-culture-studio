@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, MessageCircle, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/next/Link";
-import { artistPortfolioItems, galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
+import { galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
 import { contact } from "@/config/contact";
 import { cn } from "@/lib/utils";
 import { trackFunnelEvent } from "@/lib/funnel";
@@ -85,7 +85,6 @@ export function GalleryGrid() {
   const [artist, setArtist] = useState<string>("All");
   const [ink, setInk] = useState<string>("All");
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
-  const [portfolioOpen, setPortfolioOpen] = useState(false);
 
   useEffect(() => {
     if (filter !== "All") trackFunnelEvent("style_viewed", filter);
@@ -140,14 +139,6 @@ export function GalleryGrid() {
                 {label}
               </Chip>
             ))}
-            {artist !== "All" && (
-              <Link
-                to={`/artists/${artist.toLowerCase()}/portfolio`}
-                className="ml-1 border-2 border-bone/25 px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-bone/70 transition-colors hover:border-blood hover:text-blood"
-              >
-                open portfolio →
-              </Link>
-            )}
           </div>
         </div>
         <div className="-mx-5 overflow-x-auto px-5 pb-1 md:mx-0 md:px-0" role="tablist" aria-label="Filter by ink colour">
@@ -162,23 +153,27 @@ export function GalleryGrid() {
         </div>
       </div>
 
-      <div className="mt-5 flex flex-wrap items-center gap-3">
-        <button type="button" onClick={() => setPortfolioOpen((value) => !value)} aria-expanded={portfolioOpen} className="border-2 border-blood bg-blood px-4 py-2 font-display text-[10px] uppercase tracking-[0.16em] text-ink shadow-[3px_3px_0_0_#e8e2d5]">Portfolio</button>
-        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-bone/40">Choose an artist stack</span>
-      </div>
-      {portfolioOpen ? (
-        <div className="mt-5 grid gap-4 border-2 border-bone/15 bg-white/[0.02] p-4 md:grid-cols-2">
-          {(["lucky", "karan"] as const).map((artistId) => {
-            const work = artistPortfolioItems[artistId] ?? [];
-            const name = artistId === "lucky" ? "Lucky Solanki" : "Karan Parmar";
-            return <Link key={artistId} to={`/artists/${artistId}/portfolio`} className="group border border-bone/15 p-3 hover:border-blood">
-              <div className="grid grid-cols-3 gap-2">{work.slice(0, 3).map((item) => <img key={item.id} src={item.src} alt={item.alt} className="aspect-square w-full object-cover" loading="lazy" />)}</div>
-              <p className="mt-3 font-display text-lg uppercase text-bone group-hover:text-blood">{name}</p>
-              <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-bone/45">Open portfolio stack</p>
-            </Link>;
+      <div className="mt-8 rounded-[1.5rem] border border-bone/15 bg-[#3a3a3a] p-4 shadow-[8px_8px_0_0_rgba(0,0,0,0.24)] sm:p-6">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-[#8ee6ff]">Street Culture / albums</p>
+            <h2 className="mt-2 font-display text-3xl uppercase leading-none text-bone sm:text-4xl">Open a stack.</h2>
+          </div>
+          <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-bone/45">{galleryCategories.length - 1} folders</span>
+        </div>
+        <div className="mt-6 space-y-3">
+          {galleryCategories.filter((category) => category !== "All").map((category, index) => {
+            const albumItems = galleryItems.filter((item) => item.category === category).slice(0, 3);
+            return <button key={category} type="button" onClick={() => setFilter(category)} className="group relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-bone/15 bg-[#262626] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#8ee6ff]/60 hover:bg-[#303030]">
+              <div className="relative flex h-16 w-24 shrink-0 -space-x-5 pl-2">
+                {albumItems.map((item, imageIndex) => <img key={item.id} src={item.src} alt="" className="size-16 rounded-lg border-2 border-[#262626] object-cover shadow-lg" style={{ transform: `rotate(${(imageIndex - 1) * 5}deg) translateY(${imageIndex * 2}px)`, zIndex: 3 - imageIndex }} loading="lazy" />)}
+              </div>
+              <span className="min-w-0 flex-1"><strong className="block font-display text-lg uppercase text-bone group-hover:text-[#8ee6ff]">{category}</strong><small className="font-mono text-[9px] uppercase tracking-[0.18em] text-bone/40">{galleryItems.filter((item) => item.category === category).length} pieces · tap to open</small></span>
+              <ChevronRight className="size-5 text-bone/35 transition group-hover:translate-x-1 group-hover:text-[#8ee6ff]" aria-hidden />
+            </button>;
           })}
         </div>
-      ) : null}
+      </div>
 
       <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-bone/40">
         {items.length} piece{items.length === 1 ? "" : "s"} showing
