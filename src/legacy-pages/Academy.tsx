@@ -61,7 +61,7 @@ export default function Academy() {
         </Reveal>
       </PageHero>
 
-      <div className="bg-[#101b2d]">
+      <div className="bg-charcoal">
         <WhySection />
         <CurriculumSection />
         <WorkshopSection />
@@ -135,9 +135,10 @@ function CurriculumSection() {
               tabIndex={0}
               aria-expanded={selectedCourse === c.id}
             >
-              <div className="mb-4 flex aspect-[4/5] flex-col justify-between rounded-xl border border-[#2bb7ff]/25 bg-[#0b1422] p-4">
-                <span className="font-display text-5xl font-bold text-[#2bb7ff]/20">{c.number}</span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#2bb7ff]">Street Culture Academy</span>
+              <div className="relative mb-4 aspect-[4/5] overflow-hidden rounded-xl border border-[#2bb7ff]/25 bg-ink">
+                {c.cover ? <img src={c.cover} alt={`${c.title} course cover`} className="size-full object-cover transition duration-500 group-hover:scale-105" /> : null}
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-transparent" />
+                <span className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[#2bb7ff]">Street Culture Academy</span>
               </div>
               <div className="pointer-events-none absolute right-5 top-5 opacity-60 transition duration-500 group-hover:rotate-12 group-hover:scale-110" aria-hidden>
                 <span className="block size-9 rounded-full border border-[#2bb7ff]/50" />

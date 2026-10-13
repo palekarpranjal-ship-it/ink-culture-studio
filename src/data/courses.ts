@@ -10,6 +10,7 @@ export type Course = {
   number: string;
   image?: string;
   images?: string[];
+  cover?: string;
   instructor?: string;
 };
 
@@ -173,8 +174,9 @@ export const academyCourses: Course[] = [
   {
     id: "master-course",
     number: "01",
-    title: "Master Course",
+    title: "Twin Diploma in Tattooing",
     level: "All Levels",
+    cover: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Standy%20Diploma-JxNZpIi2ZJs7ABAAZX7CBueoOZ2vo1.jpg",
     duration: "5 months",
     instructor: "Taught by Lucky Solanki · Assisted by Karan Parmar",
     summary: "Complete tattoo education across drawing, tattooing, colour, designing and studio management.",
@@ -190,8 +192,9 @@ export const academyCourses: Course[] = [
   {
     id: "primary-course",
     number: "02",
-    title: "Primary Course",
-    level: "Beginner",
+    title: "Master in Black & Grey Tattooing",
+    level: "All Levels",
+    cover: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Standy%20B%26G-EO07oeaIUpNYyMUQ5V6HKR5wyrUNCv.jpg",
     duration: "3 months",
     summary: "A focused black and grey foundation for students ready to build disciplined tattoo fundamentals.",
     outcomes: ["Drawing and composition", "Black and grey technique", "Hygiene and studio practice"],
@@ -199,8 +202,9 @@ export const academyCourses: Course[] = [
   {
     id: "colour-course",
     number: "03",
-    title: "Colour Course",
+    title: "Master in Colour Tattooing",
     level: "Intermediate",
+    cover: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Standy%20Colour-3l0w8gjbPyqiT3jYILPz3pxQtnc1Aw.jpg",
     duration: "1 month",
     summary: "A concentrated colour programme covering theory, packing, blending and realistic colour tattooing.",
     outcomes: ["Colour theory", "Packing and blending", "Colour harmony and skin safety"],
