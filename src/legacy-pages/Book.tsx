@@ -78,7 +78,7 @@ function MysteryBoxTeaser() {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.85 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="pointer-events-auto fixed bottom-4 right-4 z-40 w-[13.5rem] border-2 border-ink bg-[#141414] p-4 text-center shadow-[6px_6px_0_0_var(--blood)] sm:bottom-6 sm:right-6 md:w-60"
+      className="pointer-events-auto fixed left-4 top-24 z-30 w-[13.5rem] border-2 border-ink bg-[#141414] p-4 text-center shadow-[6px_6px_0_0_var(--blood)] sm:left-6 md:top-28 md:w-60"
     >
       <button
         type="button"
