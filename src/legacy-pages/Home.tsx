@@ -218,7 +218,7 @@ function Philosophy() {
                 </div>
               </div>
             </MaskReveal>
-            <Reveal delay={0.3} className="absolute -bottom-8 -left-4 hidden rotate-[-4deg] bg-ink p-4 shadow-xl md:block">
+            <Reveal delay={0.3} className="absolute right-4 top-4 z-10 rotate-[3deg] bg-ink p-4 shadow-xl md:right-6 md:top-6">
               <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blood">Est. 2015, Kandivali</p>
               <p className="mt-1 font-display text-xl uppercase text-bone">West, Mumbai</p>
             </Reveal>
@@ -422,6 +422,10 @@ function Testimonials() {
               </figure>
             </Reveal>
           ))}
+        </div>
+        <div className="mt-10 flex flex-col items-center gap-3 border-t border-bone/10 pt-8 text-center">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-bone/45">See every review on Google</p>
+          <a href={contact.googleReviewUrl} target="_blank" rel="noreferrer" className="touch-manipulation border-2 border-acid bg-acid px-5 py-3 font-display text-xs uppercase tracking-[0.16em] text-ink transition hover:bg-transparent hover:text-acid focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-acid">Read our Google reviews</a>
         </div>
       </div>
     </section>

@@ -25,7 +25,7 @@ function Chip({
       role="tab"
       aria-selected={active}
       className={cn(
-        "whitespace-nowrap border-2 px-3.5 py-2 font-display text-[10px] uppercase tracking-[0.14em] transition-all",
+        "touch-manipulation whitespace-nowrap border-2 px-3.5 py-2 font-display text-[10px] uppercase tracking-[0.14em] transition-all",
         active
           ? "border-blood bg-blood text-ink shadow-[3px_3px_0_0_#e8e2d5]"
           : "border-bone/20 text-bone/60 hover:border-blood hover:text-bone",
@@ -93,12 +93,19 @@ export function GalleryGrid() {
 
   const items = useMemo(
     () =>
-      galleryItems.filter(
-        (g) =>
-          (filter === "All" || g.category === filter) &&
-          (artist === "All" || g.artistId === artist) &&
-          (ink === "All" || g.inkColor === ink),
-      ),
+      galleryItems
+        .filter(
+          (g) =>
+            (filter === "All" || g.category === filter) &&
+            (artist === "All" || g.artistId === artist) &&
+            (ink === "All" || g.inkColor === ink),
+        )
+        .sort((a, b) => {
+          if (filter !== "All") return 0;
+          const priority = (item: GalleryItem) =>
+            item.category === "Colour Tattoos" ? 0 : item.category === "Realism" ? 1 : item.category === "Skin Pads" ? 2 : 3;
+          return priority(a) - priority(b) || a.id.localeCompare(b.id);
+        }),
     [filter, artist, ink],
   );
 
