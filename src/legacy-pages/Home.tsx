@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
-import { EyeMotif, HandMotif, InkStroke, LocalTrainMotif, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
+import { EyeMotif, HamzaMotif, HandMotif, InkStroke, LocalTrainMotif, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
 import { GalleryGridMini } from "@/components/GalleryGridMini";
 import { InkButton, MaskReveal, Reveal, SectionHeading } from "@/components/ui-kit";
@@ -108,6 +108,13 @@ function Hero() {
           <span className="h-px w-10 bg-blood/70" aria-hidden />
           Tattoo Studio, Piercing & Academy — Kandivali West, Mumbai
         </motion.p>
+
+        <div className="pointer-events-none absolute right-5 top-28 hidden text-acid/70 sm:block md:right-12 md:top-36">
+          <EyeMotif className="h-9 w-14 rotate-[-8deg]" />
+        </div>
+        <div className="pointer-events-none absolute bottom-24 right-10 hidden text-blood/70 sm:block md:right-20">
+          <HamzaMotif className="h-14 w-11 rotate-[8deg]" />
+        </div>
 
         <h1 className="mt-6 font-display text-[clamp(3.6rem,16vw,6rem)] font-black uppercase leading-[0.82] tracking-[0.015em] text-bone sm:text-[9.5vw] sm:tracking-[0.035em] lg:text-[7.25rem] xl:text-[8rem]">
           <span className="block">{word("Ink", 0)}&nbsp;{word("Is", 1)}</span>
