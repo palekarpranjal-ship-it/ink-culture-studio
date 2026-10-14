@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Folder, MessageCircle, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, MessageCircle, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/next/Link";
-import { artistPortfolioItems, galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
+import { galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
 import { contact } from "@/config/contact";
 import { galleryEnquiryMessage } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
@@ -154,32 +154,6 @@ export function GalleryGrid() {
         </div>
       </div>
 
-      <div className="mt-8 rounded-[1.5rem] border border-bone/15 bg-[#3a3a3a] p-4 shadow-[8px_8px_0_0_rgba(0,0,0,0.24)] sm:p-6">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-[#8ee6ff]">Street Culture / albums</p>
-            <h2 className="mt-2 font-display text-3xl uppercase leading-none text-bone sm:text-4xl">Open a stack.</h2>
-          </div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-bone/45">{galleryCategories.length - 1} folders</span>
-        </div>
-        <div className="mt-6 space-y-3">
-          {(["Karan Parmar", "Lucky Solanki"] as const).map((name) => {
-            const artistId = name.startsWith("Karan") ? "karan" : "lucky";
-            const albumItems = artistPortfolioItems[artistId].slice(0, 3);
-            return <button key={artistId} type="button" onClick={() => { setArtist(artistId); setFilter("All"); }} className="group relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-bone/15 bg-[#262626] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#8ee6ff]/60 hover:bg-[#303030]">
-              <div className="relative flex h-16 w-24 shrink-0 -space-x-5 pl-2">{albumItems.map((item, imageIndex) => <img key={item.id} src={item.src} alt="" className="size-16 rounded-lg border-2 border-[#262626] object-cover shadow-lg" style={{ transform: `rotate(${(imageIndex - 1) * 5}deg) translateY(${imageIndex * 2}px)`, zIndex: 3 - imageIndex }} loading="lazy" />)}<span className="absolute -bottom-1 -right-1 grid size-7 place-items-center rounded-md border-2 border-ink bg-acid text-ink shadow-[2px_2px_0_0_#111]"><Folder className="size-4" aria-hidden /></span></div>
-              <span className="min-w-0 flex-1"><strong className="block font-display text-lg uppercase text-bone group-hover:text-[#8ee6ff]">{name}</strong><small className="font-mono text-[9px] uppercase tracking-[0.18em] text-bone/40">{artistPortfolioItems[artistId].length} pieces · tap to open</small></span><ChevronRight className="size-5 text-bone/35" aria-hidden />
-            </button>;
-          })}
-          {galleryCategories.filter((category) => category !== "All" && category !== "Portfolio").map((category) => {
-            const albumItems = galleryItems.filter((item) => item.category === category).slice(0, 3);
-            return <button key={category} type="button" onClick={() => { setArtist("All"); setFilter(category); }} className="group relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-bone/15 bg-[#262626] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#8ee6ff]/60 hover:bg-[#303030]">
-              <div className="relative flex h-16 w-24 shrink-0 -space-x-5 pl-2">{albumItems.map((item, imageIndex) => <img key={item.id} src={item.src} alt="" className="size-16 rounded-lg border-2 border-[#262626] object-cover shadow-lg" style={{ transform: `rotate(${(imageIndex - 1) * 5}deg) translateY(${imageIndex * 2}px)`, zIndex: 3 - imageIndex }} loading="lazy" />)}<span className="absolute -bottom-1 -right-1 grid size-7 place-items-center rounded-md border-2 border-ink bg-acid text-ink shadow-[2px_2px_0_0_#111]"><Folder className="size-4" aria-hidden /></span></div>
-              <span className="min-w-0 flex-1"><strong className="block font-display text-lg uppercase text-bone group-hover:text-[#8ee6ff]">{category}</strong><small className="font-mono text-[9px] uppercase tracking-[0.18em] text-bone/40">{galleryItems.filter((item) => item.category === category).length} pieces · tap to open</small></span><ChevronRight className="size-5 text-bone/35" aria-hidden />
-            </button>;
-          })}
-        </div>
-      </div>
 
       <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-bone/40">
         {items.length} piece{items.length === 1 ? "" : "s"} showing
