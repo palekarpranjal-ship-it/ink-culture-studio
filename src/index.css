@@ -156,7 +156,7 @@
   html, body, #root { width: 100%; max-width: 100%; overflow-x: clip; }
   body { padding-bottom: env(safe-area-inset-bottom); }
   img, svg, video, canvas { max-width: 100%; }
-  button, a { -webkit-tap-highlight-color: transparent; }
+  button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 }
 
 @keyframes course-card-bob {

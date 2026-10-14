@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
-import { EyeMotif, HandMotif, InkStroke, LocalTrainMotif, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
+import { EyeMotif, HamzaMotif, HandMotif, InkStroke, LocalTrainMotif, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
 import { GalleryGridMini } from "@/components/GalleryGridMini";
 import { InkButton, MaskReveal, Reveal, SectionHeading } from "@/components/ui-kit";
@@ -108,6 +108,13 @@ function Hero() {
           <span className="h-px w-10 bg-blood/70" aria-hidden />
           Tattoo Studio, Piercing & Academy — Kandivali West, Mumbai
         </motion.p>
+
+        <div className="pointer-events-none absolute right-5 top-28 hidden text-acid/70 sm:block md:right-12 md:top-36">
+          <EyeMotif className="h-9 w-14 rotate-[-8deg]" />
+        </div>
+        <div className="pointer-events-none absolute bottom-24 right-10 hidden text-blood/70 sm:block md:right-20">
+          <HamzaMotif className="h-14 w-11 rotate-[8deg]" />
+        </div>
 
         <h1 className="mt-6 font-display text-[clamp(3.6rem,16vw,6rem)] font-black uppercase leading-[0.82] tracking-[0.015em] text-bone sm:text-[9.5vw] sm:tracking-[0.035em] lg:text-[7.25rem] xl:text-[8rem]">
           <span className="block">{word("Ink", 0)}&nbsp;{word("Is", 1)}</span>
@@ -218,7 +225,7 @@ function Philosophy() {
                 </div>
               </div>
             </MaskReveal>
-            <Reveal delay={0.3} className="absolute -bottom-8 -left-4 hidden rotate-[-4deg] border border-bone/15 bg-ink p-4 shadow-xl md:block">
+            <Reveal delay={0.3} className="absolute right-4 top-4 z-10 rotate-[3deg] bg-ink p-4 shadow-xl md:right-6 md:top-6">
               <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blood">Est. 2015, Kandivali</p>
               <p className="mt-1 font-display text-xl uppercase text-bone">West, Mumbai</p>
             </Reveal>
@@ -404,7 +411,7 @@ function Testimonials() {
   return (
     <section className="border-t border-bone/10 py-24 md:py-32" aria-labelledby="testimonials-heading">
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
-        <SectionHeading index="05" kicker="Word On The Street" title={<>Carried with pride.</>} />
+        <SectionHeading index="05" kicker="We Have Received Some Complaints" title={<>Carried with pride.</>} />
         <div className="grid gap-6 md:grid-cols-3">
           {testimonials.map((t, i) => (
             <Reveal key={t.name} delay={i * 0.1}>
@@ -422,6 +429,10 @@ function Testimonials() {
               </figure>
             </Reveal>
           ))}
+        </div>
+        <div className="mt-10 flex flex-col items-center gap-3 border-t border-bone/10 pt-8 text-center">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-bone/45">See every review on Google</p>
+          <a href={contact.googleReviewUrl} target="_blank" rel="noreferrer" className="touch-manipulation border-2 border-acid bg-acid px-5 py-3 font-display text-xs uppercase tracking-[0.16em] text-ink transition hover:bg-transparent hover:text-acid focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-acid">Read our Google reviews</a>
         </div>
       </div>
     </section>
