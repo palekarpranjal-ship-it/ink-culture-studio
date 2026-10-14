@@ -83,7 +83,8 @@ export const contact = {
   googleBusinessUrl: "",
 
   /** Google reviews — paste the listing's reviews URL */
-  googleReviewUrl: "",
+  googleReviewUrl:
+    "https://www.google.com/search?q=Street+Culture+Tattoo+%26+Academy+Kandivali+West+reviews",
 
   /** Average Google rating (out of 5) — shown on the contact page + schema */
   googleRating: 4.8,

@@ -87,8 +87,8 @@ function MysteryBoxTeaser() {
         className="group mx-auto flex w-full cursor-pointer flex-col items-center focus:outline-none"
       >
         <motion.div
-          animate={reduce || tapped ? {} : { y: [0, -4, 0], rotate: [-1.5, 1.5, -1.5] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+  animate={reduce || tapped ? {} : { y: [0, -9, 0], rotate: [-2, 2, -2], scale: [1, 1.05, 1] }}
+  transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         >
           <MysteryBoxArt size={52} className="drop-shadow-[3px_3px_0_rgba(0,0,0,0.45)]" />
         </motion.div>
@@ -480,11 +480,7 @@ export default function Book() {
 
   <section className="relative py-14 md:py-20">
   <div className="mx-auto w-full max-w-5xl px-5 md:px-8">
-  {/* The Mystery Box sits beside the booking form on larger screens and stacks above it on mobile. */}
-  <AnimatePresence>
- <MysteryBoxTeaser />
-  </AnimatePresence>
-          {/* stepper */}
+  {/* stepper */}
           <ol className="mb-10 flex items-center justify-between" aria-label="Booking progress">
             {steps.map((s, i) => (
               <li key={s} className="flex flex-1 items-center last:flex-none">
@@ -792,9 +788,11 @@ export default function Book() {
                 )}
               </div>
             </div>
-          </form>
-
-          <p className="mt-6 text-center font-body text-xs leading-relaxed text-bone/40">
+  </form>
+  <div className="mt-10 flex justify-center">
+    <AnimatePresence><MysteryBoxTeaser /></AnimatePresence>
+  </div>
+  <p className="mt-6 text-center font-body text-xs leading-relaxed text-bone/40">
             Slots are requests until confirmed by the studio. Your details are used only for booking — never marketing.
           </p>
         </div>

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/next/Link";
 import { galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
 import { contact } from "@/config/contact";
+import { galleryEnquiryMessage } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { trackFunnelEvent } from "@/lib/funnel";
 import { CursorLabel } from "./CursorLabel";
@@ -24,7 +25,7 @@ function Chip({
       role="tab"
       aria-selected={active}
       className={cn(
-        "whitespace-nowrap border-2 px-3.5 py-2 font-display text-[10px] uppercase tracking-[0.14em] transition-all",
+        "touch-manipulation whitespace-nowrap border-2 px-3.5 py-2 font-display text-[10px] uppercase tracking-[0.14em] transition-all",
         active
           ? "border-blood bg-blood text-ink shadow-[3px_3px_0_0_#e8e2d5]"
           : "border-bone/20 text-bone/60 hover:border-blood hover:text-bone",
@@ -51,7 +52,7 @@ function Tile({ item, onOpen, index }: { item: GalleryItem; onOpen: () => void; 
         <button
           onClick={onOpen}
           className="block w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-blood"
-          aria-label={`View ${item.category} tattoo`}
+              aria-label={`View ${item.category} ${item.service}`}
         >
           <div className="flex aspect-[4/5] w-full items-center justify-center bg-[#111] p-2 sm:p-3">
             <img
@@ -69,7 +70,7 @@ function Tile({ item, onOpen, index }: { item: GalleryItem; onOpen: () => void; 
               {item.inkColor} ink
             </p>
             <span className="mt-3 inline-flex w-max items-center gap-1.5 border-2 border-blood bg-blood px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-ink">
-              View Tattoo
+              View {item.service === "piercing" ? "Piercing" : "Tattoo"}
             </span>
           </div>
         </button>
@@ -92,12 +93,19 @@ export function GalleryGrid() {
 
   const items = useMemo(
     () =>
-      galleryItems.filter(
-        (g) =>
-          (filter === "All" || g.category === filter) &&
-          (artist === "All" || g.artistId === artist) &&
-          (ink === "All" || g.inkColor === ink),
-      ),
+      galleryItems
+        .filter(
+          (g) =>
+            (filter === "All" || g.category === filter) &&
+            (artist === "All" || g.artistId === artist) &&
+            (ink === "All" || g.inkColor === ink),
+        )
+        .sort((a, b) => {
+          if (filter !== "All") return 0;
+          const priority = (item: GalleryItem) =>
+            item.category === "Colour Tattoos" ? 0 : item.category === "Realism" ? 1 : item.category === "Skin Pads" ? 2 : 3;
+          return priority(a) - priority(b) || a.id.localeCompare(b.id);
+        }),
     [filter, artist, ink],
   );
 
@@ -153,27 +161,6 @@ export function GalleryGrid() {
         </div>
       </div>
 
-      <div className="mt-8 rounded-[1.5rem] border border-bone/15 bg-[#3a3a3a] p-4 shadow-[8px_8px_0_0_rgba(0,0,0,0.24)] sm:p-6">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-[#8ee6ff]">Street Culture / albums</p>
-            <h2 className="mt-2 font-display text-3xl uppercase leading-none text-bone sm:text-4xl">Open a stack.</h2>
-          </div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-bone/45">{galleryCategories.length - 1} folders</span>
-        </div>
-        <div className="mt-6 space-y-3">
-          {galleryCategories.filter((category) => category !== "All").map((category, index) => {
-            const albumItems = galleryItems.filter((item) => item.category === category).slice(0, 3);
-            return <button key={category} type="button" onClick={() => setFilter(category)} className="group relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-bone/15 bg-[#262626] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#8ee6ff]/60 hover:bg-[#303030]">
-              <div className="relative flex h-16 w-24 shrink-0 -space-x-5 pl-2">
-                {albumItems.map((item, imageIndex) => <img key={item.id} src={item.src} alt="" className="size-16 rounded-lg border-2 border-[#262626] object-cover shadow-lg" style={{ transform: `rotate(${(imageIndex - 1) * 5}deg) translateY(${imageIndex * 2}px)`, zIndex: 3 - imageIndex }} loading="lazy" />)}
-              </div>
-              <span className="min-w-0 flex-1"><strong className="block font-display text-lg uppercase text-bone group-hover:text-[#8ee6ff]">{category}</strong><small className="font-mono text-[9px] uppercase tracking-[0.18em] text-bone/40">{galleryItems.filter((item) => item.category === category).length} pieces · tap to open</small></span>
-              <ChevronRight className="size-5 text-bone/35 transition group-hover:translate-x-1 group-hover:text-[#8ee6ff]" aria-hidden />
-            </button>;
-          })}
-        </div>
-      </div>
 
       <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-bone/40">
         {items.length} piece{items.length === 1 ? "" : "s"} showing
@@ -236,15 +223,13 @@ function Lightbox({
     };
   }, []);
 
-  const waHref = `https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(
-    `Hey ${contact.studioName}! I saw a ${item.category} piece (${item.inkColor} ink) in your gallery. I'd love something similar.`,
-  )}`;
+  const waHref = `https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(galleryEnquiryMessage(item))}`;
 
   return (
     <motion.div
       role="dialog"
       aria-modal="true"
-      aria-label={`${item.category} tattoo artwork`}
+      aria-label={`${item.category} ${item.service} artwork`}
       className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/95 p-4 backdrop-blur-sm sm:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -309,7 +294,7 @@ function Lightbox({
               to="/gallery"
               className="border-2 border-blood bg-blood px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink transition-transform hover:-translate-y-0.5"
             >
-              View {item.category} Collection
+              View {item.service === "piercing" ? "Piercing" : "Tattoo"} Collection
             </Link>
           </div>
           {item.description && <p className="mt-3 text-sm leading-relaxed text-bone/65">{item.description}</p>}
@@ -320,7 +305,7 @@ function Lightbox({
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 border-2 border-ink bg-cream px-5 py-3 font-display text-xs font-bold uppercase tracking-[0.18em] text-ink shadow-[4px_4px_0_0_var(--blood)] transition-transform hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_var(--blood)]"
             >
-              <MessageCircle className="size-4" /> Book a Similar Tattoo
+              <MessageCircle className="size-4" /> Book a Similar {item.service === "piercing" ? "Piercing" : "Tattoo"}
             </a>
           </div>
         </figcaption>

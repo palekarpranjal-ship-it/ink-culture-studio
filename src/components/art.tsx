@@ -87,6 +87,16 @@ export function SnakeMotif({ className }: ArtProps) {
   );
 }
 
+export function HamzaMotif({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 80 100" fill="none" aria-hidden className={className}>
+      <path d="M40 8 C 30 21, 25 31, 25 45 C 25 65, 31 82, 40 92 C 49 82, 55 65, 55 45 C 55 31, 50 21, 40 8 Z" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M30 45 C 35 40, 45 40, 50 45 M32 58 C 37 54, 43 54, 48 58" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M40 23 V 34 M35 28 H45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function StarMotif({ className }: ArtProps) {
   return (
     <svg viewBox="0 0 40 40" fill="none" aria-hidden className={className}>

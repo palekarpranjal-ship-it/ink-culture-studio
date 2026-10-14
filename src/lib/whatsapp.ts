@@ -38,6 +38,14 @@ export function openWhatsApp(message: string): void {
 }
 
 /** Generic short message helper. */
+export function galleryEnquiryMessage(item: { service: "tattoo" | "piercing"; artistName?: string; category?: string; src?: string }): string {
+  const reference = item.src ? `\nReference image: ${item.src}` : "";
+  if (item.service === "piercing") {
+    return `Hi ${contact.studioName}! 🖤 I'd like to enquire about getting a piercing similar to this reference.\n\nPiercing type: ${item.category || "Gallery reference"}${reference}\n\nCould you please share the pricing, availability, jewellery options, and aftercare information?`;
+  }
+  return `Hi ${contact.studioName}! 🖤 I'd like to enquire about getting a tattoo similar to this reference.\n\nArtist: ${item.artistName || "Street Culture artist"}\nTattoo style: ${item.category || "Gallery reference"}${reference}\n\nCould you please share the estimated pricing, availability, and next steps for booking?`;
+}
+
 export function generalEnquiryMessage(): string {
   return `Hey ${contact.studioName}! I want to enquire about a tattoo.`;
 }
