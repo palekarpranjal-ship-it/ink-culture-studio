@@ -59,8 +59,11 @@ export const inkColorFilters: ("All" | InkColor)[] = [
   "Fine B&W",
 ];
 
+export type GalleryService = "tattoo" | "piercing";
+
 export type GalleryItem = {
   id: string;
+  service: GalleryService;
   title: string;
   category: GalleryCategory;
   /** Ink palette dimension for filtering */
@@ -221,6 +224,7 @@ export const artistPortfolioItems: Record<string, GalleryItem[]> = Object.entrie
   (all, [artistId, sources]) => {
     all[artistId] = sources.map((src, index) => ({
       id: `portfolio-${artistId}-${index + 1}`,
+      service: "tattoo",
       title: `${artistId} portfolio ${index + 1}`,
       category: artistId === "lucky" ? "Colour Tattoos" : "Line Art",
       inkColor: artistId === "lucky" ? "Colour" : "Black & Grey",
@@ -257,6 +261,7 @@ const ratios = [1, 1.45, 0.8, 1.2, 0.9, 1.6, 1.1, 0.85, 1.3, 0.95, 1.5, 1.05];
 function build(): GalleryItem[] {
   return uploadedCategories.map(({ category, src, index }, itemIndex) => ({
     id: `g-${itemIndex + 1}`,
+    service: category === "Piercing" ? "piercing" : "tattoo",
     title: `${category} ${index + 1}`,
     category: category as GalleryCategory,
     inkColor: category === "Colour Tattoos" ? "Colour" : "Black & Grey",

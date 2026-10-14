@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/next/Link";
 import { artistPortfolioItems, galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
 import { contact } from "@/config/contact";
+import { galleryEnquiryMessage } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { trackFunnelEvent } from "@/lib/funnel";
 import { CursorLabel } from "./CursorLabel";
@@ -51,7 +52,7 @@ function Tile({ item, onOpen, index }: { item: GalleryItem; onOpen: () => void; 
         <button
           onClick={onOpen}
           className="block w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-blood"
-          aria-label={`View ${item.category} tattoo`}
+              aria-label={`View ${item.category} ${item.service}`}
         >
           <div className="flex aspect-[4/5] w-full items-center justify-center bg-[#111] p-2 sm:p-3">
             <img
@@ -69,7 +70,7 @@ function Tile({ item, onOpen, index }: { item: GalleryItem; onOpen: () => void; 
               {item.inkColor} ink
             </p>
             <span className="mt-3 inline-flex w-max items-center gap-1.5 border-2 border-blood bg-blood px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-ink">
-              View Tattoo
+              View {item.service === "piercing" ? "Piercing" : "Tattoo"}
             </span>
           </div>
         </button>
@@ -241,15 +242,13 @@ function Lightbox({
     };
   }, []);
 
-  const waHref = `https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(
-    `Hey ${contact.studioName}! I saw a ${item.category} piece (${item.inkColor} ink) in your gallery. I'd love something similar.`,
-  )}`;
+  const waHref = `https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(galleryEnquiryMessage(item))}`;
 
   return (
     <motion.div
       role="dialog"
       aria-modal="true"
-      aria-label={`${item.category} tattoo artwork`}
+      aria-label={`${item.category} ${item.service} artwork`}
       className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/95 p-4 backdrop-blur-sm sm:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -314,7 +313,7 @@ function Lightbox({
               to="/gallery"
               className="border-2 border-blood bg-blood px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink transition-transform hover:-translate-y-0.5"
             >
-              View {item.category} Collection
+              View {item.service === "piercing" ? "Piercing" : "Tattoo"} Collection
             </Link>
           </div>
           {item.description && <p className="mt-3 text-sm leading-relaxed text-bone/65">{item.description}</p>}
@@ -325,7 +324,7 @@ function Lightbox({
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 border-2 border-ink bg-cream px-5 py-3 font-display text-xs font-bold uppercase tracking-[0.18em] text-ink shadow-[4px_4px_0_0_var(--blood)] transition-transform hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_var(--blood)]"
             >
-              <MessageCircle className="size-4" /> Book a Similar Tattoo
+              <MessageCircle className="size-4" /> Book a Similar {item.service === "piercing" ? "Piercing" : "Tattoo"}
             </a>
           </div>
         </figcaption>
