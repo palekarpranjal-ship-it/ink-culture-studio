@@ -143,7 +143,7 @@ const uploadedPhotos: Record<string, string[]> = {
     "/images/placeholder/student's Achievement/Throwback B&G 02.jpg",
     "/images/placeholder/student's Achievement/Throwback Student tat Yogesh.jpg",
   ],
-  Piercing: ["/images/placeholder/Piercing.svg", "/images/placeholder/piercing.svg"],
+  Piercing: ["/images/placeholder/piercing.svg"],
   "Skin Pads": [
     "/images/placeholder/skinpads/Backpiece 01.jpg",
     "/images/placeholder/skinpads/Bagga Scary portrait.jpg",

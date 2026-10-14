@@ -37,11 +37,11 @@ export function StreetCultureBot() {
 <div className="relative grid size-20 place-items-center">
  <span aria-hidden className="absolute -left-5 top-2 h-4 w-8 rounded-full bg-white/80 blur-[1px] animate-[cloud-drift_4s_ease-in-out_infinite]" />
  <span aria-hidden className="absolute -top-2 left-2 h-3 w-7 rounded-full bg-white/70 blur-[1px] animate-[cloud-drift_5s_ease-in-out_infinite_reverse]" />
- <span aria-hidden className="relative z-10 mt-3 grid h-14 w-11 place-items-center border-4 border-ink bg-blood shadow-[5px_5px_0_0_#1a1a1a] [image-rendering:pixelated]">
-   <span className="absolute -top-4 left-1 h-4 w-9 border-4 border-b-0 border-ink bg-acid" />
-   <span className="absolute left-2 top-4 size-2 bg-bone" /><span className="absolute right-2 top-4 size-2 bg-bone" />
-   <Droplets aria-hidden className="h-6 w-6 text-acid" />
-   <span className="absolute -bottom-3 left-0 size-3 border-2 border-ink bg-acid" /><span className="absolute -bottom-3 right-0 size-3 border-2 border-ink bg-acid" />
+ <span aria-hidden className="relative z-10 grid size-16 place-items-center rounded-[45%_45%_42%_42%] border-4 border-ink bg-acid shadow-[4px_6px_0_0_#1a1a1a] animate-bounce">
+   <span className="absolute left-3 top-4 size-3 rounded-full bg-ink" /><span className="absolute right-3 top-4 size-3 rounded-full bg-ink" />
+   <span className="absolute left-4 top-5 size-1 bg-bone" /><span className="absolute right-4 top-5 size-1 bg-bone" />
+   <span className="absolute bottom-3 left-5 h-1 w-6 rounded-full bg-ink" />
+   <Droplets aria-hidden className="absolute -bottom-3 size-5 text-blood" />
  </span>
  </div>
         <span className="sr-only">Street Culture Bot{count > 0 ? `, ${count} bookings in the book` : ", ready for your idea"}</span>

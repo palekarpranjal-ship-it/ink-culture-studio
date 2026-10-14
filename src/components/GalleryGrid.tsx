@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, MessageCircle, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/next/Link";
-import { galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
+import { artistPortfolioItems, galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
 import { contact } from "@/config/contact";
 import { cn } from "@/lib/utils";
 import { trackFunnelEvent } from "@/lib/funnel";
@@ -162,14 +162,19 @@ export function GalleryGrid() {
           <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-bone/45">{galleryCategories.length - 1} folders</span>
         </div>
         <div className="mt-6 space-y-3">
-          {galleryCategories.filter((category) => category !== "All").map((category, index) => {
+          {(["Karan Parmar", "Lucky Solanki"] as const).map((name) => {
+            const artistId = name.startsWith("Karan") ? "karan" : "lucky";
+            const albumItems = artistPortfolioItems[artistId].slice(0, 3);
+            return <button key={artistId} type="button" onClick={() => { setArtist(artistId); setFilter("All"); }} className="group relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-bone/15 bg-[#262626] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#8ee6ff]/60 hover:bg-[#303030]">
+              <div className="relative flex h-16 w-24 shrink-0 -space-x-5 pl-2">{albumItems.map((item, imageIndex) => <img key={item.id} src={item.src} alt="" className="size-16 rounded-lg border-2 border-[#262626] object-cover shadow-lg" style={{ transform: `rotate(${(imageIndex - 1) * 5}deg) translateY(${imageIndex * 2}px)`, zIndex: 3 - imageIndex }} loading="lazy" />)}</div>
+              <span className="min-w-0 flex-1"><strong className="block font-display text-lg uppercase text-bone group-hover:text-[#8ee6ff]">{name}</strong><small className="font-mono text-[9px] uppercase tracking-[0.18em] text-bone/40">{artistPortfolioItems[artistId].length} pieces · tap to open</small></span><ChevronRight className="size-5 text-bone/35" aria-hidden />
+            </button>;
+          })}
+          {galleryCategories.filter((category) => category !== "All" && category !== "Portfolio").map((category) => {
             const albumItems = galleryItems.filter((item) => item.category === category).slice(0, 3);
-            return <button key={category} type="button" onClick={() => setFilter(category)} className="group relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-bone/15 bg-[#262626] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#8ee6ff]/60 hover:bg-[#303030]">
-              <div className="relative flex h-16 w-24 shrink-0 -space-x-5 pl-2">
-                {albumItems.map((item, imageIndex) => <img key={item.id} src={item.src} alt="" className="size-16 rounded-lg border-2 border-[#262626] object-cover shadow-lg" style={{ transform: `rotate(${(imageIndex - 1) * 5}deg) translateY(${imageIndex * 2}px)`, zIndex: 3 - imageIndex }} loading="lazy" />)}
-              </div>
-              <span className="min-w-0 flex-1"><strong className="block font-display text-lg uppercase text-bone group-hover:text-[#8ee6ff]">{category}</strong><small className="font-mono text-[9px] uppercase tracking-[0.18em] text-bone/40">{galleryItems.filter((item) => item.category === category).length} pieces · tap to open</small></span>
-              <ChevronRight className="size-5 text-bone/35 transition group-hover:translate-x-1 group-hover:text-[#8ee6ff]" aria-hidden />
+            return <button key={category} type="button" onClick={() => { setArtist("All"); setFilter(category); }} className="group relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-bone/15 bg-[#262626] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#8ee6ff]/60 hover:bg-[#303030]">
+              <div className="relative flex h-16 w-24 shrink-0 -space-x-5 pl-2">{albumItems.map((item, imageIndex) => <img key={item.id} src={item.src} alt="" className="size-16 rounded-lg border-2 border-[#262626] object-cover shadow-lg" style={{ transform: `rotate(${(imageIndex - 1) * 5}deg) translateY(${imageIndex * 2}px)`, zIndex: 3 - imageIndex }} loading="lazy" />)}</div>
+              <span className="min-w-0 flex-1"><strong className="block font-display text-lg uppercase text-bone group-hover:text-[#8ee6ff]">{category}</strong><small className="font-mono text-[9px] uppercase tracking-[0.18em] text-bone/40">{galleryItems.filter((item) => item.category === category).length} pieces · tap to open</small></span><ChevronRight className="size-5 text-bone/35" aria-hidden />
             </button>;
           })}
         </div>
