@@ -218,7 +218,7 @@ function Philosophy() {
                 </div>
               </div>
             </MaskReveal>
-            <Reveal delay={0.3} className="absolute -bottom-8 -left-4 hidden rotate-[-4deg] border border-bone/15 bg-ink p-4 shadow-xl md:block">
+            <Reveal delay={0.3} className="absolute -bottom-8 -left-4 hidden rotate-[-4deg] bg-ink p-4 shadow-xl md:block">
               <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blood">Est. 2015, Kandivali</p>
               <p className="mt-1 font-display text-xl uppercase text-bone">West, Mumbai</p>
             </Reveal>
@@ -404,7 +404,7 @@ function Testimonials() {
   return (
     <section className="border-t border-bone/10 py-24 md:py-32" aria-labelledby="testimonials-heading">
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
-        <SectionHeading index="05" kicker="Word On The Street" title={<>Carried with pride.</>} />
+        <SectionHeading index="05" kicker="We Have Received Some Complaints" title={<>Carried with pride.</>} />
         <div className="grid gap-6 md:grid-cols-3">
           {testimonials.map((t, i) => (
             <Reveal key={t.name} delay={i * 0.1}>

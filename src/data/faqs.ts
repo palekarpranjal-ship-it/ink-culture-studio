@@ -45,24 +45,73 @@ export const faqs: Faq[] = [
 
 export const testimonials = [
   {
-    name: "Rhea M.",
-    piece: "Fine line forearm piece",
+    name: "Rohan2701Vish",
+    piece: "Tattoo experience",
     quote:
-      "Karan redrew my idea twice before the stencil was right. That patience is why the tattoo looks like it was always part of my arm.",
+      "I recently got inked at street culture tattoo studio, by lucky Solanki sir. His work is truly amazingggggg... even his teammates were polite and friendly towards me . The overall experience that will always stay in my mind.",
     rating: 5,
   },
   {
-    name: "Aditya S.",
-    piece: "Black & grey realism",
+    name: "Reddy Sreekar",
+    piece: "Tattoo experience",
     quote:
-      "The studio feels like an art gallery that happens to have tattoo machines. Clean, calm, zero ego — and the healed work speaks for itself.",
+      "Hello so a must visit place if you want get some beautiful tattoo done. Located at Kandivali and superb salon for tattoo. The studio has positive vibes as soon as you enter. Must say Lucky and his whole team are so proficient. We entered the studio at 2.30 pm. The artist who made my tattoo- Karan, welcomed us with a warm smile. He patiently heard about my requirement and then created the design till the time I felt that yes this is the one. It took almost an hour for the design. Later on the team took half an hour lunch break so by the time we just rested. The tattoo making started sharp at 4.00pm and got done by 5.30pm. It was very smooth process and just like a therapy. Karan is excellent at his work and made the tattoo with precision. He was patiently talking and answering all the questions too. It's a spacious studio with some amazing music. Towards the end one of their team members, Shubham clicked some outstanding pictures. If it's your first tattoo or last you must visit this place once. I am so glad with their after service too. I had queries and kept sending on WhatsApp. They replied promptly and guided well. Thanks for the beautiful tattoo and the experience. I plan to get ear piercing done too. Already my friends are looking forward to visit the place. Best wishes to Lucky, Karan, Shubham and Nayan.",
     rating: 5,
   },
   {
-    name: "Sana K.",
-    piece: "Custom lettering",
+    name: "Sparsh Dutta",
+    piece: "Colour tattoo",
     quote:
-      "Lucky turned my grandmother's handwriting into something I'll carry forever. I cried when he showed me the design. Best decision I've made.",
+      "Lucky sir was absolutely cooperative and brilliant at his work, we designed the tattoo and got it done within 6 hours, it was an absolutely amazing environment, he's a master with colours and detailing!",
+    rating: 5,
+  },
+  {
+    name: "Ritika Shah",
+    piece: "First tattoo",
+    quote:
+      "It was my first time getting a tattoo done with Karan. He's really good at his craft and the entire process was very smooth. He's very patient with constant back and forth we had on my tattoo design and also showed me multiple options. The entire inking process was literally pain free and super fun! Defs going again to get my next tattoo done.",
+    rating: 5,
+  },
+  {
+    name: "An imish Pandit",
+    piece: "Custom colour tattoo",
+    quote:
+      "Had an incredible experience getting inked here! I came in with a few rough concepts, and Karan was amazing to work with while refining the design. He was extremely calm, composed, and patient throughout the entire process. What I appreciated most was his honest advice—he clearly explained what would and wouldn't translate well on skin, as well as what was realistic to achieve. I only had one simple black-and-grey tattoo prior to this, but I really wanted to try a colored piece this time. Karan absolutely delivered to my expectations. The final outcome is awesome",
+    rating: 5,
+  },
+  {
+    name: "Harshada Salunkhe",
+    piece: "First tattoo",
+    quote:
+      "It was my very first tattoo.. n i was pretty much scared but the people around were so sweet enough to make me feel comfortable and explain me all the small tiny details which helped me throughout! It didn't even pain for a bit i felt am a very delicate person but I didn't felt the pain..! 10/10 recommended! Love you guys!",
+    rating: 5,
+  },
+  {
+    name: "Pratham Muchchala",
+    piece: "Tattoo and piercing studio",
+    quote:
+      "Very friendly, extremely professional and masters at what they do and yet humble enough to explain everything as many times as you want. Mostly importantly, extremely hygienic and clean. Must visit for safe and great tattoo/ piercing experience.",
+    rating: 5,
+  },
+  {
+    name: "Mahima Karmokar",
+    piece: "Custom tattoo",
+    quote:
+      "I had a great experience, the tattoo was almost painless, the environment was so comfortable. The designs were well made, I had come with a design I wanted but it was poorly drawn, they made sure to bring my tattoo to life and perfect my design. My tattoo was also quite intricate and I wanted something identical on both of my shoulders. They made sure to measure the distance between my tattoos accurately and kept trying until they got it right. Very meticulous and great!",
+    rating: 5,
+  },
+  {
+    name: "Nandini Yadav",
+    piece: "Tattoo experience",
+    quote:
+      "Had a really great time at Street Culture Tattoo! The consultation was super chill and the vibe was amazing. Karan was really professional and made sure I was comfortable throughout. Can't wait to come back for my next tattoo.",
+    rating: 5,
+  },
+  {
+    name: "Pankti Shah",
+    piece: "First tattoo",
+    quote:
+      "Absolutely phenomenal experience with Karan as the tattoo artist. It was my first time getting a tattoo and thanks to Karan, I got 2 of them done in the same sitting. I really appreciated Karan's patience throughout the designing process, he really took the time and effort to design something that I was happy with without rushing the process. I received a lot of compliments on my tattoos and I will definitely be back for more!.",
     rating: 5,
   },
 ];
