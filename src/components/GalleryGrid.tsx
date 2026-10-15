@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, MessageCircle, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/next/Link";
-import { galleryCategories, galleryItems, inkColorFilters, type GalleryItem } from "@/data/gallery";
+import { galleryCategories, galleryItems, type GalleryItem } from "@/data/gallery";
 import { contact } from "@/config/contact";
 import { galleryEnquiryMessage } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
@@ -84,7 +84,6 @@ export function GalleryGrid() {
   const initialFilter = requestedCategory && galleryCategories.includes(requestedCategory as (typeof galleryCategories)[number]) ? requestedCategory : "All";
   const [filter, setFilter] = useState(initialFilter);
   const [artist, setArtist] = useState<string>("All");
-  const [ink, setInk] = useState<string>("All");
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
 
   useEffect(() => {
@@ -98,7 +97,7 @@ export function GalleryGrid() {
           (g) =>
             (filter === "All" || g.category === filter) &&
             (artist === "All" || g.artistId === artist) &&
-            (ink === "All" || g.inkColor === ink),
+            true,
         )
         .sort((a, b) => {
           if (filter !== "All") return 0;
@@ -106,7 +105,7 @@ export function GalleryGrid() {
             item.category === "Colour Tattoos" ? 0 : item.category === "Realism" ? 1 : item.category === "Skin Pads" ? 2 : 3;
           return priority(a) - priority(b) || a.id.localeCompare(b.id);
         }),
-    [filter, artist, ink],
+    [filter, artist],
   );
 
   // keyboard nav for lightbox
@@ -145,16 +144,6 @@ export function GalleryGrid() {
             {[["All", "All"], ["karan", "Karan Parmar"], ["lucky", "Lucky Solanki"]].map(([id, label]) => (
               <Chip key={id} active={artist === id} onClick={() => setArtist(id)}>
                 {label}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="-mx-5 overflow-x-auto px-5 pb-1 md:mx-0 md:px-0" role="tablist" aria-label="Filter by ink colour">
-          <div className="flex w-max items-center gap-2 md:flex-wrap md:w-auto">
-            <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-bone/35">Ink</span>
-            {inkColorFilters.map((c) => (
-              <Chip key={c} active={ink === c} onClick={() => setInk(c)}>
-                {c}
               </Chip>
             ))}
           </div>

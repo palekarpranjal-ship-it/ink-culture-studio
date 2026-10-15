@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
-import { EyeMotif, HandMotif, InkStroke, LocalTrainMotif, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
+import { EyeMotif, HandMotif, InkStroke, LocalTrainMotif, StarMotif, TickerStrip } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
 import { GalleryGridMini } from "@/components/GalleryGridMini";
 import { InkButton, MaskReveal, Reveal, SectionHeading } from "@/components/ui-kit";
@@ -153,8 +153,7 @@ function Hero() {
           transition={{ delay: 0.12, duration: 0.4 }}
           className="mt-10 flex items-end justify-between gap-6 text-bone/25 md:mt-14"
         >
-          <SnakeMotif className="h-16 w-16 md:h-24 md:w-24" />
-          <LocalTrainMotif className="hidden h-16 w-24 text-bone/20 sm:block" />
+                  <LocalTrainMotif className="hidden h-16 w-24 text-bone/20 sm:block" />
           <HandMotif className="h-20 w-16 md:h-28 md:w-24" />
           <InkStroke className="hidden w-40 md:block" />
           <StarMotif className="h-7 w-7 text-blood/40" />
