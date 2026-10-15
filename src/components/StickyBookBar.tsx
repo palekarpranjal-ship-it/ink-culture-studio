@@ -24,9 +24,9 @@ export function StickyBookBar() {
           animate={{ y: 0 }}
           exit={{ y: 80 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-bone/15 bg-ink/95 px-4 py-3 backdrop-blur-md sm:hidden"
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-bone/15 bg-ink/95 px-3 py-2 backdrop-blur-md sm:hidden"
         >
-          <PixelButton href="/book" size="md" className="w-full py-3.5 text-sm">
+          <PixelButton href="/book" size="sm" className="w-full py-2 text-xs">
             Book Your Tattoo
           </PixelButton>
         </motion.div>
