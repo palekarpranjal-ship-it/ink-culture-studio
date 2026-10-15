@@ -64,7 +64,6 @@ export default function Academy() {
 
   <div className="bg-black">
   <WhySection />
-  <AcademyGameFeatures />
         <CurriculumSection />
         <WorkshopSection />
         <WhoSection />
@@ -97,35 +96,21 @@ function WhySection() {
   );
 }
 
-function AcademyGameFeatures() {
-  return <section className="mx-auto max-w-6xl px-5 pb-10 md:px-8" aria-label="Academy game features">
-    <div className="grid gap-4 sm:grid-cols-2">
-      <div className="border-2 border-[#ffcb05]/70 bg-[#365fa8]/80 p-5 shadow-[5px_5px_0_0_#ffcb05]">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#ffcb05]">Training deck</p>
-        <h3 className="mt-2 font-display text-2xl uppercase text-bone">Catch your next skill</h3>
-        <p className="mt-2 font-body text-sm text-bone/70">Unlock course badges as you collect drawing, lining, colour and studio-management skills.</p>
-      </div>
-      <div className="border-2 border-[#e53b35]/70 bg-[#e53b35]/70 p-5 shadow-[5px_5px_0_0_#2bb7ff]">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-bone">Level-up route</p>
-        <h3 className="mt-2 font-display text-2xl uppercase text-bone">Coins for consistency</h3>
-        <p className="mt-2 font-body text-sm text-bone/70">Complete practice missions, collect studio coins and move from sketchbook start to confident artist.</p>
-      </div>
-    </div>
-  </section>;
-}
-
 function CurriculumSection() {
   const reduce = useReducedMotion();
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [courseSlide, setCourseSlide] = useState(0);
   return (
-    <section className="border-t border-bone/10 py-20 md:py-28" aria-labelledby="curriculum-heading">
+    <section className="border-t border-bone/10 py-12 sm:py-16 md:py-28" aria-labelledby="curriculum-heading">
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
+        <div className="mb-8 overflow-hidden border-2 border-[#2bb7ff]/60 bg-[#2bb7ff]/10 px-4 py-3 shadow-[4px_4px_0_0_#e53b35] sm:mb-10 sm:px-5">
+          <p className="animate-pulse text-center font-display text-sm uppercase tracking-[0.18em] text-[#2bb7ff] sm:text-base">Next batch commencement — admissions opening soon</p>
+        </div>
         <SectionHeading index="03" kicker="Course Structure" title={<>Five ways in.<br />Choose your path.</>} />
-        <div className="grid gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
           <div className="order-2 md:order-1">
             {selectedCourse ? (() => { const active = academyCourses.find((course) => course.id === selectedCourse); return active ? (
-              <motion.div layout initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} className="sticky top-24 rounded-xl border-2 border-[#2bb7ff]/40 bg-charcoal p-6 shadow-[6px_6px_0_0_rgba(239,190,58,0.65)]">
+              <motion.div layout initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} className="sticky top-20 rounded-xl border-2 border-[#2bb7ff]/40 bg-charcoal p-4 sm:p-6 shadow-[4px_4px_0_0_rgba(239,190,58,0.65)]">
   <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#2bb7ff]">Course pamphlet</p>
   {active.images?.length ? <div className="mt-4 overflow-hidden rounded-lg border border-[#2bb7ff]/25 bg-ink">
     <img src={active.images[courseSlide]} alt={`${active.title} curriculum page ${courseSlide + 1}`} className="h-40 w-full object-cover" />
@@ -151,7 +136,7 @@ function CurriculumSection() {
               animate={reduce ? undefined : { y: [0, -5, 0], rotate: [0, i % 2 ? 0.3 : -0.3, 0] }}
               whileHover={reduce ? undefined : { scale: 1.015, rotate: 0 }}
               transition={{ duration: 4.8, repeat: Infinity, delay: (i % 3) * 0.25, ease: "easeInOut" }}
-              className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-[1.25rem] border-2 border-[#2bb7ff]/35 bg-ink p-3 shadow-[5px_5px_0_0_rgba(239,190,58,0.8)] transition-all hover:-translate-y-2 hover:border-[#2bb7ff] hover:bg-charcoal hover:shadow-[8px_8px_0_0_rgba(239,190,58,0.9)] ${selectedCourse === c.id ? "border-[#2bb7ff] bg-charcoal ring-2 ring-[#2bb7ff]/30" : ""}`}
+              className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border-2 border-[#2bb7ff]/35 bg-ink p-2.5 shadow-[4px_4px_0_0_rgba(239,190,58,0.8)] transition-all hover:-translate-y-1 hover:border-[#2bb7ff] hover:bg-charcoal hover:shadow-[6px_6px_0_0_rgba(239,190,58,0.9)] sm:rounded-[1.25rem] sm:p-3 ${selectedCourse === c.id ? "border-[#2bb7ff] bg-charcoal ring-2 ring-[#2bb7ff]/30" : ""}`}
               onClick={() => { setSelectedCourse(selectedCourse === c.id ? null : c.id); setCourseSlide(0); }}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -163,7 +148,7 @@ function CurriculumSection() {
               tabIndex={0}
               aria-expanded={selectedCourse === c.id}
             >
-              <div className="relative mb-4 aspect-[4/5] overflow-hidden rounded-xl border border-[#2bb7ff]/25 bg-ink">
+              <div className="relative mb-3 aspect-[16/10] overflow-hidden rounded-lg border border-[#2bb7ff]/25 bg-ink sm:mb-4 sm:aspect-[4/5] sm:rounded-xl">
                 {c.cover ? <img src={c.cover} alt={`${c.title} course cover`} className="size-full object-cover transition duration-500 group-hover:scale-105" /> : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-transparent" />
                 <span className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[#2bb7ff]">Street Culture Academy</span>
@@ -180,15 +165,8 @@ function CurriculumSection() {
                 </span>
               </div>
               <h3 className="mt-4 font-display text-xl uppercase leading-tight tracking-tight text-bone">{c.title}</h3>
-              <p className="mt-3 flex-1 font-body text-sm leading-relaxed text-bone/60">{c.summary}</p>
-              <ul className="mt-4 space-y-1.5 border-t border-bone/10 pt-4">
-                {c.outcomes.map((o) => (
-                  <li key={o} className="flex items-start gap-2 text-[12px] leading-snug text-bone/70">
-                    <span className="mt-1.5 size-1 shrink-0 rounded-full bg-[#2bb7ff]/70" aria-hidden />
-                    {o}
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-2 flex-1 font-body text-xs leading-relaxed text-bone/60 sm:mt-3 sm:text-sm">{c.summary}</p>
+              <span className="mt-4 border-t border-bone/10 pt-3 font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-[#2bb7ff]">Read more in the course pamphlet</span>
               {c.instructor ? <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.12em] text-[#2bb7ff]/80">{c.instructor}</p> : null}
               <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-bone/40">{c.duration}</p>
               <button
