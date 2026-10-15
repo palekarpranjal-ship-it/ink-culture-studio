@@ -1,12 +1,12 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
-import { EyeMotif, HandMotif, InkStroke, StarMotif, TickerStrip } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
-import { GalleryGridMini } from "@/components/GalleryGridMini";
+import { EyeMotif, HandMotif, InkStroke, StarMotif, TickerStrip } from "@/components/art";
+import { StudioArchiveSlideshow } from "@/components/StudioArchiveSlideshow";
 import { InkButton, MaskReveal, Reveal, SectionHeading } from "@/components/ui-kit";
 import { contact } from "@/config/contact";
 import { artists } from "@/data/artists";
@@ -50,19 +50,10 @@ export default function Home() {
 }
 
 function LiveStudioPulse() {
-  const [viewers, setViewers] = useState(14);
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setViewers((current) => Math.max(8, Math.min(28, current + (Math.random() > 0.5 ? 1 : -1))));
-    }, 4200);
-    return () => window.clearInterval(interval);
-  }, []);
-
   return (
-    <div className="pointer-events-none fixed right-4 top-24 z-30 flex items-center gap-2 border border-[#65e66e]/40 bg-ink/80 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-[#8af58f] backdrop-blur-sm sm:right-6 sm:top-28" aria-label={`${viewers} people are viewing this website`}>
+    <div className="pointer-events-none fixed right-4 top-24 z-30 flex items-center gap-2 border border-[#65e66e]/40 bg-ink/80 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-[#8af58f] backdrop-blur-sm sm:right-6 sm:top-28" aria-label="The studio website is live">
       <span className="size-2 animate-pulse rounded-full bg-[#65e66e] shadow-[0_0_10px_#65e66e]" aria-hidden />
-      <span><strong className="text-[#b7ffba]">{viewers}</strong> people browsing now</span>
+      <span><strong className="text-[#b7ffba]">LIVE</strong> studio archive</span>
     </div>
   );
 }
@@ -73,7 +64,7 @@ function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const yBg = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 120]);
+  const yBg = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 48]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
 
   const word = (t: string, i: number) => (
@@ -110,10 +101,14 @@ function Hero() {
         </motion.p>
 
         <img
+          width="112"
+          height="128"
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-168-Q8oAx2UrDPfCxOYO6BX6DL1g6DgsXX.jpg"
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute right-5 top-28 hidden h-24 w-20 object-contain mix-blend-screen opacity-45 grayscale invert sm:block md:right-12 md:top-36 md:h-32 md:w-28"
+          loading="eager"
+          decoding="async"
+          className="pointer-events-none absolute right-5 top-28 hidden h-24 w-20 object-contain mix-blend-screen opacity-25 grayscale invert sm:block md:right-12 md:top-36 md:h-32 md:w-28"
         />
         <img
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-456-dBzKxReKMw1tROjjEL5qM9lpmpC1eg.jpg"
@@ -121,7 +116,7 @@ function Hero() {
           aria-hidden="true"
           loading="lazy"
           decoding="async"
-          className="pointer-events-none absolute left-5 top-36 hidden h-20 w-20 object-contain mix-blend-screen opacity-35 grayscale invert sm:block md:left-12 md:top-44 md:h-28 md:w-28"
+          className="pointer-events-none absolute left-5 top-36 hidden h-20 w-20 object-contain mix-blend-screen opacity-20 grayscale invert sm:block md:left-12 md:top-44 md:h-28 md:w-28"
         />
         <img
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-453-3OrpApZ96jvAB8578ZQG91C3TMOCiv.jpg"
@@ -129,7 +124,7 @@ function Hero() {
           aria-hidden="true"
           loading="lazy"
           decoding="async"
-          className="pointer-events-none absolute bottom-28 left-16 hidden h-24 w-32 object-contain mix-blend-screen opacity-35 grayscale invert sm:block md:left-24 md:h-32 md:w-44"
+          className="pointer-events-none absolute bottom-28 left-16 hidden h-24 w-32 object-contain mix-blend-screen opacity-18 grayscale invert sm:block md:left-24 md:h-32 md:w-44"
         />
         <img
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-167-vglWMrVYUABYoXSL7pHytZDVMHYpwk.jpg"
@@ -294,7 +289,7 @@ function GalleryStrip() {
           </Reveal>
         </div>
         <div className="mt-12">
-          <GalleryGridMini />
+          <StudioArchiveSlideshow />
         </div>
         <div className="mt-10 flex flex-wrap gap-3" aria-label="Browse tattoo genres">
           {[
