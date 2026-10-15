@@ -64,7 +64,6 @@ export default function Academy() {
 
   <div className="bg-black">
   <WhySection />
-  <AcademyGameFeatures />
         <CurriculumSection />
         <WorkshopSection />
         <WhoSection />
@@ -97,23 +96,6 @@ function WhySection() {
   );
 }
 
-function AcademyGameFeatures() {
-  return <section className="mx-auto max-w-6xl px-5 pb-10 md:px-8" aria-label="Academy game features">
-    <div className="grid gap-4 sm:grid-cols-2">
-      <div className="border-2 border-[#ffcb05]/70 bg-[#365fa8]/80 p-5 shadow-[5px_5px_0_0_#ffcb05]">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#ffcb05]">Training deck</p>
-        <h3 className="mt-2 font-display text-2xl uppercase text-bone">Catch your next skill</h3>
-        <p className="mt-2 font-body text-sm text-bone/70">Unlock course badges as you collect drawing, lining, colour and studio-management skills.</p>
-      </div>
-      <div className="border-2 border-[#e53b35]/70 bg-[#e53b35]/70 p-5 shadow-[5px_5px_0_0_#2bb7ff]">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-bone">Level-up route</p>
-        <h3 className="mt-2 font-display text-2xl uppercase text-bone">Coins for consistency</h3>
-        <p className="mt-2 font-body text-sm text-bone/70">Complete practice missions, collect studio coins and move from sketchbook start to confident artist.</p>
-      </div>
-    </div>
-  </section>;
-}
-
 function CurriculumSection() {
   const reduce = useReducedMotion();
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
@@ -121,6 +103,9 @@ function CurriculumSection() {
   return (
     <section className="border-t border-bone/10 py-12 sm:py-16 md:py-28" aria-labelledby="curriculum-heading">
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
+        <div className="mb-8 overflow-hidden border-2 border-[#2bb7ff]/60 bg-[#2bb7ff]/10 px-4 py-3 shadow-[4px_4px_0_0_#e53b35] sm:mb-10 sm:px-5">
+          <p className="animate-pulse text-center font-display text-sm uppercase tracking-[0.18em] text-[#2bb7ff] sm:text-base">Next batch commencement — admissions opening soon</p>
+        </div>
         <SectionHeading index="03" kicker="Course Structure" title={<>Five ways in.<br />Choose your path.</>} />
         <div className="grid gap-4 sm:gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
           <div className="order-2 md:order-1">

@@ -101,8 +101,12 @@ export function GalleryGrid() {
         )
         .sort((a, b) => {
           if (filter !== "All") return 0;
-          const priority = (item: GalleryItem) =>
-            item.category === "Colour Tattoos" ? 0 : item.category === "Realism" ? 1 : item.category === "Skin Pads" ? 2 : 3;
+          const priority = (item: GalleryItem) => {
+            if (item.category === "Portfolio" || item.inkColor === "Black & Grey") return 0;
+            if (item.category === "Colour Tattoos") return 1;
+            if (item.category === "Realism") return 2;
+            return 3;
+          };
           return priority(a) - priority(b) || a.id.localeCompare(b.id);
         }),
     [filter, artist],

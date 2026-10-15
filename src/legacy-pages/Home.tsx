@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
-import { EyeMotif, HandMotif, InkStroke, LocalTrainMotif, StarMotif, TickerStrip } from "@/components/art";
+import { EyeMotif, HandMotif, InkStroke, StarMotif, TickerStrip } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
 import { GalleryGridMini } from "@/components/GalleryGridMini";
 import { InkButton, MaskReveal, Reveal, SectionHeading } from "@/components/ui-kit";
@@ -116,6 +116,22 @@ function Hero() {
           className="pointer-events-none absolute right-5 top-28 hidden h-24 w-20 object-contain mix-blend-screen opacity-45 grayscale invert sm:block md:right-12 md:top-36 md:h-32 md:w-28"
         />
         <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-456-dBzKxReKMw1tROjjEL5qM9lpmpC1eg.jpg"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="pointer-events-none absolute left-5 top-36 hidden h-20 w-20 object-contain mix-blend-screen opacity-35 grayscale invert sm:block md:left-12 md:top-44 md:h-28 md:w-28"
+        />
+        <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-453-3OrpApZ96jvAB8578ZQG91C3TMOCiv.jpg"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="pointer-events-none absolute bottom-28 left-16 hidden h-24 w-32 object-contain mix-blend-screen opacity-35 grayscale invert sm:block md:left-24 md:h-32 md:w-44"
+        />
+        <img
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-167-vglWMrVYUABYoXSL7pHytZDVMHYpwk.jpg"
           alt=""
           aria-hidden="true"
@@ -153,8 +169,7 @@ function Hero() {
           transition={{ delay: 0.12, duration: 0.4 }}
           className="mt-10 flex items-end justify-between gap-6 text-bone/25 md:mt-14"
         >
-                  <LocalTrainMotif className="hidden h-16 w-24 text-bone/20 sm:block" />
-          <HandMotif className="h-20 w-16 md:h-28 md:w-24" />
+                          <HandMotif className="h-20 w-16 md:h-28 md:w-24" />
           <InkStroke className="hidden w-40 md:block" />
           <StarMotif className="h-7 w-7 text-blood/40" />
         </motion.div>
@@ -223,7 +238,7 @@ function Philosophy() {
             <MaskReveal>
               <div className="relative aspect-[4/5] border border-bone/10 bg-gradient-to-br from-[#1b1b1b] to-[#0f0f0f]">
                 <div className="absolute inset-0 grain opacity-50" aria-hidden />
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Website%20ESTD-NVqTam8FqKqgIeFpnYL2vqlpHVeB1O.png" alt="Street Culture Tattoo Studio artists" className="absolute inset-0 h-full w-full object-contain object-bottom" />
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Website%20ESTD-NVqTam8FqKqgIeFpnYL2vqlpHVeB1O.png" alt="Street Culture Tattoo Studio artists" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-contain object-bottom" />
                 <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
                   <p className="font-marker text-2xl text-cream/80">every line means something</p>
                   <EyeMotif className="h-10 w-16 text-blood/50" />
