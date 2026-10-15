@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
-import { EyeMotif, HamzaMotif, HandMotif, InkStroke, LocalTrainMotif, SnakeMotif, StarMotif, TickerStrip } from "@/components/art";
+import { EyeMotif, HandMotif, InkStroke, LocalTrainMotif, StarMotif, TickerStrip } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
 import { GalleryGridMini } from "@/components/GalleryGridMini";
 import { InkButton, MaskReveal, Reveal, SectionHeading } from "@/components/ui-kit";
@@ -109,12 +109,18 @@ function Hero() {
           Tattoo Studio, Piercing & Academy — Kandivali West, Mumbai
         </motion.p>
 
-        <div className="pointer-events-none absolute right-5 top-28 hidden text-acid/70 sm:block md:right-12 md:top-36">
-          <EyeMotif className="h-9 w-14 rotate-[-8deg]" />
-        </div>
-        <div className="pointer-events-none absolute bottom-24 right-10 hidden text-blood/70 sm:block md:right-20">
-          <HamzaMotif className="h-14 w-11 rotate-[8deg]" />
-        </div>
+        <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-168-Q8oAx2UrDPfCxOYO6BX6DL1g6DgsXX.jpg"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute right-5 top-28 hidden h-24 w-20 object-contain mix-blend-screen opacity-45 grayscale invert sm:block md:right-12 md:top-36 md:h-32 md:w-28"
+        />
+        <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-167-vglWMrVYUABYoXSL7pHytZDVMHYpwk.jpg"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-24 right-10 hidden h-32 w-24 object-contain mix-blend-screen opacity-40 grayscale invert sm:block md:right-20 md:h-44 md:w-32"
+        />
 
         <h1 className="mt-6 font-display text-[clamp(3.6rem,16vw,6rem)] font-black uppercase leading-[0.82] tracking-[0.015em] text-bone sm:text-[9.5vw] sm:tracking-[0.035em] lg:text-[7.25rem] xl:text-[8rem]">
           <span className="block">{word("Ink", 0)}&nbsp;{word("Is", 1)}</span>
@@ -147,8 +153,7 @@ function Hero() {
           transition={{ delay: 0.12, duration: 0.4 }}
           className="mt-10 flex items-end justify-between gap-6 text-bone/25 md:mt-14"
         >
-          <SnakeMotif className="h-16 w-16 md:h-24 md:w-24" />
-          <LocalTrainMotif className="hidden h-16 w-24 text-bone/20 sm:block" />
+                  <LocalTrainMotif className="hidden h-16 w-24 text-bone/20 sm:block" />
           <HandMotif className="h-20 w-16 md:h-28 md:w-24" />
           <InkStroke className="hidden w-40 md:block" />
           <StarMotif className="h-7 w-7 text-blood/40" />
@@ -268,7 +273,7 @@ function GalleryStrip() {
     <section className="border-t border-bone/10 py-24 md:py-36" aria-labelledby="gallery-heading">
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading index="03" kicker="Fresh From The Machine" title={<>The work<br />speaks first.</>} className="mb-0" />
+          <SectionHeading index="03" kicker="The Studio Archive" title={<>The work<br />speaks first.</>} className="mb-0" />
           <Reveal>
             <InkButton href="/gallery" variant="outline">Full Gallery</InkButton>
           </Reveal>

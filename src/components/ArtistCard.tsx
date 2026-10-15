@@ -264,16 +264,6 @@ export function ArtistCard({ artist, index, showPhoto = false, cardImage }: { ar
               </div>
             </Link>
 
-            <Link
-              to={`/artists/${artist.id}/portfolio`}
-              className="mt-5 flex items-center justify-between border-y border-bone/15 py-4 text-bone transition-colors hover:border-blood hover:text-blood"
-            >
-              <span>
-                <span className="block text-[9px] font-semibold uppercase tracking-[0.25em] text-bone/45">Artist portfolio</span>
-                <span className="mt-1 block font-display text-lg uppercase">View {artist.name}&apos;s work</span>
-              </span>
-              <ArrowUpRight className="size-5" aria-hidden />
-            </Link>
 
             {/* specialties chips */}
             <div className="mt-4 flex flex-wrap gap-1.5">
