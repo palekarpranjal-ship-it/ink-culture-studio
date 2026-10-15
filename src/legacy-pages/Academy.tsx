@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Fragment, useState } from "react";
 import { PenToolIcon, ShieldIcon, UserCheckIcon, WorkflowIcon } from "@/components/icons";
 import { InkButton, PageHero, Reveal, SectionHeading } from "@/components/ui-kit";
@@ -116,6 +117,7 @@ function AcademyGameFeatures() {
 function CurriculumSection() {
   const reduce = useReducedMotion();
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+  const [courseSlide, setCourseSlide] = useState(0);
   return (
     <section className="border-t border-bone/10 py-20 md:py-28" aria-labelledby="curriculum-heading">
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
@@ -124,8 +126,16 @@ function CurriculumSection() {
           <div className="order-2 md:order-1">
             {selectedCourse ? (() => { const active = academyCourses.find((course) => course.id === selectedCourse); return active ? (
               <motion.div layout initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} className="sticky top-24 rounded-xl border-2 border-[#2bb7ff]/40 bg-charcoal p-6 shadow-[6px_6px_0_0_rgba(239,190,58,0.65)]">
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#2bb7ff]">Course pamphlet</p>
-                <h4 className="mt-3 font-display text-3xl font-bold uppercase leading-none text-bone">{active.title}</h4>
+  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#2bb7ff]">Course pamphlet</p>
+  {active.images?.length ? <div className="mt-4 overflow-hidden rounded-lg border border-[#2bb7ff]/25 bg-ink">
+    <img src={active.images[courseSlide]} alt={`${active.title} curriculum page ${courseSlide + 1}`} className="h-40 w-full object-cover" />
+    <div className="flex items-center justify-between px-3 py-2">
+      <button type="button" aria-label="Previous course page" onClick={() => setCourseSlide((courseSlide - 1 + active.images!.length) % active.images!.length)} className="p-1 text-[#2bb7ff]"><ChevronLeft className="size-4" /></button>
+      <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-bone/50">Page {courseSlide + 1} / {active.images.length}</span>
+      <button type="button" aria-label="Next course page" onClick={() => setCourseSlide((courseSlide + 1) % active.images!.length)} className="p-1 text-[#2bb7ff]"><ChevronRight className="size-4" /></button>
+    </div>
+  </div> : null}
+  <h4 className="mt-3 font-display text-3xl font-bold uppercase leading-none text-bone">{active.title}</h4>
                 <p className="mt-4 font-body text-sm leading-relaxed text-bone/70">{active.summary}</p>
                 <div className="mt-6 space-y-2">{active.outcomes.map((outcome) => <p key={outcome} className="border-l-2 border-[#2bb7ff] pl-3 font-body text-sm text-bone/75">{outcome}</p>)}</div>
                 <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-[#2bb7ff]">{active.duration} · {active.level}</p>
@@ -142,7 +152,7 @@ function CurriculumSection() {
               whileHover={reduce ? undefined : { scale: 1.015, rotate: 0 }}
               transition={{ duration: 4.8, repeat: Infinity, delay: (i % 3) * 0.25, ease: "easeInOut" }}
               className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-[1.25rem] border-2 border-[#2bb7ff]/35 bg-ink p-3 shadow-[5px_5px_0_0_rgba(239,190,58,0.8)] transition-all hover:-translate-y-2 hover:border-[#2bb7ff] hover:bg-charcoal hover:shadow-[8px_8px_0_0_rgba(239,190,58,0.9)] ${selectedCourse === c.id ? "border-[#2bb7ff] bg-charcoal ring-2 ring-[#2bb7ff]/30" : ""}`}
-              onClick={() => setSelectedCourse(selectedCourse === c.id ? null : c.id)}
+              onClick={() => { setSelectedCourse(selectedCourse === c.id ? null : c.id); setCourseSlide(0); }}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();

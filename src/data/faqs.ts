@@ -52,13 +52,6 @@ export const testimonials = [
     rating: 5,
   },
   {
-    name: "Reddy Sreekar",
-    piece: "Tattoo experience",
-    quote:
-      "Hello so a must visit place if you want get some beautiful tattoo done. Located at Kandivali and superb salon for tattoo. The studio has positive vibes as soon as you enter. Must say Lucky and his whole team are so proficient. We entered the studio at 2.30 pm. The artist who made my tattoo- Karan, welcomed us with a warm smile. He patiently heard about my requirement and then created the design till the time I felt that yes this is the one. It took almost an hour for the design. Later on the team took half an hour lunch break so by the time we just rested. The tattoo making started sharp at 4.00pm and got done by 5.30pm. It was very smooth process and just like a therapy. Karan is excellent at his work and made the tattoo with precision. He was patiently talking and answering all the questions too. It's a spacious studio with some amazing music. Towards the end one of their team members, Shubham clicked some outstanding pictures. If it's your first tattoo or last you must visit this place once. I am so glad with their after service too. I had queries and kept sending on WhatsApp. They replied promptly and guided well. Thanks for the beautiful tattoo and the experience. I plan to get ear piercing done too. Already my friends are looking forward to visit the place. Best wishes to Lucky, Karan, Shubham and Nayan.",
-    rating: 5,
-  },
-  {
     name: "Sparsh Dutta",
     piece: "Colour tattoo",
     quote:
