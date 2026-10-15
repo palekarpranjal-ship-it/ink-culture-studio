@@ -177,13 +177,6 @@ export const academyCourses: Course[] = [
     title: "Twin Diploma in Tattooing",
     level: "All Levels",
     cover: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Standy%20Diploma-JxNZpIi2ZJs7ABAAZX7CBueoOZ2vo1.jpg",
-    images: [
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Drawing%2001-6Sbxe1KMzSRFhywLMI8ifhB5tyNsx6.jpg",
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Tattooing%2002-sypZl7pBaU9VFvROVOfeFCuhd4wiuZ.jpg",
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Colour%20Tat%2003-D5wb4KSQHWlhQO7GntoAGMPEUN20hS.jpg",
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Designing%2004-0udHYxs2qhoXrJ7kNRpb0kcpfpdsqN.jpg",
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Mngmant%2005-GojGjLmcYHT62r3aV66f4G0yOeJJbb.jpg",
-    ],
     duration: "5 months",
     instructor: "Taught by Lucky Solanki · Assisted by Karan Parmar",
     summary: "A complete Twin Diploma pathway for developing a professional tattoo artist from foundation to studio-ready practice. The program moves through drawing, design, management studies, tattooing and colour tattooing in a connected sequence, combining classroom understanding, digital design, supervised practice and live demonstration. Students build the visual discipline, technical control, hygiene habits, client communication and business mindset needed to create thoughtful work safely and consistently.",
