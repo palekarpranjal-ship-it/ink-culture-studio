@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link } from "@/next/Link";
 import { galleryItems } from "@/data/gallery";
 
@@ -7,54 +7,55 @@ const categories = ["Realism", "Colour Tattoos", "Animal", "Portrait", "Religiou
 export function StudioArchiveSlideshow() {
   const slides = useMemo(() => {
     const chosen = categories.flatMap((category) =>
-      galleryItems.filter((item) => item.category.toLowerCase().includes(category.toLowerCase())).slice(0, 2),
+      galleryItems.filter((item) => item.category.toLowerCase().includes(category.toLowerCase())).slice(0, 3),
     );
-    return chosen.length ? chosen : galleryItems.slice(0, 10);
+    return chosen.length ? chosen : galleryItems.slice(0, 12);
   }, []);
-  const [active, setActive] = useState(0);
 
-  useEffect(() => {
-    const timer = window.setInterval(() => setActive((current) => (current + 1) % slides.length), 6500);
-    return () => window.clearInterval(timer);
-  }, [slides.length]);
-
-  const current = slides[active];
-  if (!current) return null;
+  if (!slides.length) return null;
+  const loop = [...slides, ...slides];
 
   return (
-    <div className="overflow-hidden border border-bone/10 bg-[#101010]">
-      <div className="grid md:grid-cols-[1.15fr_0.85fr]">
-        <div className="relative aspect-[4/3] overflow-hidden bg-[#0b0b0b] md:aspect-[16/10]">
-          {slides.map((item, index) => (
-            <img
-              key={item.id}
-              src={item.src}
-              alt={index === active ? `${item.category} tattoo from the studio archive` : ""}
-              aria-hidden={index !== active}
-              loading={index === 0 ? "eager" : "lazy"}
-              decoding="async"
-              className={`absolute inset-0 h-full w-full object-contain p-3 transition-opacity duration-1000 ${index === active ? "opacity-100" : "opacity-0"}`}
-            />
-          ))}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
-          <p className="absolute bottom-4 left-4 font-mono text-[9px] uppercase tracking-[0.22em] text-bone/65">{active + 1} / {slides.length}</p>
+    <section className="overflow-hidden border-y border-bone/10 bg-[#101010] py-5 sm:py-7" aria-label="Studio archive slideshow">
+      <div className="mb-4 flex items-end justify-between gap-4 px-5 sm:px-8">
+        <div>
+          <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-blood">Studio archive</p>
+          <h3 className="mt-2 font-display text-2xl uppercase leading-none text-bone sm:text-3xl">The work moves first.</h3>
         </div>
-        <div className="flex flex-col justify-between gap-8 p-5 sm:p-7 md:p-8">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-blood">Now showing</p>
-            <h3 className="mt-3 font-display text-3xl uppercase leading-none text-bone sm:text-4xl">{current.category}</h3>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-bone/60">A slow rotation through the studio archive — realism, colour, animal, portrait and religious tattoo work.</p>
-          </div>
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex gap-1.5" aria-label="Archive slideshow progress">
-              {slides.map((item, index) => <button key={item.id} type="button" aria-label={`Show archive image ${index + 1}`} onClick={() => setActive(index)} className={`h-1.5 rounded-full transition-all ${index === active ? "w-8 bg-blood" : "w-2 bg-bone/25"}`} />)}
-            </div>
-            <Link to="/gallery" className="shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-[#2bb7ff] hover:text-bone">View gallery →</Link>
-          </div>
+        <Link to="/gallery" className="shrink-0 font-mono text-[9px] uppercase tracking-[0.18em] text-[#2bb7ff] hover:text-bone">View gallery →</Link>
+      </div>
+      <div className="archive-marquee group" tabIndex={0}>
+        <div className="archive-marquee-track group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused]">
+          {loop.map((item, index) => (
+            <figure key={`${item.id}-${index}`} className="archive-slide">
+              <img src={item.src} alt={`${item.category} tattoo from the studio archive`} loading={index < 4 ? "eager" : "lazy"} decoding="async" />
+              <figcaption>{item.category}</figcaption>
+            </figure>
+          ))}
         </div>
       </div>
-    </div>
+      <p className="mt-3 px-5 font-mono text-[8px] uppercase tracking-[0.18em] text-bone/35 sm:px-8">Realism · colour · animal · portraits · religious work</p>
+    </section>
   );
 }
 
 export default StudioArchiveSlideshow;
+
+/* Additive global animation styles are scoped by the archive class. */
+const archiveStyles = `
+.archive-marquee { overflow: hidden; width: 100%; mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent); }
+.archive-marquee-track { display: flex; width: max-content; gap: 0.75rem; animation: archive-scroll 78s linear infinite; will-change: transform; }
+.archive-slide { position: relative; width: clamp(190px, 27vw, 360px); aspect-ratio: 4 / 3; overflow: hidden; flex: none; background: #0b0b0b; }
+.archive-slide img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .9; transition: transform .7s ease, opacity .3s ease; }
+.archive-slide:hover img { transform: scale(1.035); opacity: 1; }
+.archive-slide figcaption { position: absolute; inset: auto .65rem .55rem; color: rgba(255,255,255,.75); font: 9px/1 monospace; text-transform: uppercase; letter-spacing: .16em; text-shadow: 0 1px 8px #000; }
+@keyframes archive-scroll { from { transform: translate3d(0,0,0); } to { transform: translate3d(calc(-50% - .375rem),0,0); } }
+@media (prefers-reduced-motion: reduce) { .archive-marquee-track { animation-play-state: paused; } .archive-slide img { transition: none; } }
+`;
+
+if (typeof document !== "undefined" && !document.getElementById("archive-marquee-styles")) {
+  const style = document.createElement("style");
+  style.id = "archive-marquee-styles";
+  style.textContent = archiveStyles;
+  document.head.appendChild(style);
+}
