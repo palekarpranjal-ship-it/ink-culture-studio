@@ -29,9 +29,15 @@ export default function ConceptLab() {
     ]),
   );
 
-  const generate = async ({ idea, placement, style }: { idea: string; placement?: string; style?: string; imageDataUrl?: string }) => ({
-    brief: `A ${style ?? "custom"} tattoo concept based on “${idea}”. Focus the composition around ${placement ?? "a placement chosen with your artist"}, with a clear silhouette, intentional negative space, and a finish that suits your body. Bring this direction to the studio for an artist-led refinement.`,
-  });
+  const generate = async ({ idea, placement, style }: { idea: string; placement?: string; style?: string; imageDataUrl?: string }) => {
+    const response = await fetch("/api/ink-lab", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idea, placement, style, hasReferenceImage: Boolean(imageDataUrl) }),
+    });
+    if (!response.ok) throw new Error("The studio brain is unavailable right now. Try again in a moment.");
+    return response.json() as Promise<{ brief: string }>;
+  };
 
   const [idea, setIdea] = useState("");
   const [placement, setPlacement] = useState("");
