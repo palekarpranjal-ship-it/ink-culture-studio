@@ -51,7 +51,7 @@ export default function Home() {
 
 function LiveStudioPulse() {
   return (
-    <div className="pointer-events-none fixed right-4 top-24 z-30 flex items-center gap-2 border border-[#65e66e]/40 bg-ink/80 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-[#8af58f] backdrop-blur-sm sm:right-6 sm:top-28" aria-label="The studio website is live">
+    <div className="pointer-events-none absolute right-4 top-24 z-30 flex items-center gap-2 border border-[#65e66e]/40 bg-ink/80 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-[#8af58f] backdrop-blur-sm sm:right-6 sm:top-28" aria-label="The studio website is live">
       <span className="size-2 animate-pulse rounded-full bg-[#65e66e] shadow-[0_0_10px_#65e66e]" aria-hidden />
       <span><strong className="text-[#b7ffba]">LIVE</strong> studio archive</span>
     </div>
