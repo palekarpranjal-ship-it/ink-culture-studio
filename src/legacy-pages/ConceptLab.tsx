@@ -9,6 +9,8 @@ import { breadcrumbSchema, pageMeta } from "@/config/seo";
 import { useJsonLd, useSeo } from "@/hooks/use-seo";
 import { cn } from "@/lib/utils";
 
+const languageOptions = ["English", "हिन्दी", "Hinglish"] as const;
+
 const styleOptions = [
   "No preference",
   "Black & Grey",
@@ -29,11 +31,11 @@ export default function ConceptLab() {
     ]),
   );
 
-  const generate = async ({ idea, placement, style }: { idea: string; placement?: string; style?: string; imageDataUrl?: string }) => {
+  const generate = async ({ idea, placement, style, language }: { idea: string; placement?: string; style?: string; language: string; imageDataUrl?: string }) => {
     const response = await fetch("/api/ink-lab", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idea, placement, style, hasReferenceImage: Boolean(imageDataUrl) }),
+        body: JSON.stringify({ idea, placement, style, language, hasReferenceImage: Boolean(imageDataUrl) }),
     });
     if (!response.ok) throw new Error("The studio brain is unavailable right now. Try again in a moment.");
     return response.json() as Promise<{ brief: string }>;
@@ -42,6 +44,7 @@ export default function ConceptLab() {
   const [idea, setIdea] = useState("");
   const [placement, setPlacement] = useState("");
   const [style, setStyle] = useState(styleOptions[0]);
+  const [language, setLanguage] = useState<(typeof languageOptions)[number]>("English");
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -77,6 +80,7 @@ export default function ConceptLab() {
         idea: idea.trim(),
         placement: placement.trim() || undefined,
         style: style === "No preference" ? undefined : style,
+        language,
         imageDataUrl: imageDataUrl ?? undefined,
       });
       setBrief(result.brief);
@@ -147,6 +151,14 @@ export default function ConceptLab() {
                 <select value={style} onChange={(e) => setStyle(e.target.value)} className={inputCls}>
                   {styleOptions.map((s) => (
                     <option key={s}>{s}</option>
+                  ))}
+                </select>
+                <label className="mt-4 block text-[10px] font-semibold uppercase tracking-[0.25em] text-bone/50">
+                  Response language
+                </label>
+                <select value={language} onChange={(e) => setLanguage(e.target.value as (typeof languageOptions)[number])} className={cn(inputCls, "mt-2")}>
+                  {languageOptions.map((option) => (
+                    <option key={option}>{option}</option>
                   ))}
                 </select>
               </div>
