@@ -1,86 +1,346 @@
-import { Copy, Download, Loader2, MessageCircle, Plus, Send, Sparkles, WandSparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { ImagePlus, Loader2, MessageCircle, Sparkles } from "lucide-react";
 import { useRef, useState } from "react";
-import { PageHero, Reveal } from "@/components/ui-kit";
+import { BombMotif, CatMotif, SparkMotif, WinkMotif } from "@/components/art";
+import { CursorLabel } from "@/components/CursorLabel";
+import { InkButton, PageHero, Reveal } from "@/components/ui-kit";
 import { contact } from "@/config/contact";
 import { breadcrumbSchema, pageMeta } from "@/config/seo";
 import { useJsonLd, useSeo } from "@/hooks/use-seo";
 import { cn } from "@/lib/utils";
 
-type ChatMessage = { role: "user" | "assistant"; content: string };
-type Stage = "DISCOVER" | "CLARIFY" | "EXPLORE" | "REFINE" | "BRIEF" | "BOOK";
-
-const starters = [
-  "I have a story but no design idea.",
-  "Help me design a meaningful tattoo.",
-  "I want a minimalist tattoo.",
-  "Help me improve an existing idea.",
-  "I want a cover-up concept.",
-  "Turn my idea into an artist-ready brief.",
+const styleOptions = [
+  "No preference",
+  "Black & Grey",
+  "Realism",
+  "Fine Line",
+  "Traditional",
+  "Neo Traditional",
+  "Lettering",
+  "Geometric",
 ];
 
 export default function ConceptLab() {
   useSeo(pageMeta.concept ?? pageMeta.book);
-  useJsonLd(breadcrumbSchema([{ name: "Home", path: "/" }, { name: "AI Concept Lab", path: "/concept" }]));
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState("");
-  const [language, setLanguage] = useState("auto");
-  const [stage, setStage] = useState<Stage>("DISCOVER");
+  useJsonLd(
+    breadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "AI Concept Lab", path: "/concept" },
+    ]),
+  );
+
+  const generate = async ({ idea, placement, style }: { idea: string; placement?: string; style?: string; imageDataUrl?: string }) => {
+    const response = await fetch("/api/ink-lab", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idea, placement, style, hasReferenceImage: Boolean(imageDataUrl) }),
+    });
+    if (!response.ok) throw new Error("The studio brain is unavailable right now. Try again in a moment.");
+    return response.json() as Promise<{ brief: string }>;
+  };
+
+  const [idea, setIdea] = useState("");
+  const [placement, setPlacement] = useState("");
+  const [style, setStyle] = useState(styleOptions[0]);
+  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [copied, setCopied] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const [brief, setBrief] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
-  const send = async (text = input, mode: "chat" | "brief" = "chat") => {
-    const value = text.trim();
-    if (!value || loading) return;
-    const next = [...messages, { role: "user" as const, content: value }];
-    setMessages(next);
-    setInput("");
-    setError("");
+  const valid = idea.trim().length >= 10;
+
+  const onFile = (file: File | undefined) => {
+    if (!file) return;
+    if (file.size > 4 * 1024 * 1024) {
+      setError("Keep the reference under 4 MB so it uploads fast.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageDataUrl(reader.result as string);
+      setError("");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const onGenerate = async () => {
+    if (!valid) {
+      setError("Give us at least a sentence about your idea (10+ characters).");
+      return;
+    }
     setLoading(true);
-    if (mode === "brief") setStage("BRIEF");
+    setError("");
+    setBrief(null);
     try {
-      const response = await fetch("/api/ink-lab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: next, language, mode }) });
-      const data = (await response.json()) as { text?: string; error?: string };
-      if (!response.ok || !data.text) throw new Error(data.error ?? "Ink Lab could not respond.");
-      setMessages((current) => [...current, { role: "assistant", content: data.text! }]);
-      setStage(mode === "brief" ? "BRIEF" : next.length > 4 ? "EXPLORE" : "CLARIFY");
-      requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }));
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Ink Lab could not respond. Please retry.");
-      setMessages(messages);
+      const result = await generate({
+        idea: idea.trim(),
+        placement: placement.trim() || undefined,
+        style: style === "No preference" ? undefined : style,
+        imageDataUrl: imageDataUrl ?? undefined,
+      });
+      setBrief(result.brief);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Try again!");
     } finally {
       setLoading(false);
     }
   };
 
-  const reset = () => { setMessages([]); setInput(""); setError(""); setStage("DISCOVER"); };
-  const transcript = messages.map((message) => `${message.role === "user" ? "Client" : "Ink Lab"}: ${message.content}`).join("\n\n");
-  const copyBrief = async () => { await navigator.clipboard?.writeText(transcript); setCopied(true); window.setTimeout(() => setCopied(false), 1600); };
-  const downloadBrief = () => { const blob = new Blob([transcript], { type: "text/plain" }); const url = URL.createObjectURL(blob); const anchor = document.createElement("a"); anchor.href = url; anchor.download = "street-culture-ink-lab-brief.txt"; anchor.click(); URL.revokeObjectURL(url); };
-  const whatsapp = () => window.open(`https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(`Hey ${contact.studioName}, I developed this tattoo idea with Ink Lab:\n\n${transcript}`)}`, "_blank", "noopener,noreferrer");
+  const waHandoff = () => {
+    const msg =
+      `Hey ${contact.studioName}! I used your AI Concept Lab and I love this direction:\n\n` +
+      `${brief ?? idea}\n\n` +
+      (placement ? `Placement: ${placement}\n` : "") +
+      `I'd like to book a consultation.`;
+    open(`https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+  };
 
-  return <>
-    <PageHero index="07" kicker="AI Concept Lab" title={<>Think it.<br />Ink it.</>} lead="A thoughtful tattoo conversation for turning a story, feeling, or rough sketch into an artist-ready direction." />
-    <section className="pb-20 pt-8 md:pb-28 md:pt-12">
-      <div className="mx-auto grid max-w-7xl gap-5 px-5 md:px-8 lg:grid-cols-[minmax(0,1fr)_280px]">
-        <main className="overflow-hidden border-2 border-bone/15 bg-[#121211] shadow-[8px_8px_0_0_var(--blood)]">
-          <header className="flex flex-wrap items-center justify-between gap-4 border-b border-bone/10 px-4 py-4 md:px-6">
-            <div><p className="font-mono text-[9px] uppercase tracking-[0.24em] text-blood">Street Culture / Thinking Machine</p><h2 className="mt-1 font-display text-xl uppercase text-bone">Ink Lab conversation</h2></div>
-            <div className="flex items-center gap-2"><label className="sr-only" htmlFor="ink-language">Response language</label><select id="ink-language" value={language} onChange={(e) => setLanguage(e.target.value)} className="border border-bone/20 bg-ink px-2 py-2 font-mono text-[10px] uppercase text-bone"><option value="auto">Auto language</option><option value="English">English</option><option value="Hindi">हिन्दी</option><option value="Hinglish">Hinglish</option></select><button onClick={reset} className="inline-flex items-center gap-1 border border-bone/20 px-2 py-2 font-mono text-[10px] uppercase text-bone/65 hover:border-blood hover:text-blood"><Plus className="size-3" /> New</button></div>
-          </header>
-          <div className="flex flex-wrap gap-1 border-b border-bone/10 px-4 py-3 md:px-6">{(["DISCOVER", "CLARIFY", "EXPLORE", "REFINE", "BRIEF", "BOOK"] as Stage[]).map((item) => <span key={item} className={cn("font-mono text-[9px] tracking-[0.16em]", stage === item ? "text-blood" : "text-bone/25")}>{item}</span>)}</div>
-          <div className="min-h-[420px] space-y-5 px-4 py-6 md:min-h-[540px] md:px-8">
-            {!messages.length && <div className="mx-auto max-w-2xl py-8 text-center"><WandSparkles className="mx-auto size-10 text-blood" /><h3 className="mt-5 font-display text-3xl uppercase text-bone">Where should we begin?</h3><p className="mx-auto mt-3 max-w-lg font-body text-sm leading-relaxed text-bone/55">Tell me the story, feeling, image, or problem behind your tattoo. I’ll think through the creative direction before asking the next useful question.</p><div className="mt-7 flex flex-wrap justify-center gap-2">{starters.map((starter) => <button key={starter} onClick={() => send(starter)} className="border border-bone/15 px-3 py-2 text-left font-body text-xs text-bone/65 transition hover:border-blood hover:text-bone">{starter}</button>)}</div></div>}
-            {messages.map((message, index) => <div key={`${message.role}-${index}`} className={cn("flex", message.role === "user" ? "justify-end" : "justify-start")}><div className={cn("max-w-[88%] whitespace-pre-wrap px-4 py-3 font-body text-sm leading-relaxed", message.role === "user" ? "bg-blood text-ink" : "border border-bone/15 bg-white/[0.03] text-bone/80")}><p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] opacity-55">{message.role === "user" ? "You" : "Ink Lab"}</p>{message.content}</div></div>)}
-            {loading && <div className="flex items-center gap-2 text-bone/50"><Loader2 className="size-4 animate-spin text-blood" /><span className="font-mono text-[10px] uppercase tracking-[0.16em]">Thinking through the idea…</span></div>}
-            <div ref={bottomRef} />
+  return (
+    <>
+      <PageHero
+        index="07"
+        kicker="AI Concept Lab"
+        title={<>Dream it.<br />Brief it.</>}
+        lead="Upload a reference, describe the idea, and get a personalized concept brief drafted in studio style — then bring it to a real artist to make it permanent."
+      >
+        <Reveal delay={0.3} className="mt-6">
+          <p className="flex items-center gap-2 font-marker text-xl text-cream/70">
+            <WinkMotif className="h-6 w-10 text-blood" /> the machine drafts, the artist decides
+          </p>
+        </Reveal>
+      </PageHero>
+
+      <section className="py-14 md:py-20">
+        <div className="mx-auto grid w-full max-w-6xl gap-8 px-5 md:px-8 lg:grid-cols-[1fr_1.1fr]">
+          {/* -------- input column -------- */}
+          <div className="space-y-5">
+            <div className="border-2 border-bone/15 bg-white/[0.02] p-6">
+              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-bone/50">
+                1 · Your idea *
+              </p>
+              <textarea
+                value={idea}
+                onChange={(e) => setIdea(e.target.value)}
+                rows={4}
+                className={cn(inputCls, "resize-none")}
+                placeholder="A black & grey moth holding a tiny umbrella, rain made of fine line work, two sessions max…"
+              />
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div className="border-2 border-bone/15 bg-white/[0.02] p-6">
+                <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-bone/50">
+                  2 · Placement
+                </p>
+                <input
+                  value={placement}
+                  onChange={(e) => setPlacement(e.target.value)}
+                  className={inputCls}
+                  placeholder="Forearm, ribs, calf…"
+                />
+              </div>
+              <div className="border-2 border-bone/15 bg-white/[0.02] p-6">
+                <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-bone/50">
+                  3 · Style vibe
+                </p>
+                <select value={style} onChange={(e) => setStyle(e.target.value)} className={inputCls}>
+                  {styleOptions.map((s) => (
+                    <option key={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="border-2 border-bone/15 bg-white/[0.02] p-6">
+              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-bone/50">
+                4 · Reference image (optional)
+              </p>
+              {imageDataUrl ? (
+                <div className="relative">
+                  <img src={imageDataUrl} alt="Your tattoo reference" className="mx-auto max-h-56 border-2 border-bone/20" />
+                  <button
+                    onClick={() => setImageDataUrl(null)}
+                    className="absolute right-2 top-2 border-2 border-ink bg-blood px-2 py-1 font-display text-[10px] uppercase text-ink"
+                  >
+                    remove
+                  </button>
+                </div>
+              ) : (
+                <label
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    onFile(e.dataTransfer.files?.[0]);
+                  }}
+                  className="flex cursor-pointer flex-col items-center gap-2 border-2 border-dashed border-bone/25 px-4 py-8 text-center transition-colors hover:border-blood"
+                >
+                  <ImagePlus className="size-8 text-bone/40" />
+                  <span className="font-body text-sm text-bone/60">
+                    drop an image or <span className="text-blood underline underline-offset-4">browse</span>
+                  </span>
+                  <span className="font-mono text-[10px] text-bone/35">JPG / PNG / WebP · max 4 MB</span>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="sr-only"
+                    onChange={(e) => onFile(e.target.files?.[0])}
+                  />
+                </label>
+              )}
+            </div>
+
+            {error && (
+              <p role="alert" className="border-2 border-blood bg-blood/10 px-4 py-3 text-xs font-semibold text-blood">
+                {error}
+              </p>
+            )}
+
+            <InkButton onClick={onGenerate} disabled={loading} size="lg" className="w-full justify-center">
+              {loading ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" /> Sketching your brief…
+                </>
+              ) : (
+                <>
+                  <Sparkles className="size-4" /> Generate Concept Brief
+                </>
+              )}
+            </InkButton>
+
+            <p className="text-center font-body text-[11px] leading-relaxed text-bone/40">
+              Your image is sent to our AI (OpenAI) only to draft this brief and is never stored on our servers.
+            </p>
           </div>
-          {error && <div role="alert" className="mx-4 mb-3 border border-blood/60 bg-blood/10 px-3 py-2 text-xs text-blood md:mx-6">{error} <button onClick={() => send(messages.length ? messages[messages.length - 1].content : "")} className="ml-2 underline">Retry</button></div>}
-          <div className="border-t border-bone/10 p-3 md:p-4"><div className="flex items-end gap-2 border border-bone/20 bg-ink p-2 focus-within:border-blood"><textarea value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing && e.keyCode !== 229) { e.preventDefault(); send(); } }} rows={2} placeholder="Describe the idea in your own words…" className="min-h-12 flex-1 resize-none bg-transparent px-2 py-2 font-body text-sm text-bone outline-none placeholder:text-bone/30" /><button aria-label="Send message" onClick={() => send()} disabled={!input.trim() || loading} className="bg-blood p-3 text-ink disabled:cursor-not-allowed disabled:opacity-30"><Send className="size-4" /></button></div><div className="mt-2 flex flex-wrap items-center justify-between gap-2"><span className="font-mono text-[9px] text-bone/30">Shift + Enter for a new line · creative draft, not final medical advice</span>{messages.length > 1 && <button onClick={() => send("Please turn our conversation into an artist-ready brief.", "brief")} disabled={loading} className="font-mono text-[10px] uppercase tracking-[0.15em] text-blood hover:underline">Create brief</button>}</div></div>
-        </main>
-        <aside className="h-fit border border-bone/15 bg-white/[0.02] p-5 lg:sticky lg:top-24"><p className="font-mono text-[9px] uppercase tracking-[0.2em] text-blood">When you’re ready</p><h3 className="mt-2 font-display text-2xl uppercase text-bone">Make it real.</h3><p className="mt-3 font-body text-sm leading-relaxed text-bone/55">Use the conversation to compare directions, then create a brief to share with the studio. Final size, feasibility, price, and healing guidance are confirmed by an artist.</p>{messages.length > 1 && <div className="mt-5 grid gap-2"><button onClick={copyBrief} className="flex items-center gap-2 border border-bone/20 px-3 py-2 text-left font-mono text-[10px] uppercase text-bone/70 hover:border-blood"><Copy className="size-3" /> {copied ? "Copied" : "Copy conversation"}</button><button onClick={downloadBrief} className="flex items-center gap-2 border border-bone/20 px-3 py-2 text-left font-mono text-[10px] uppercase text-bone/70 hover:border-blood"><Download className="size-3" /> Download brief</button><button onClick={whatsapp} className="flex items-center gap-2 bg-blood px-3 py-2 text-left font-mono text-[10px] uppercase text-ink"><MessageCircle className="size-3" /> Send to studio</button></div>}</aside>
-      </div>
-    </section>
-  </>;
+
+          {/* -------- output column -------- */}
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            {loading ? (
+              <BriefSkeleton />
+            ) : brief ? (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <BriefCard brief={brief} onWhatsApp={waHandoff} />
+              </motion.div>
+            ) : (
+              <EmptyState />
+            )}
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
+
+/* ------------------------------ sub-views ------------------------------ */
+
+function BriefCard({ brief, onWhatsApp }: { brief: string; onWhatsApp: () => void }) {
+  const blocks = brief.split(/\n{2,}/).filter(Boolean);
+  return (
+    <article className="relative border-2 border-ink bg-[#151310] p-6 shadow-[8px_8px_0_0_var(--blood)] md:p-8">
+      <div className="absolute -right-3 -top-3 rotate-12">
+        <SparkMotif className="h-9 w-9 text-blood" />
+      </div>
+      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blood">Concept Brief · Draft 01</p>
+      <div className="mt-5 space-y-4">
+        {blocks.map((block, i) => {
+          const [first, ...rest] = block.split("\n");
+          const isHeading = /^\d+\.\s/.test(first.trim()) || /^[A-Z &']{3,}:/.test(first.trim());
+          if (isHeading) {
+            const heading = first.replace(/^\d+\.\s*/, "").replace(/:$/, "");
+            return (
+              <section key={i}>
+                <h3 className="font-display text-sm uppercase tracking-[0.14em] text-blood">{heading}</h3>
+                <div className="mt-1.5 space-y-1 font-body text-sm leading-relaxed text-bone/80">
+                  <p>{rest.join(" ").trim() || (block.split("\n").slice(1).join(" ") || first.replace(/^\d+\.\s*/, "").replace(/^[A-Z &']+:\s*/, ""))}</p>
+                  {rest.length === 0 && null}
+                </div>
+              </section>
+            );
+          }
+          return (
+            <p key={i} className="font-body text-sm leading-relaxed text-bone/80">
+              {block}
+            </p>
+          );
+        })}
+      </div>
+      <div className="mt-7 flex flex-wrap gap-3 border-t-2 border-dashed border-bone/15 pt-6">
+        <InkButton onClick={onWhatsApp}>
+          <MessageCircle className="size-4" /> Send to the Studio
+        </InkButton>
+        <InkButton href="/book" variant="outline">
+          Book This Idea
+        </InkButton>
+      </div>
+    </article>
+  );
+}
+
+function BriefSkeleton() {
+  return (
+    <div className="border-2 border-bone/15 bg-white/[0.02] p-6 md:p-8">
+      <div className="flex items-center gap-3">
+        <Loader2 className="size-5 animate-spin text-blood" />
+        <p className="font-display text-lg uppercase tracking-tight text-bone">
+          Your artist-brain is thinking…
+        </p>
+      </div>
+      <p className="mt-2 font-marker text-lg text-cream/60">studying your reference, weighing line weights</p>
+      <div className="mt-6 space-y-4">
+        {[92, 78, 85, 60, 88].map((w, i) => (
+          <div key={i} className="space-y-1.5">
+            <div className="h-3 w-1/3 animate-pulse bg-bone/10" />
+            <div className="h-2.5 animate-pulse bg-bone/5" style={{ width: `${w}%`, animationDelay: `${i * 120}ms` }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="relative overflow-hidden border-2 border-dashed border-bone/20 p-8 md:p-10">
+      <div className="pointer-events-none absolute inset-0 grain opacity-40" aria-hidden />
+      <div className="flex items-start justify-between">
+        <CatMotif className="h-16 w-16 text-blood/60" />
+        <BombMotif className="h-14 w-14 text-bone/20" />
+      </div>
+      <h2 className="mt-6 font-display text-2xl uppercase tracking-tight text-bone">
+        Your brief lands here
+      </h2>
+      <p className="mt-3 font-body text-sm leading-relaxed text-bone/60">
+        Describe the tattoo living in your head — messy is fine. Add a reference if you have one. Our AI drafts
+        a concept brief in the studio's voice: concept, style notes, placement guidance and which of our
+        artists should hold the machine.
+      </p>
+      <ul className="mt-5 space-y-2 font-body text-sm text-bone/65">
+        {[
+          "Concept name + the story behind it",
+          "Style & linework recommendations",
+          "Realistic size and session guidance",
+          "Karan vs Lucky — who fits your idea",
+          "3 questions to ask at your consultation",
+        ].map((t) => (
+          <li key={t} className="flex items-start gap-2">
+            <SparkMotif className="mt-1 size-3 shrink-0 text-blood" />
+            {t}
+          </li>
+        ))}
+      </ul>
+      <CursorLabel label="FREE">
+        <p className="mt-6 inline-block font-marker text-xl text-cream/70">
+          free while we're in beta — no sign-up, no card
+        </p>
+      </CursorLabel>
+    </div>
+  );
+}
+
+const inputCls =
+  "w-full border-2 border-bone/20 bg-ink px-3.5 py-3 font-body text-sm text-bone placeholder:text-bone/30 focus:border-blood/70 focus:outline-none";
