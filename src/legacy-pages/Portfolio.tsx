@@ -175,7 +175,7 @@ export default function Portfolio() {
       <section className="border-t border-bone/10 py-16 md:py-24" aria-label="Portfolio gallery">
         <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
           <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading index="02" kicker="The Wall" title={<>Fresh from<br />the machine.</>} className="mb-0" />
+            <SectionHeading index="02" kicker="The Wall" title={<>Selected<br />work.</>} className="mb-0" />
             <Reveal>
               <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-bone/40">
                 {work.length} piece{work.length === 1 ? "" : "s"} · {artist.style}

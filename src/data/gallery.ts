@@ -146,7 +146,10 @@ const uploadedPhotos: Record<string, string[]> = {
     "/images/placeholder/student's Achievement/Throwback B&G 02.jpg",
     "/images/placeholder/student's Achievement/Throwback Student tat Yogesh.jpg",
   ],
-  Piercing: ["/images/placeholder/piercing.svg"],
+  Piercing: [
+    "/images/placeholder/piercing/Website Piercing1.jpg",
+    ...Array.from({ length: 7 }, (_, index) => `/images/placeholder/piercing/Website piercing ${index + 2}.jpg`),
+  ],
   "Skin Pads": [
     "/images/placeholder/skinpads/Backpiece 01.jpg",
     "/images/placeholder/skinpads/Bagga Scary portrait.jpg",
@@ -204,8 +207,9 @@ const imageRange = (folder: string, prefix: string, numbers: number[]) =>
 
 const artistPortfolioSources = {
   lucky: [
-    ...imageRange("lucky portfolio", "Website clr ", Array.from({ length: 27 }, (_, i) => i + 1).filter((n) => n !== 26)),
-    ...imageRange("lucky portfolio", "Website Realistic ", Array.from({ length: 25 }, (_, i) => i + 1)),
+    ...imageRange("lucky portfolio", "Website clr ", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27]),
+    "/images/placeholder/lucky portfolio/Website clr26.jpg",
+    ...imageRange("lucky portfolio", "Website Realistic ", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 20, 21, 22, 23, 24, 25]),
     ...imageRange("lucky portfolio", "Website Animal ", [2, 3, 4, 5, 6, 7]),
     ...imageRange("lucky portfolio", "Website LINE ART ", [6, 17, 18, 25, 26]),
     ...imageRange("lucky portfolio", "Website Religeous ", [1, 5, 6, 7, 8, 21, 22]),
