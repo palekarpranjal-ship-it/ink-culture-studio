@@ -1,4 +1,4 @@
-import { articleSchema, breadcrumbSchema, faqSchema, localBusinessSchema, organizationSchema, pageMeta, personSchema } from "@/config/seo";
+import { articleSchema, breadcrumbSchema, localBusinessSchema, organizationSchema, pageMeta, personSchema } from "@/config/seo";
 import { artists } from "@/data/artists";
 import { blogPosts } from "@/data/blog";
 
