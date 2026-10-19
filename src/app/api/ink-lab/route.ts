@@ -1,5 +1,4 @@
-import { generateText, Output, type ModelMessage } from "ai";
-import { z } from "zod";
+import { generateText } from "ai";
 import { NextResponse } from "next/server";
 
 export const runtime = "edge";
@@ -16,7 +15,6 @@ export async function POST(request: Request) {
       messages?: Array<{ role?: string; content?: string }>;
       language?: string;
       mode?: "chat" | "brief";
-      imageDataUrl?: string;
     };
     const messages = (body.messages ?? [])
       .filter((message) => message.role === "user" || message.role === "assistant")
@@ -28,32 +26,13 @@ export async function POST(request: Request) {
     }
     const languageInstruction = body.language && body.language !== "auto" ? `Preferred response language: ${body.language}.` : "Detect the latest user language automatically.";
     const modeInstruction = body.mode === "brief" ? "The user wants an artist-ready brief now. Synthesize the conversation into the required brief headings." : "Continue the conversation naturally.";
-    const imageDataUrl = typeof body.imageDataUrl === "string" && body.imageDataUrl.startsWith("data:image/") && body.imageDataUrl.length < 6_000_000 ? body.imageDataUrl : undefined;
-    const modelMessages: ModelMessage[] = imageDataUrl
-      ? messages.map((message, index) => {
-        if (index === messages.length - 1 && message.role === "user") {
-          return { role: "user" as const, content: [{ type: "text" as const, text: message.content }, { type: "image" as const, image: imageDataUrl }] };
-        }
-        return message.role === "user"
-          ? { role: "user" as const, content: message.content }
-          : { role: "assistant" as const, content: message.content };
-      })
-      : messages.map((message) => message.role === "user"
-        ? { role: "user" as const, content: message.content }
-        : { role: "assistant" as const, content: message.content });
-    const { output } = await generateText({
+    const { text } = await generateText({
       model: "openai/gpt-4o-mini",
-      temperature: 0.35,
-      system: `${SYSTEM}\n${languageInstruction}\n${modeInstruction}${imageDataUrl ? "\nA reference image is attached to the latest client message. Analyze it only for visible design qualities; do not infer identity, health, or personal history." : ""}`,
-      messages: modelMessages,
-      output: Output.object({ schema: z.object({
-        kind: z.enum(["question", "directions", "brief"]),
-        response: z.string().min(1).max(5000),
-        followUpQuestions: z.array(z.string()).max(2),
-        stage: z.enum(["DISCOVER", "CLARIFY", "EXPLORE", "REFINE", "BRIEF", "BOOK"]),
-      }) }),
+      temperature: 0.45,
+      system: `${SYSTEM}\n${languageInstruction}\n${modeInstruction}`,
+      messages,
     });
-    return NextResponse.json({ text: output.response, kind: output.kind, followUpQuestions: output.followUpQuestions, stage: output.stage });
+    return NextResponse.json({ text });
   } catch (error) {
     console.error("[v0] Ink Lab chat failed", error);
     return NextResponse.json({ error: "Ink Lab is temporarily unavailable. Please retry in a moment." }, { status: 500 });

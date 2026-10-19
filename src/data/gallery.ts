@@ -12,7 +12,6 @@
  */
 
 export type GalleryCategory =
-  | "Portfolio"
   | "Realism"
   | "Colour Tattoos"
   | "Religious"
@@ -33,7 +32,6 @@ export type InkColor = "Black" | "Black & Grey" | "Colour" | "Fine B&W";
 
 export const galleryCategories: ("All" | GalleryCategory)[] = [
   "All",
-  "Portfolio",
   "Realism",
   "Colour Tattoos",
   "Religious",
@@ -82,7 +80,6 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
 /** Placeholder pool — duplicated across categories to fill the grid until real work is added. */
 const styles: { style: string; artist: 0 | 1; cat: GalleryCategory; ink: InkColor }[] = [
-  { style: "Portfolio", artist: 0, cat: "Portfolio", ink: "Black & Grey" },
   { style: "Colour Tattoos", artist: 1, cat: "Colour Tattoos", ink: "Colour" },
   { style: "Religious", artist: 0, cat: "Religious", ink: "Black & Grey" },
   { style: "Animal", artist: 1, cat: "Animal", ink: "Colour" },
