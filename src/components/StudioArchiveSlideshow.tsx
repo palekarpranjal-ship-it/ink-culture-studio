@@ -27,7 +27,7 @@ export function StudioArchiveSlideshow() {
       <div className="archive-marquee group" tabIndex={0}>
         <div className="archive-marquee-track group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused]">
           {loop.map((item, index) => (
-            <figure key={`${item.id}-${index}`} className="archive-slide" style={{ aspectRatio: item.ratio > 0 ? `${item.ratio}` : "4 / 3" }}>
+            <figure key={`${item.id}-${index}`} className="archive-slide">
               <img src={item.src} alt={`${item.category} tattoo from the studio archive`} loading={index < 4 ? "eager" : "lazy"} decoding="async" />
               <figcaption>{item.category}</figcaption>
             </figure>
@@ -45,7 +45,7 @@ export default StudioArchiveSlideshow;
 const archiveStyles = `
 .archive-marquee { overflow: hidden; width: 100%; mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent); }
 .archive-marquee-track { display: flex; width: max-content; align-items: center; gap: clamp(1rem, 1.8vw, 2rem); animation: archive-scroll 78s linear infinite; will-change: transform; }
-.archive-slide { position: relative; width: clamp(260px, 34vw, 560px); height: auto; overflow: hidden; flex: none; background: #0b0b0b; display: grid; place-items: center; }
+.archive-slide { position: relative; width: clamp(260px, 34vw, 560px); aspect-ratio: 4 / 3; overflow: hidden; flex: none; background: #0b0b0b; display: grid; place-items: center; }
 .archive-slide img { display: block; width: 100%; height: auto; max-width: none; object-fit: contain; object-position: center; opacity: .9; transition: opacity .3s ease; }
 .archive-slide:hover img { opacity: 1; }
 .archive-slide figcaption { position: absolute; inset: auto .65rem .55rem; color: rgba(255,255,255,.75); font: 9px/1 monospace; text-transform: uppercase; letter-spacing: .16em; text-shadow: 0 1px 8px #000; }

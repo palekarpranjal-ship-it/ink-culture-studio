@@ -5,7 +5,7 @@ import { Link } from "@/next/Link";
 import { ArtistCard } from "@/components/ArtistCard";
 import { BrandLogo } from "@/components/BrandLogo";
 import { CursorLabel } from "@/components/CursorLabel";
-import { EyeMotif, HandMotif, InkStroke, StarMotif, TickerStrip } from "@/components/art";
+import { EyeMotif, StarMotif, TickerStrip } from "@/components/art";
 import { StudioArchiveSlideshow } from "@/components/StudioArchiveSlideshow";
 import { InkButton, MaskReveal, Reveal, SectionHeading } from "@/components/ui-kit";
 import { contact } from "@/config/contact";
@@ -64,7 +64,7 @@ function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const yBg = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 48]);
+  const yBg = useTransform(scrollYProgress, [0, 1], [0, 0]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
 
   const word = (t: string, i: number) => (
@@ -84,9 +84,8 @@ function Hero() {
     <section ref={ref} className="relative flex min-h-[100svh] flex-col overflow-hidden pb-2" aria-label="Introduction">
       {/* backdrop layers */}
       <motion.div style={{ y: yBg }} className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute inset-0 grain opacity-70" />
-        <div className="absolute -right-24 top-1/4 h-[420px] w-[420px] rounded-full bg-blood/10 blur-[120px]" />
-        <div className="absolute -left-32 bottom-0 h-[360px] w-[360px] rounded-full bg-acid/5 blur-[100px]" />
+  <div className="absolute inset-0 grain opacity-35" />
+  <div className="absolute -right-24 top-1/4 h-[320px] w-[320px] rounded-full bg-blood/8 blur-[100px]" />
       </motion.div>
 
       <motion.div style={{ opacity }} className="relative mx-auto flex w-full max-w-[90rem] flex-1 flex-col justify-center px-4 pt-24 sm:px-8 md:px-10 md:pt-28 lg:px-12">
@@ -100,38 +99,6 @@ function Hero() {
           Tattoo Studio, Piercing & Academy — Kandivali West, Mumbai
         </motion.p>
 
-        <img
-          width="112"
-          height="128"
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-168-Q8oAx2UrDPfCxOYO6BX6DL1g6DgsXX.jpg"
-          alt=""
-          aria-hidden="true"
-          loading="eager"
-          decoding="async"
-          className="pointer-events-none absolute right-5 top-28 hidden h-24 w-20 object-contain mix-blend-screen opacity-25 grayscale invert sm:block md:right-12 md:top-36 md:h-32 md:w-28"
-        />
-        <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-456-dBzKxReKMw1tROjjEL5qM9lpmpC1eg.jpg"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className="pointer-events-none absolute left-5 top-36 hidden h-20 w-20 object-contain mix-blend-screen opacity-20 grayscale invert sm:block md:left-12 md:top-44 md:h-28 md:w-28"
-        />
-        <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-453-3OrpApZ96jvAB8578ZQG91C3TMOCiv.jpg"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className="pointer-events-none absolute bottom-28 left-16 hidden h-24 w-32 object-contain mix-blend-screen opacity-18 grayscale invert sm:block md:left-24 md:h-32 md:w-44"
-        />
-        <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%20-167-vglWMrVYUABYoXSL7pHytZDVMHYpwk.jpg"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute bottom-24 right-10 hidden h-32 w-24 object-contain mix-blend-screen opacity-40 grayscale invert sm:block md:right-20 md:h-44 md:w-32"
-        />
 
         <h1 className="mt-6 font-display text-[clamp(3.6rem,16vw,6rem)] font-black uppercase leading-[0.82] tracking-[0.015em] text-bone sm:text-[9.5vw] sm:tracking-[0.035em] lg:text-[7.25rem] xl:text-[8rem]">
           <span className="block">{word("Ink", 0)}&nbsp;{word("Is", 1)}</span>
@@ -157,17 +124,6 @@ function Hero() {
           </div>
         </motion.div>
 
-        {/* illustrated strip */}
-        <motion.div
-          initial={reduce ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.12, duration: 0.4 }}
-          className="mt-10 flex items-end justify-between gap-6 text-bone/25 md:mt-14"
-        >
-                          <HandMotif className="h-20 w-16 md:h-28 md:w-24" />
-          <InkStroke className="hidden w-40 md:block" />
-          <StarMotif className="h-7 w-7 text-blood/40" />
-        </motion.div>
 
         {/* hit the block — quiet arcade easter egg */}
 
