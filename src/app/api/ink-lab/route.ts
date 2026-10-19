@@ -1,61 +1,36 @@
-import { generateText, Output, type ModelMessage } from "ai";
-import { z } from "zod";
+import { generateText } from "ai";
 import { NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-const SYSTEM = `You are Street Culture Tattoo Studio's senior tattoo creative director in Mumbai. You are a thoughtful bilingual consultant, not a generic chatbot. Detect the language of the user's latest message and answer in the same language: English, Hindi in Devanagari, or Hinglish in Roman script. Preserve emotional meaning and keep technical terms simple.
-
-Before answering, silently assess the client's expressed story, emotion, symbolism, likes, dislikes, style, body flow, placement, scale, readability, ageing, contrast, session complexity, constraints, contradictions, and missing essentials. Never reveal private chain-of-thought. Preserve only what the client actually said; do not invent personal details or emotional meaning. Ask at most one or two high-value clarification questions only when they materially improve the concept, and never ask for information already supplied. When enough context exists, offer three meaningfully different directions and explain their distinction, strengths, limitations, style, placement, and why each fits. Treat “no preference” as permission to recommend a style, not as a confirmed preference. You may help compare, combine, or refine directions.
-
-Move naturally through DISCOVER, CLARIFY, EXPLORE, REFINE, BRIEF, BOOK. If the user asks for a brief, return a polished brief with exactly these headings: CONCEPT TITLE, INTENTION & STORY, SYMBOLISM, VISUAL COMPOSITION, STYLE, PLACEMENT & SIZE, COLOUR & LINEWORK, FEASIBILITY & AGEING, ARTIST NOTES, OPEN QUESTIONS. Keep creative suggestions separate from confirmed artist recommendations. Never invent pricing, availability, approval, or technical certainty. Final feasibility, size, pricing, and healing advice must be confirmed with the studio. Keep normal replies under 350 words and artist-ready briefs under 650 words. Use concrete, client-specific language rather than generic tattoo advice. End a non-brief reply with one clear next step or question when useful.`;
-
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as {
-      messages?: Array<{ role?: string; content?: string }>;
-      language?: string;
-      mode?: "chat" | "brief";
-      imageDataUrl?: string;
+      idea?: string;
+      placement?: string;
+      style?: string;
+      language?: "English" | "हिन्दी" | "Hinglish";
+      hasReferenceImage?: boolean;
     };
-    const messages = (body.messages ?? [])
-      .filter((message) => message.role === "user" || message.role === "assistant")
-      .map((message) => ({ role: message.role as "user" | "assistant", content: String(message.content ?? "").slice(0, 4000) }))
-      .filter((message) => message.content.trim())
-      .slice(-16);
-    if (!messages.length || messages[messages.length - 1].role !== "user") {
-      return NextResponse.json({ error: "Tell Ink Lab what you want to explore first." }, { status: 400 });
+    const idea = body.idea?.trim();
+    if (!idea || idea.length < 10 || idea.length > 1200) {
+      return NextResponse.json({ error: "Please describe your tattoo idea in 10–1200 characters." }, { status: 400 });
     }
-    const languageInstruction = body.language && body.language !== "auto" ? `Preferred response language: ${body.language}.` : "Detect the latest user language automatically.";
-    const modeInstruction = body.mode === "brief" ? "The user wants an artist-ready brief now. Synthesize the conversation into the required brief headings." : "Continue the conversation naturally.";
-    const imageDataUrl = typeof body.imageDataUrl === "string" && body.imageDataUrl.startsWith("data:image/") && body.imageDataUrl.length < 6_000_000 ? body.imageDataUrl : undefined;
-    const modelMessages: ModelMessage[] = imageDataUrl
-      ? messages.map((message, index) => {
-        if (index === messages.length - 1 && message.role === "user") {
-          return { role: "user" as const, content: [{ type: "text" as const, text: message.content }, { type: "image" as const, image: imageDataUrl }] };
-        }
-        return message.role === "user"
-          ? { role: "user" as const, content: message.content }
-          : { role: "assistant" as const, content: message.content };
-      })
-      : messages.map((message) => message.role === "user"
-        ? { role: "user" as const, content: message.content }
-        : { role: "assistant" as const, content: message.content });
-    const { output } = await generateText({
+
+    const language = body.language || "English";
+    const languageInstruction = language === "हिन्दी"
+      ? "Respond entirely in natural Hindi using Devanagari script, while keeping tattoo style names and necessary artist terms in English."
+      : language === "Hinglish"
+        ? "Respond naturally in Hinglish: conversational Hindi written in Latin script with clear English tattoo and artist terms."
+        : "Respond entirely in natural English.";
+    const { text } = await generateText({
       model: "openai/gpt-4o-mini",
-      temperature: 0.35,
-      system: `${SYSTEM}\n${languageInstruction}\n${modeInstruction}${imageDataUrl ? "\nA reference image is attached to the latest client message. Analyze it only for visible design qualities; do not infer identity, health, or personal history." : ""}`,
-      messages: modelMessages,
-      output: Output.object({ schema: z.object({
-        kind: z.enum(["question", "directions", "brief"]),
-        response: z.string().min(1).max(5000),
-        followUpQuestions: z.array(z.string()).max(2),
-        stage: z.enum(["DISCOVER", "CLARIFY", "EXPLORE", "REFINE", "BRIEF", "BOOK"]),
-      }) }),
+      temperature: 0.4,
+      system: `You are the Ink Lab creative brief assistant for Street Culture Tattoo Studio in Mumbai. Think like a thoughtful tattoo consultant and a small tattoo-studio AI powerhouse. First understand the client's meaning, emotions, symbols, visual references, likes, dislikes, placement, scale, style, body flow, readability, ageing, feasibility, and constraints. Do not invent personal meaning or expose chain-of-thought. Turn rough client language into a concise, specific, artist-useful brief that helps an artist design the tattoo. If important information is missing, state a practical assumption and include one focused question. Never promise medical safety or exact results. Encourage an artist consultation for anatomy, sizing, skin, placement, feasibility, and healing. Return plain text with exactly these sections: IDEA, VISUAL DIRECTION, COMPOSITION & FLOW, PLACEMENT NOTES, SESSION & PRACTICAL NOTES, ARTIST QUESTIONS. Be warm, specific, and under 500 words.\n${languageInstruction}`,
+      prompt: `Client idea: ${idea}\nPlacement: ${body.placement?.trim() || "Not specified"}\nStyle: ${body.style || "No preference"}\nRequested response language: ${language}\nReference image supplied: ${body.hasReferenceImage ? "Yes" : "No"}`,
     });
-    return NextResponse.json({ text: output.response, kind: output.kind, followUpQuestions: output.followUpQuestions, stage: output.stage });
-  } catch (error) {
-    console.error("[v0] Ink Lab chat failed", error);
-    return NextResponse.json({ error: "Ink Lab is temporarily unavailable. Please retry in a moment." }, { status: 500 });
+    return NextResponse.json({ brief: text });
+  } catch {
+    return NextResponse.json({ error: "The Ink Lab could not draft this brief." }, { status: 500 });
   }
 }

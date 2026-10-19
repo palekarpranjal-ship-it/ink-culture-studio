@@ -102,7 +102,7 @@ export function GalleryGrid() {
         .sort((a, b) => {
           if (filter !== "All") return 0;
           const priority = (item: GalleryItem) => {
-            if (item.category === "Portfolio" || item.inkColor === "Black & Grey") return 0;
+            if (item.inkColor === "Black & Grey") return 0;
             if (item.category === "Colour Tattoos") return 1;
             if (item.category === "Realism") return 2;
             return 3;
