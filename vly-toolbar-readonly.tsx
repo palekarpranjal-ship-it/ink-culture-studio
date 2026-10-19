@@ -297,7 +297,7 @@ export const VlyToolbar: React.FC = () => {
     const hierarchy = getReactComponentHierarchy(el);
     const formatted = formatReactComponentHierarchy(hierarchy);
 
-    let imageDataUrl: string | undefined = undefined;
+    let imageDataUrl: string | undefined;
     try {
       // Optionally, preload resources for best results
       // await preCache(el);
