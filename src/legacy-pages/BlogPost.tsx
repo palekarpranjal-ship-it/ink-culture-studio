@@ -83,17 +83,17 @@ export default function BlogPost() {
       </Reveal>
 
       <div className="mx-auto mt-12 w-full max-w-3xl px-5 md:px-8">
-        {post.body.map((block, i) => {
+        {post.body.map((block) => {
           if (block.type === "h2") {
             return (
-              <Reveal key={i}>
+              <Reveal key={`${block.type}-${block.text}`}>
                 <h2 className="mt-10 font-display text-2xl uppercase tracking-tight text-bone md:text-3xl">{block.text}</h2>
               </Reveal>
             );
           }
           if (block.type === "quote") {
             return (
-              <Reveal key={i}>
+              <Reveal key={`${block.type}-${block.text}`}>
                 <blockquote className="my-10 border-l-2 border-blood pl-6">
                   <InkStroke className="mb-3 w-24 text-blood/70" />
                   <p className="font-marker text-xl leading-relaxed text-cream/85 md:text-2xl">{block.text}</p>
@@ -102,7 +102,7 @@ export default function BlogPost() {
             );
           }
           return (
-            <Reveal key={i}>
+            <Reveal key={`${block.type}-${block.text}`}>
               <p className="mt-6 font-body text-base leading-[1.85] text-bone/75">{block.text}</p>
             </Reveal>
           );

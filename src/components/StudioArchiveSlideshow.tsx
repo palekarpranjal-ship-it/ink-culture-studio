@@ -26,7 +26,7 @@ export function StudioArchiveSlideshow() {
       <div className="archive-marquee group" tabIndex={0}>
         <div className="archive-marquee-track group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused]">
           {loop.map((item, index) => (
-            <figure key={`${item.id}-${index}`} className="archive-slide">
+            <figure key={item.id} className="archive-slide">
               <img src={item.src} alt={`${item.category} tattoo from the studio archive`} loading={index < 4 ? "eager" : "lazy"} decoding="async" />
               <figcaption>{item.category}</figcaption>
             </figure>

@@ -187,8 +187,8 @@ export function TickerStrip({ items, className }: { items: string[]; className?:
   <div
   className="flex w-max animate-[ticker-scroll_22s_linear_infinite] items-center gap-5 pr-5 sm:gap-8 sm:pr-8"
   >
-        {doubled.map((t, i) => (
-          <span key={i} className="flex items-center gap-5 whitespace-nowrap font-display text-sm uppercase tracking-[0.08em] text-ink sm:gap-8 sm:text-lg">
+        {doubled.map((t) => (
+          <span key={t} className="flex items-center gap-5 whitespace-nowrap font-display text-sm uppercase tracking-[0.08em] text-ink sm:gap-8 sm:text-lg">
             {t}
             <StarMotif className="h-4 w-4" />
           </span>

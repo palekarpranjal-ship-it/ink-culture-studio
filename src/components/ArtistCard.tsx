@@ -118,7 +118,7 @@ function PowerAura({ accent, active }: { accent: Artist["accent"]; active: boole
           {/* floating motifs */}
           {FLOATING.map(({ Icon, pos, size, dur, drift, rot }, i) => (
             <motion.div
-              key={i}
+              key={`${pos}-${size}-${dur}-${drift}-${rot}`}
               className={cn("absolute", pos, size)}
               style={{ color }}
               initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.4, rotate: rot * 2 }}
@@ -143,9 +143,9 @@ function PowerAura({ accent, active }: { accent: Artist["accent"]; active: boole
           ))}
 
           {/* rising sparks */}
-          {SPARKS.map((s, i) => (
+          {SPARKS.map((s) => (
             <motion.span
-              key={`spark-${i}`}
+              key={`spark-${s.x}-${s.delay}`}
               className="absolute bottom-[4%]"
               style={{ left: `${s.x}%`, color }}
               initial={reduce ? { opacity: 0 } : { opacity: 0, y: 0 }}

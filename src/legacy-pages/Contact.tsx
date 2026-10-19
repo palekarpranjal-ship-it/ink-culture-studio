@@ -146,7 +146,7 @@ export default function Contact() {
               { t: "By Road", d: "Off S.V. Road in Kandivali West, near Adarsh Nagar — easy drop-off point." },
               { t: "By Rickshaw / Cab", d: "Ask for Pillar No. 283, opp. Gaurav Heights, Kandivali West — a 2-minute ride from Kandivali station." },
             ].map((x, i) => (
-              <Reveal key={`${x.t}-${i}`} delay={i * 0.07}>
+              <Reveal key={x.t} delay={i * 0.07}>
                 <div className="h-full border border-bone/12 p-6">
                   <h3 className="font-display text-lg uppercase tracking-tight text-bone">{x.t}</h3>
                   <p className="mt-2 font-body text-sm leading-relaxed text-bone/60">{x.d}</p>

@@ -389,7 +389,7 @@ function Testimonials() {
               <figure className="flex h-full flex-col border border-bone/12 bg-white/[0.02] p-6 md:p-7">
                 <div className="flex gap-1 text-blood" aria-label={`${t.rating} out of 5 stars`}>
                   {Array.from({ length: t.rating }).map((_, s) => (
-                    <StarMotif key={s} className="h-3.5 w-3.5" />
+                    <StarMotif key={`${t.rating}-${s}`} className="h-3.5 w-3.5" />
                   ))}
                 </div>
                 <blockquote className="mt-4 flex-1 font-body text-sm leading-relaxed text-bone/75">“{t.quote}”</blockquote>

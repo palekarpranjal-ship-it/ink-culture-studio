@@ -44,7 +44,7 @@ function PixelBurst({ x, y }: { x: number; y: number }) {
     <div className="absolute" style={{ left: x, top: y }}>
       {shards.map((s, i) => (
         <motion.span
-          key={i}
+          key={`${s.color}-${s.dx}-${s.dy}`}
           className="absolute"
           style={{ width: s.size, height: s.size, background: s.color }}
           initial={{ x: -s.size / 2, y: -s.size / 2, opacity: 1 }}
