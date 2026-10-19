@@ -20,7 +20,6 @@ export function StudioArchiveSlideshow() {
       <div className="mx-auto mb-6 flex w-full max-w-[1800px] items-end justify-between gap-4 px-5 sm:mb-8 sm:px-8 lg:px-12">
         <div>
           <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-blood">Studio archive</p>
-          <h3 className="mt-2 font-display text-2xl uppercase leading-none text-bone sm:text-3xl">The work moves first.</h3>
         </div>
         <Link to="/gallery" className="shrink-0 font-mono text-[9px] uppercase tracking-[0.18em] text-[#2bb7ff] hover:text-bone">View gallery →</Link>
       </div>
@@ -45,8 +44,8 @@ export default StudioArchiveSlideshow;
 const archiveStyles = `
 .archive-marquee { overflow: hidden; width: 100%; mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent); }
 .archive-marquee-track { display: flex; width: max-content; align-items: center; gap: clamp(1rem, 1.8vw, 2rem); animation: archive-scroll 78s linear infinite; will-change: transform; }
-.archive-slide { position: relative; width: clamp(260px, 34vw, 560px); aspect-ratio: 4 / 3; overflow: hidden; flex: none; background: #0b0b0b; display: grid; place-items: center; }
-.archive-slide img { display: block; width: 100%; height: auto; max-width: none; object-fit: contain; object-position: center; opacity: .9; transition: opacity .3s ease; }
+.archive-slide { position: relative; width: clamp(300px, 38vw, 680px); aspect-ratio: 4 / 3; overflow: hidden; flex: none; background: #0b0b0b; display: grid; place-items: center; padding: .75rem; }
+.archive-slide img { display: block; width: 100%; height: 100%; max-width: none; object-fit: contain; object-position: center; opacity: .9; transition: opacity .3s ease; }
 .archive-slide:hover img { opacity: 1; }
 .archive-slide figcaption { position: absolute; inset: auto .65rem .55rem; color: rgba(255,255,255,.75); font: 9px/1 monospace; text-transform: uppercase; letter-spacing: .16em; text-shadow: 0 1px 8px #000; }
 @keyframes archive-scroll { from { transform: translate3d(0,0,0); } to { transform: translate3d(calc(-50% - .375rem),0,0); } }

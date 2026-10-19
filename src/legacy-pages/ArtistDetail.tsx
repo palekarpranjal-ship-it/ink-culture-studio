@@ -2,11 +2,8 @@ import { RefreshCw } from "lucide-react";
 import { Link, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { InkStroke, StarMotif, StickArtistFigure } from "@/components/art";
-import { CursorLabel } from "@/components/CursorLabel";
-import { PlaceholderImage } from "@/components/PlaceholderImage";
 import { InkButton, MaskReveal, PageHero, Reveal, SectionHeading } from "@/components/ui-kit";
 import { breadcrumbSchema, pageMeta, personSchema } from "@/config/seo";
-import { galleryItems } from "@/data/gallery";
 import { getArtist, statLabelsFor } from "@/data/artists";
 import { useJsonLd, useSeo } from "@/hooks/use-seo";
 import { cn } from "@/lib/utils";
@@ -61,8 +58,6 @@ export default function ArtistDetail() {
   );
 
   if (!artist) return <NotFound />;
-
-  const work = galleryItems.filter((g) => g.artistId === artist.id).slice(0, 6);
 
   return (
     <>
@@ -221,27 +216,6 @@ export default function ArtistDetail() {
               </Reveal>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* GALLERY */}
-      <section className="border-t border-bone/10 py-20 md:py-28" aria-label="Signature work">
-        <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
-          <SectionHeading index="03" kicker="Signature Work" title={<>Fresh from<br />the machine.</>} />
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            {work.map((g) => (
-              <CursorLabel key={g.id} label="VIEW">
-                <Link to={`/artists/${artist.id}/portfolio`} className="group block border border-bone/10">
-                  <div className="aspect-[3/4] overflow-hidden">
-                    <PlaceholderImage seed={g.id} label={g.category} sub={g.title} className="transition-transform duration-700 group-hover:scale-105" />
-                  </div>
-                </Link>
-              </CursorLabel>
-            ))}
-          </div>
-          <Reveal className="mt-8">
-            <InkButton href={`/artists/${artist.id}/portfolio`} variant="outline">See the Full Portfolio</InkButton>
-          </Reveal>
         </div>
       </section>
 
