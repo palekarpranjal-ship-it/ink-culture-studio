@@ -16,15 +16,6 @@ const why = [
   { icon: ShieldIcon, title: "Hygiene From Day One", body: "Sterile discipline is a module, not a footnote. It's the difference between a tattooist and a liability." },
 ];
 
-const masterCover = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Standy%20B%26G-KLch8cQN0JADEb9RxnOeTVpowQY0o7.jpg";
-const courseCovers = [
-  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Drawing%2001-6Sbxe1KMzSRFhywLMI8ifhB5tyNsx6.jpg",
-  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Tattooing%2002-sypZl7pBaU9VFvROVOfeFCuhd4wiuZ.jpg",
-  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Colour%20Tat%2003-D5wb4KSQHWlhQO7GntoAGMPEUN20hS.jpg",
-  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Designing%2004-0udHYxs2qhoXrJ7kNRpb0kcpfpdsqN.jpg",
-  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Mngmant%2005-GojGjLmcYHT62r3aV66f4G0yOeJJbb.jpg",
-];
-
 const audiences = [
   "Complete beginners who want the craft done properly",
   "Artists from other mediums moving into tattoo",
