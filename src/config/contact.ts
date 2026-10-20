@@ -188,4 +188,4 @@ export const googleForm = {
 /** Site-wide deployment URL used for canonical URLs, sitemap & schema. */
 export const siteUrl =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_SITE_URL) ||
-  "https://streetculture.tattoo";
+  "https://www.streetculturetattoos.com";
