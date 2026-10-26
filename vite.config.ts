@@ -111,7 +111,7 @@ export default defineConfig({
   server: {
     // Bind to all interfaces so the browser runtime's server-ready event fires.
     host: true,
-    port: 5173,
+    port: Number(process.env.PORT) || 3000,
     // Keep HMR on, but disable full-screen error overlay
     hmr: {
       overlay: false,
