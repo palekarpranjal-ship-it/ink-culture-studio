@@ -20,7 +20,11 @@ export default async function handler(request: Request) {
     });
     return Response.json({ brief: text });
   } catch (error) {
-    console.error("[v0] Ink Lab generation failed", error);
+    console.error("Ink Lab generation failed", error);
+    const message = error instanceof Error ? error.message : "";
+    if (message.includes("credit card")) {
+      return Response.json({ error: "The Ink Lab is offline: the studio's AI Gateway needs a card on file in Vercel." }, { status: 503 });
+    }
     return Response.json({ error: "The Ink Lab could not draft this brief. Please try again." }, { status: 500 });
   }
 }

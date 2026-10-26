@@ -37,7 +37,10 @@ export default function ConceptLab() {
       headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idea, placement, style, language, hasReferenceImage: Boolean(imageDataUrl) }),
     });
-    if (!response.ok) throw new Error("The studio brain is unavailable right now. Try again in a moment.");
+    if (!response.ok) {
+      const data = (await response.json().catch(() => null)) as { error?: string } | null;
+      throw new Error(data?.error || "The studio brain is unavailable right now. Try again in a moment.");
+    }
     return response.json() as Promise<{ brief: string }>;
   };
 

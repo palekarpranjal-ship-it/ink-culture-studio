@@ -3,13 +3,15 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { generateText } from "ai";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), vlyPlugin(), tailwindcss(), {
     name: "ink-lab-api",
     configureServer(server) {
+      // Vite only exposes VITE_* vars by default; the AI SDK reads AI_GATEWAY_API_KEY from process.env.
+      process.env = { ...loadEnv(server.config.mode, process.cwd(), ""), ...process.env };
       server.middlewares.use("/api/ink-lab", async (req, res) => {
         if (req.method !== "POST") { res.statusCode = 405; res.end("Method not allowed"); return; }
         let raw = "";
@@ -20,7 +22,13 @@ export default defineConfig({
           if (!idea || idea.length < 10 || idea.length > 1200) { res.statusCode = 400; res.setHeader("Content-Type", "application/json"); res.end(JSON.stringify({ error: "Please describe your tattoo idea in 10–1200 characters." })); return; }
           const { text } = await generateText({ model: "openai/gpt-4o-mini", temperature: 0.4, system: "You are the senior tattoo consultant for Street Culture Tattoo Studio in Mumbai. Silently assess intent, symbolism, body flow, style fit, scale, contrast, session complexity, and ambiguity before answering. Do not reveal chain-of-thought. If information is missing, state an assumption and add one focused question. Never promise medical safety or exact results. Return exactly these sections: IDEA, VISUAL DIRECTION, COMPOSITION & FLOW, PLACEMENT NOTES, SESSION & PRACTICAL NOTES, ARTIST QUESTIONS. Be warm, specific, and under 500 words.", prompt: `Client idea: ${idea}\\nPlacement: ${body.placement?.trim() || "Not specified"}\\nStyle: ${body.style || "No preference"}\\nReference image supplied: ${body.hasReferenceImage ? "Yes" : "No"}` });
           res.statusCode = 200; res.setHeader("Content-Type", "application/json"); res.end(JSON.stringify({ brief: text }));
-        } catch (error) { console.error("[v0] Ink Lab generation failed", error); res.statusCode = 500; res.setHeader("Content-Type", "application/json"); res.end(JSON.stringify({ error: "The Ink Lab could not draft this brief. Please try again." })); }
+        } catch (error) {
+          console.error("Ink Lab generation failed", error);
+          const needsCard = error instanceof Error && error.message.includes("credit card");
+          res.statusCode = needsCard ? 503 : 500;
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ error: needsCard ? "The Ink Lab is offline: the studio's AI Gateway needs a card on file in Vercel." : "The Ink Lab could not draft this brief. Please try again." }));
+        }
       });
     },
   }],
