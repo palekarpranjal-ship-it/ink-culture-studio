@@ -47,6 +47,14 @@ const schema = defineSchema(
       createdAt: v.number(),
       redeemedAt: v.optional(v.number()),
     }).index("by_code", ["code"]),
+
+    // Live visitor presence: one row per open browser tab, refreshed by heartbeat.
+    visitorPresence: defineTable({
+      sessionId: v.string(),
+      lastSeen: v.number(),
+    })
+      .index("by_session", ["sessionId"])
+      .index("by_lastSeen", ["lastSeen"]),
   },
   {
     schemaValidation: false,
