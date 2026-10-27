@@ -1,6 +1,8 @@
 "use client";
 
 import "../index.css";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -26,10 +28,24 @@ import Book from "../legacy-pages/Book";
 import Careers from "../legacy-pages/Careers";
 import Contact from "../legacy-pages/Contact";
 import ConceptLab from "../legacy-pages/ConceptLab";
+import Privacy from "../legacy-pages/Privacy";
+import Terms from "../legacy-pages/Terms";
 import NotFound from "../legacy-pages/NotFound";
 
 function RouteSyncer() {
   const location = useLocation();
+  const router = useRouter();
+
+  // Keep the browser URL in step with react-router navigation inside the
+  // MemoryRouter (nav links, internal buttons) so deep links, refresh and the
+  // back button all behave. Next-side navigations remount this shell with a
+  // matching routePath, so this never loops.
+  useEffect(() => {
+    if (typeof window !== "undefined" && location.pathname !== window.location.pathname) {
+      router.push(location.pathname);
+    }
+  }, [location.pathname, router]);
+
   return <>{location.pathname && null}</>;
 }
 
@@ -61,6 +77,8 @@ function NativeContent() {
       <Route path="/careers" element={<Careers />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/concept" element={<ConceptLab />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -72,7 +90,7 @@ export default function NativeRoutePage({ routePath = "/" }: { routePath?: strin
       <ClickSound />
       <PixelCloud />
       <Intro />
-      <MemoryRouter initialEntries={[routePath]}>
+      <MemoryRouter key={routePath} initialEntries={[routePath]}>
         <RouteSyncer />
         <ScrollToTop />
         <Navbar />

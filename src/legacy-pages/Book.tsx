@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Calendar, Check, Clock, MessageCircle, Upload } 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { SparkMotif } from "@/components/art";
+import { Turnstile } from "@/components/Turnstile";
 import { notifyStreetCultureBooking } from "@/components/StreetCultureBot";
 import { InkButton, PageHero, Reveal } from "@/components/ui-kit";
 import { breadcrumbSchema, pageMeta } from "@/config/seo";
@@ -306,6 +307,7 @@ export default function Book() {
   const [done, setDone] = useState(false);
   const [formOk, setFormOk] = useState(false);
   const [mystery, setMystery] = useState<MysteryDecision | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   /* The mystery box exists the moment they land on /book — the engine is
@@ -418,7 +420,7 @@ export default function Book() {
       notes: `${form.referenceName}${mystery ? `\nMystery Box: ${mystery.code} — ${mystery.percent}% off` : ""}`,
       mysteryCode: decision.code,
       mysteryDiscount: String(decision.percent),
-    });
+    }, turnstileToken ?? undefined);
     setSubmitting(false);
     // The box opens now: decide the discount from behavior pattern + tattoo size.
     trackBookingSubmit();
@@ -773,6 +775,7 @@ export default function Book() {
               >
                 <ArrowLeft className="size-4" /> Back
               </button>
+              <Turnstile onVerify={setTurnstileToken} />
               <div className="flex flex-wrap gap-3">
                 <InkButton variant="outline" onClick={onWhatsApp}>
                   <MessageCircle className="size-4" /> WhatsApp Instead

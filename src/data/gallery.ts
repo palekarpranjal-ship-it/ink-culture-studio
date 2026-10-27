@@ -76,23 +76,6 @@ export type GalleryItem = {
   ratio: number;
 };
 
-const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-
-/** Placeholder pool — duplicated across categories to fill the grid until real work is added. */
-const styles: { style: string; artist: 0 | 1; cat: GalleryCategory; ink: InkColor }[] = [
-  { style: "Colour Tattoos", artist: 1, cat: "Colour Tattoos", ink: "Colour" },
-  { style: "Religious", artist: 0, cat: "Religious", ink: "Black & Grey" },
-  { style: "Animal", artist: 1, cat: "Animal", ink: "Colour" },
-  { style: "Cover Ups", artist: 0, cat: "Cover Ups", ink: "Black" },
-  { style: "Line Art", artist: 1, cat: "Line Art", ink: "Fine B&W" },
-  { style: "Script", artist: 0, cat: "Script", ink: "Black" },
-  { style: "Feminine", artist: 1, cat: "Feminine Tattoo Inspo", ink: "Fine B&W" },
-  { style: "BTS", artist: 1, cat: "BTS", ink: "Black & Grey" },
-  { style: "Healed", artist: 0, cat: "Healed Tattoos", ink: "Black & Grey" },
-  { style: "Students Awards", artist: 1, cat: "Students, Convocation + Awards", ink: "Colour" },
-  { style: "Piercing", artist: 0, cat: "Piercing", ink: "Black" },
-];
-
 const numbered = (folder: string, prefix: string, count: number, extension = "jpg") =>
   Array.from({ length: count }, (_, i) => `/images/placeholder/${folder}/${prefix}${i + 1}.${extension}`);
 
@@ -242,21 +225,6 @@ export const artistPortfolioItems: Record<string, GalleryItem[]> = Object.entrie
 
 const portfolioItems = Object.values(artistPortfolioItems).flat();
 
-const titles = [
-  "Saint of Streets",
-  "Mumbai Monsoon",
-  "Concrete Bloom",
-  "Third Eye Open",
-  "Local Train Serpent",
-  "Ghost Type",
-  "Sea-Link Serpent",
-  "Paper Rose",
-  "Second Chances",
-  "Tiny Thunder",
-  "Full Back Saga",
-  "Watchful",
-];
-
 const ratios = [1, 1.45, 0.8, 1.2, 0.9, 1.6, 1.1, 0.85, 1.3, 0.95, 1.5, 1.05];
 
 function build(): GalleryItem[] {
@@ -274,11 +242,5 @@ function build(): GalleryItem[] {
     ratio: ratios[itemIndex % ratios.length],
   }));
 }
-
-// Avoid circular import with artists data; minimal shim of what we need
-const artistsShim = [
-  { id: "karan", name: "Karan" },
-  { id: "lucky", name: "Lucky" },
-];
 
 export const galleryItems: GalleryItem[] = [...build(), ...portfolioItems];

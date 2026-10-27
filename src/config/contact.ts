@@ -79,8 +79,18 @@ export const contact = {
       "Street Culture Tattoo & Academy, Metro Station Pillar No. 283, opp. Gaurav Heights, Kandivali West, Mumbai 400067",
     ),
 
-  /** Google Business Profile — paste the "Own this business" listing URL */
-  googleBusinessUrl: "",
+  /**
+   * Google Business Profile — used in schema.org sameAs, the footer/contact
+   * links and llms.txt so AI engines and Google itself can cite the listing.
+   * Google's documented Maps search URL resolves directly to the studio's
+   * place page; swap in the profile's canonical CID share link if you want
+   * the exact permalink.
+   */
+  googleBusinessUrl:
+    "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(
+      "Street Culture Tattoo & Academy, Metro Station Pillar No. 283, Kandivali West, Mumbai 400067",
+    ),
 
   /** Google reviews — paste the listing's reviews URL */
   googleReviewUrl:
@@ -112,7 +122,8 @@ export const contact = {
      */
     facebook: "",
     facebookHandle: "",
-    youtube: "",
+    /** Official channel — verified via the studio's YouTube presence. */
+    youtube: "https://www.youtube.com/channel/UCPEvYjhNXe_9zwg4nw7MT1A",
   },
 
   /** Landing page (Instagram) description, verbatim from the profile */
@@ -187,5 +198,4 @@ export const googleForm = {
 
 /** Site-wide deployment URL used for canonical URLs, sitemap & schema. */
 export const siteUrl =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_SITE_URL) ||
-  "https://www.streetculturetattoos.com";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.streetculturetattoos.com";

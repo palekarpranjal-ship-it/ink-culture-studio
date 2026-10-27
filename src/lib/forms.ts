@@ -1,16 +1,17 @@
 /**
- * Google Forms integration layer.
+ * Google Forms integration layer (hardened).
  *
- * Posts data as application/x-www-form-urlencoded (the format Google Forms
- * formResponse endpoints accept) which avoids CORS preflight entirely.
- * Endpoints & entry-field mappings are configured in src/config/contact.ts.
- * If an endpoint is not configured, submission resolves to { ok: false,
- * configured: false } and the UI falls back to WhatsApp / mailto.
+ * Submissions POST to our own /api/enquiry endpoint, which validates with
+ * Zod, sanitizes with DOMPurify, rate-limits per IP, verifies the Turnstile
+ * spam token, and only then forwards to the configured Google Form
+ * formResponse endpoint.
+ *
+ * If an endpoint is not configured, the API resolves to { ok: false,
+ * configured: false } and the UI falls back to WhatsApp / mailto — the same
+ * contract this module always exposed.
  */
 
-import { contact, googleForm } from "@/config/contact";
-
-type EntryMap = Record<string, string>;
+import { contact } from "@/config/contact";
 
 export type SubmitResult = {
   ok: boolean;
@@ -19,47 +20,81 @@ export type SubmitResult = {
   error?: string;
 };
 
-export function isFormConfigured(url: string): boolean {
-  return Boolean(url && url.startsWith("http"));
-}
+export type EnquiryKind = "booking" | "career" | "academy";
 
-async function postToForm(url: string, entryMap: EntryMap, data: Record<string, string>): Promise<SubmitResult> {
-  if (!isFormConfigured(url)) {
-    return { ok: false, configured: false };
-  }
-  try {
-    const body = new URLSearchParams();
-    for (const [key, value] of Object.entries(data)) {
-      const entry = entryMap[key];
-      if (entry && value) body.append(entry, value);
-    }
-    // no-cors: Google Forms does not return CORS headers; fire-and-forget POST.
-    await fetch(`${url}`, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: body.toString(),
-    });
-    return { ok: true, configured: true };
-  } catch (err) {
+async function submitEnquiry(
+  kind: EnquiryKind,
+  data: Record<string, string>,
+  token?: string,
+): Promise<SubmitResult> {
+  if (typeof navigator !== "undefined" && navigator.onLine === false) {
     return {
       ok: false,
       configured: true,
-      error: err instanceof Error ? err.message : "Submission failed",
+      error: "You appear to be offline. Reconnect and try again, or use WhatsApp.",
+    };
+  }
+
+  try {
+    const res = await fetch("/api/enquiry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ kind, data, token: token || undefined }),
+    });
+
+    const json = (await res.json().catch(() => ({}))) as SubmitResult;
+
+    if (res.status === 429) {
+      return {
+        ok: false,
+        configured: true,
+        error:
+          json.error ??
+          "Too many attempts — wait a minute and try again, or use WhatsApp.",
+      };
+    }
+    if (!res.ok) {
+      return {
+        ok: false,
+        configured: true,
+        error:
+          json.error ?? "We couldn't send that just now. Please try WhatsApp instead.",
+      };
+    }
+    return { ok: json.ok === true, configured: json.configured !== false };
+  } catch {
+    return {
+      ok: false,
+      configured: true,
+      error: "Network error — check your connection or use WhatsApp instead.",
     };
   }
 }
 
-export function submitBooking(data: Record<string, string>): Promise<SubmitResult> {
-  return postToForm(googleForm.bookingsUrl, googleForm.bookingsEntryFields, data);
+export function submitBooking(
+  data: Record<string, string>,
+  token?: string,
+): Promise<SubmitResult> {
+  return submitEnquiry("booking", data, token);
 }
 
-export function submitCareersApplication(data: Record<string, string>): Promise<SubmitResult> {
-  return postToForm(googleForm.careersUrl, googleForm.careersEntryFields, data);
+export function submitCareersApplication(
+  data: Record<string, string>,
+  token?: string,
+): Promise<SubmitResult> {
+  return submitEnquiry("career", data, token);
 }
 
-export function submitAcademyEnquiry(data: Record<string, string>): Promise<SubmitResult> {
-  return postToForm(googleForm.academyUrl, googleForm.academyEntryFields, data);
+export function submitAcademyEnquiry(
+  data: Record<string, string>,
+  token?: string,
+): Promise<SubmitResult> {
+  return submitEnquiry("academy", data, token);
+}
+
+/** Kept for UI code that checks configuration; the server now owns the URLs. */
+export function isFormConfigured(url: string): boolean {
+  return Boolean(url && url.startsWith("http"));
 }
 
 /** mailto fallback so every form has a working submit path pre-configuration. */

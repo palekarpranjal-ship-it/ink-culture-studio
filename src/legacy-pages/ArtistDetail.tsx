@@ -1,5 +1,5 @@
 import { RefreshCw } from "lucide-react";
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { InkStroke, StarMotif, StickArtistFigure } from "@/components/art";
 import { InkButton, MaskReveal, PageHero, Reveal, SectionHeading } from "@/components/ui-kit";

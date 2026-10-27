@@ -47,6 +47,22 @@ const schema = defineSchema(
       createdAt: v.number(),
       redeemedAt: v.optional(v.number()),
     }).index("by_code", ["code"]),
+
+    // Public site stats for the live pulse badge (no auth: anonymous,
+    // rate-limited-by-client UX counters only).
+    siteCounters: defineTable({
+      key: v.string(),
+      value: v.number(),
+    }).index("by_key", ["key"]),
+
+    siteSessions: defineTable({
+      sessionId: v.string(),
+    }).index("by_sessionId", ["sessionId"]),
+
+    sitePresence: defineTable({
+      sessionId: v.string(),
+      lastSeen: v.number(),
+    }).index("by_sessionId", ["sessionId"]),
   },
   {
     schemaValidation: false,

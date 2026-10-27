@@ -1,4 +1,5 @@
 import { contact, siteUrl } from "./contact";
+import { academyCourses } from "@/data/courses";
 
 /** Brand accent (yellow). Single source of truth for schema colors. */
 export const BRAND_COLOR = "#F5C518";
@@ -89,6 +90,18 @@ export function buildPageMeta(input: SeoInput) {
 /* ------------------------------------------------------------------ */
 
 export const pageMeta = {
+  privacy: buildPageMeta({
+    title: `Privacy Policy | ${siteName}`,
+    description:
+      "How Street Culture Tattoo & Academy collects, uses and protects the information you share when you book, apply or enquire — and the choices you have.",
+    path: "/privacy",
+  }),
+  terms: buildPageMeta({
+    title: `Terms of Service | ${siteName}`,
+    description:
+      "The terms governing bookings, tattoo & piercing services, aftercare and academy enrolment at Street Culture Tattoo & Academy, Kandivali West, Mumbai.",
+    path: "/terms",
+  }),
   home: buildPageMeta({
     title: `Tattoo Studio, Piercing & Academy in Kandivali West, Mumbai | ${siteName}`,
     description:
@@ -234,7 +247,16 @@ export function localBusinessSchema() {
       contact.social.instagramStudio.url,
       contact.social.instagramAcademy.url,
       contact.social.facebook,
+      contact.social.youtube,
+      contact.googleBusinessUrl,
     ].filter(Boolean),
+    makesOffer: [
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Custom Tattoos", serviceType: "Custom tattoo design and application" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Piercings", serviceType: "Professional body piercing" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Tattoo Artist Academy", serviceType: "Tattoo artist training courses" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Colour Realism Tattoos", serviceType: "Colour realism tattooing" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Cover-Up Tattoos", serviceType: "Tattoo cover-ups and reworks" } },
+    ],
     areaServed: [
       ...contact.address.areas,
       "Kandivali West",
@@ -259,7 +281,46 @@ export function organizationSchema() {
       contact.social.instagramStudio.url,
       contact.social.instagramAcademy.url,
       contact.social.facebook,
+      contact.social.youtube,
+      contact.googleBusinessUrl,
     ].filter(Boolean),
+  };
+}
+
+export function educationalOrganizationSchema() {
+  const a = contact.address;
+  return {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "@id": `${siteUrl}/#academy`,
+    name: "Street Culture Tattoo Academy",
+    alternateName: "Street Culture Academy",
+    description:
+      "Tattoo artist academy inside a working tattoo studio in Kandivali West, Mumbai — diploma and foundation training in tattoo design, machine handling, hygiene, and portfolio building.",
+    url: seoUrl("/academy"),
+    image: absoluteUrl(ogImage),
+    parentOrganization: { "@type": "Organization", "@id": `${siteUrl}/#organization` },
+    telephone: `+${contact.whatsappNumber}`,
+    email: contact.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: a.street,
+      addressLocality: a.locality,
+      addressRegion: a.state,
+      postalCode: a.postalCode,
+      addressCountry: "IN",
+    },
+    sameAs: [
+      contact.social.instagramAcademy.url,
+      contact.social.youtube,
+      contact.googleBusinessUrl,
+    ].filter(Boolean),
+    hasCourse: academyCourses.map((course) => ({
+      "@type": "Course",
+      name: course.title,
+      description: `${course.level} · ${course.duration} · ${course.instructor}`,
+      provider: { "@type": "Organization", "@id": `${siteUrl}/#academy` },
+    })),
   };
 }
 

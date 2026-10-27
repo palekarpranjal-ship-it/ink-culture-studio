@@ -114,6 +114,11 @@ export function Footer() {
                 </a>
               </li>
               <li>
+                <a href={`tel:+${contact.whatsappNumber}`} className="transition-colors hover:text-blood">
+                  Call {contact.displayPhone}
+                </a>
+              </li>
+              <li>
                 <a href={`mailto:${contact.email}`} className="transition-colors hover:text-blood">
                   {contact.email}
                 </a>
@@ -127,7 +132,11 @@ export function Footer() {
 
         <div className="mt-14 flex flex-col gap-3 border-t border-bone/10 pt-6 text-[11px] uppercase tracking-[0.2em] text-bone/35 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} {contact.studioName}</p>
-          <p className="font-mono">Kandivali West · Mumbai · Maharashtra</p>
+          <div className="flex items-center gap-5">
+            <Link to="/privacy" className="transition-colors hover:text-blood">Privacy</Link>
+            <Link to="/terms" className="transition-colors hover:text-blood">Terms</Link>
+            <span className="font-mono">Kandivali West · Mumbai · Maharashtra</span>
+          </div>
         </div>
       </div>
     </footer>

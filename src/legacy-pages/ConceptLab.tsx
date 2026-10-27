@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { ImagePlus, Loader2, MessageCircle, Sparkles } from "lucide-react";
-import { useRef, useState } from "react";
+import { Check, Copy, ImagePlus, Loader2, MessageCircle, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { BombMotif, CatMotif, SparkMotif, WinkMotif } from "@/components/art";
 import { CursorLabel } from "@/components/CursorLabel";
 import { InkButton, PageHero, Reveal } from "@/components/ui-kit";
@@ -12,15 +13,41 @@ import { cn } from "@/lib/utils";
 const languageOptions = ["English", "हिन्दी", "Hinglish"] as const;
 
 const styleOptions = [
-  "No preference",
-  "Black & Grey",
-  "Realism",
+  "Black & Grey Realism",
+  "Colour Realism",
   "Fine Line",
-  "Traditional",
-  "Neo Traditional",
-  "Lettering",
-  "Geometric",
+  "Neo-Traditional",
+  "Minimalist",
+  "Script",
+  "Custom/Undecided",
 ];
+
+const placementOptions = [
+  "Forearm",
+  "Bicep",
+  "Chest",
+  "Ribs",
+  "Back",
+  "Calf",
+  "Ankle",
+  "Wrist",
+  "Neck",
+  "Custom",
+];
+
+const sizeOptions = [
+  "Small — under 3″",
+  "Medium — 3–6″",
+  "Large — 6″ and up",
+  "Sleeve / Full Piece",
+];
+
+type BriefPlan = {
+  refinedConcept: string;
+  visualBreakdown: { primary: string; secondary: string; background: string };
+  placementGuidance: string;
+  styles: [string, string];
+};
 
 export default function ConceptLab() {
   useSeo(pageMeta.concept ?? pageMeta.book);
@@ -31,26 +58,35 @@ export default function ConceptLab() {
     ]),
   );
 
-  const generate = async ({ idea, placement, style, language }: { idea: string; placement?: string; style?: string; language: string; imageDataUrl?: string }) => {
+  const generate = async ({ idea, placement, style, size, language }: { idea: string; placement?: string; style?: string; size?: string; language: string; imageDataUrl?: string }) => {
     const response = await fetch("/api/ink-lab", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idea, placement, style, language, hasReferenceImage: Boolean(imageDataUrl) }),
+      body: JSON.stringify({ idea, placement, style, size, language, hasReferenceImage: Boolean(imageDataUrl) }),
     });
-    if (!response.ok) throw new Error("The studio brain is unavailable right now. Try again in a moment.");
-    return response.json() as Promise<{ brief: string }>;
+    const json = (await response.json().catch(() => ({}))) as { plan?: BriefPlan; brief?: string; error?: string };
+    if (!response.ok) {
+      if (response.status === 429) throw new Error(json.error ?? "The lab is busy — wait a minute and try again.");
+      throw new Error(json.error ?? "The studio brain is unavailable right now. Try again in a moment.");
+    }
+    return json;
   };
 
   const [idea, setIdea] = useState("");
   const [placement, setPlacement] = useState("");
-  const [style, setStyle] = useState(styleOptions[0]);
+  const [customPlacement, setCustomPlacement] = useState("");
+  const [style, setStyle] = useState("");
+  const [size, setSize] = useState("");
   const [language, setLanguage] = useState<(typeof languageOptions)[number]>("English");
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [brief, setBrief] = useState<string | null>(null);
+  const [plan, setPlan] = useState<BriefPlan | null>(null);
+  const [copied, setCopied] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const effectivePlacement = placement === "Custom" ? customPlacement.trim() : placement;
   const valid = idea.trim().length >= 10;
 
   const onFile = (file: File | undefined) => {
@@ -72,18 +108,39 @@ export default function ConceptLab() {
       setError("Give us at least a sentence about your idea (10+ characters).");
       return;
     }
+    if (!placement) {
+      setError("Pick where it goes on the body — or choose Custom.");
+      return;
+    }
+    if (placement === "Custom" && !effectivePlacement) {
+      setError("Tell us the custom placement (e.g. inner forearm, left calf…).");
+      return;
+    }
+    if (!style) {
+      setError("Pick a style — or Custom/Undecided and we'll steer it.");
+      return;
+    }
+    if (!size) {
+      setError("Pick a size estimate so we can judge what fits.");
+      return;
+    }
     setLoading(true);
     setError("");
     setBrief(null);
+    setPlan(null);
+    setCopied(false);
     try {
       const result = await generate({
         idea: idea.trim(),
-        placement: placement.trim() || undefined,
-        style: style === "No preference" ? undefined : style,
+        placement: effectivePlacement || undefined,
+        style,
+        size,
         language,
         imageDataUrl: imageDataUrl ?? undefined,
       });
-      setBrief(result.brief);
+      if (result.plan) setPlan(result.plan);
+      else if (result.brief) setBrief(result.brief);
+      else throw new Error("The lab returned an empty brief. Try refining your idea once more.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Try again!");
     } finally {
@@ -91,13 +148,48 @@ export default function ConceptLab() {
     }
   };
 
+  const formatBrief = (): string => {
+    if (plan) {
+      return [
+        "REFINED CONCEPT",
+        plan.refinedConcept,
+        "",
+        "VISUAL BREAKDOWN",
+        `Primary element: ${plan.visualBreakdown.primary}`,
+        `Secondary accents: ${plan.visualBreakdown.secondary}`,
+        `Background & contrast: ${plan.visualBreakdown.background}`,
+        "",
+        "PLACEMENT & FLOW",
+        plan.placementGuidance,
+        "",
+        "SUGGESTED STYLES",
+        plan.styles.join(" · "),
+      ].join("\n");
+    }
+    return brief ?? idea;
+  };
+
   const waHandoff = () => {
     const msg =
-      `Hey ${contact.studioName}! I used your AI Concept Lab and I love this direction:\n\n` +
-      `${brief ?? idea}\n\n` +
-      (placement ? `Placement: ${placement}\n` : "") +
+      `Hey ${contact.studioName}! I refined a concept in your AI Ink Lab — here's my brief:\n\n` +
+      `Idea: ${idea.trim()}\n` +
+      (effectivePlacement ? `Placement: ${effectivePlacement}\n` : "") +
+      `Style: ${style || "Undecided"}\n` +
+      `Size: ${size || "Not sure"}\n\n` +
+      `${formatBrief()}\n\n` +
       `I'd like to book a consultation.`;
     open(`https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+  };
+
+  const onCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(formatBrief());
+      setCopied(true);
+      toast.success("Brief copied to clipboard");
+      window.setTimeout(() => setCopied(false), 2500);
+    } catch {
+      toast.error("Couldn't access the clipboard — select the text and copy manually.");
+    }
   };
 
   return (
@@ -135,22 +227,40 @@ export default function ConceptLab() {
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="border-2 border-bone/15 bg-white/[0.02] p-6">
                 <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-bone/50">
-                  2 · Placement
+                  2 · Placement on body *
                 </p>
-                <input
-                  value={placement}
-                  onChange={(e) => setPlacement(e.target.value)}
-                  className={inputCls}
-                  placeholder="Forearm, ribs, calf…"
-                />
+                <select value={placement} onChange={(e) => setPlacement(e.target.value)} className={inputCls}>
+                  <option value="">Choose placement…</option>
+                  {placementOptions.map((p) => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </select>
+                {placement === "Custom" && (
+                  <input
+                    value={customPlacement}
+                    onChange={(e) => setCustomPlacement(e.target.value)}
+                    className={cn(inputCls, "mt-2")}
+                    placeholder="Where exactly? e.g. inner forearm, left calf…"
+                  />
+                )}
               </div>
               <div className="border-2 border-bone/15 bg-white/[0.02] p-6">
                 <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-bone/50">
-                  3 · Style vibe
+                  3 · Preferred style & size *
                 </p>
                 <select value={style} onChange={(e) => setStyle(e.target.value)} className={inputCls}>
+                  <option value="">Choose a style…</option>
                   {styleOptions.map((s) => (
-                    <option key={s}>{s}</option>
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+                <label className="mt-4 block text-[10px] font-semibold uppercase tracking-[0.25em] text-bone/50">
+                  Size estimate *
+                </label>
+                <select value={size} onChange={(e) => setSize(e.target.value)} className={cn(inputCls, "mt-2")}>
+                  <option value="">Choose size…</option>
+                  {sizeOptions.map((s) => (
+                    <option key={s} value={s}>{s}</option>
                   ))}
                 </select>
                 <label className="mt-4 block text-[10px] font-semibold uppercase tracking-[0.25em] text-bone/50">
@@ -212,11 +322,11 @@ export default function ConceptLab() {
             <InkButton onClick={onGenerate} disabled={loading} size="lg" className="w-full justify-center">
               {loading ? (
                 <>
-                  <Loader2 className="size-4 animate-spin" /> Sketching your brief…
+                  <Loader2 className="size-4 animate-spin" /> Ink Lab Processing…
                 </>
               ) : (
                 <>
-                  <Sparkles className="size-4" /> Generate Concept Brief
+                  <Sparkles className="size-4" /> Refine My Tattoo Concept
                 </>
               )}
             </InkButton>
@@ -230,13 +340,13 @@ export default function ConceptLab() {
           <div className="lg:sticky lg:top-24 lg:self-start">
             {loading ? (
               <BriefSkeleton />
-            ) : brief ? (
+            ) : plan || brief ? (
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
               >
-                <BriefCard brief={brief} onWhatsApp={waHandoff} />
+                <BriefCard plan={plan} brief={brief} onWhatsApp={waHandoff} onCopy={onCopy} copied={copied} />
               </motion.div>
             ) : (
               <EmptyState />
@@ -250,40 +360,97 @@ export default function ConceptLab() {
 
 /* ------------------------------ sub-views ------------------------------ */
 
-function BriefCard({ brief, onWhatsApp }: { brief: string; onWhatsApp: () => void }) {
-  const blocks = brief.split(/\n{2,}/).filter(Boolean);
+function BriefCard({
+  plan,
+  brief,
+  onWhatsApp,
+  onCopy,
+  copied,
+}: {
+  plan: BriefPlan | null;
+  brief: string | null;
+  onWhatsApp: () => void;
+  onCopy: () => void;
+  copied: boolean;
+}) {
   return (
     <article className="relative border-2 border-ink bg-[#151310] p-6 shadow-[8px_8px_0_0_var(--blood)] md:p-8">
       <div className="absolute -right-3 -top-3 rotate-12">
         <SparkMotif className="h-9 w-9 text-blood" />
       </div>
-      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blood">Concept Brief · Draft 01</p>
-      <div className="mt-5 space-y-4">
-        {blocks.map((block, i) => {
-          const [first, ...rest] = block.split("\n");
-          const isHeading = /^\d+\.\s/.test(first.trim()) || /^[A-Z &']{3,}:/.test(first.trim());
-          if (isHeading) {
-            const heading = first.replace(/^\d+\.\s*/, "").replace(/:$/, "");
-            return (
-              <section key={i}>
-                <h3 className="font-display text-sm uppercase tracking-[0.14em] text-blood">{heading}</h3>
-                <div className="mt-1.5 space-y-1 font-body text-sm leading-relaxed text-bone/80">
-                  <p>{rest.join(" ").trim() || (block.split("\n").slice(1).join(" ") || first.replace(/^\d+\.\s*/, "").replace(/^[A-Z &']+:\s*/, ""))}</p>
-                  {rest.length === 0 && null}
+      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blood">Ink Lab Brief · Draft 01</p>
+
+      {plan ? (
+        <div className="mt-5 space-y-6">
+          <section>
+            <h3 className="font-display text-sm uppercase tracking-[0.14em] text-blood">
+              Refined Concept Summary
+            </h3>
+            <p className="mt-2 font-body text-sm leading-relaxed text-bone/85">{plan.refinedConcept}</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-sm uppercase tracking-[0.14em] text-blood">Visual Breakdown</h3>
+            <dl className="mt-2 space-y-2.5">
+              {([
+                ["Primary element", plan.visualBreakdown.primary],
+                ["Secondary accents", plan.visualBreakdown.secondary],
+                ["Background & contrast", plan.visualBreakdown.background],
+              ] as const).map(([label, value]) => (
+                <div key={label} className="border-l-2 border-blood/50 pl-3">
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.2em] text-bone/45">{label}</dt>
+                  <dd className="mt-0.5 font-body text-sm leading-relaxed text-bone/80">{value}</dd>
                 </div>
-              </section>
-            );
-          }
-          return (
-            <p key={i} className="font-body text-sm leading-relaxed text-bone/80">
-              {block}
-            </p>
-          );
-        })}
-      </div>
+              ))}
+            </dl>
+          </section>
+
+          <section>
+            <h3 className="font-display text-sm uppercase tracking-[0.14em] text-blood">
+              Placement &amp; Flow Guidance
+            </h3>
+            <p className="mt-2 font-body text-sm leading-relaxed text-bone/80">{plan.placementGuidance}</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-sm uppercase tracking-[0.14em] text-blood">
+              Suggested Tattoo Styles
+            </h3>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {plan.styles.map((s, i) => (
+                <span
+                  key={s}
+                  className={cn(
+                    "border-2 px-3 py-1.5 font-display text-xs uppercase tracking-[0.12em]",
+                    i === 0 ? "border-blood bg-blood/10 text-blood" : "border-bone/30 text-bone/75",
+                  )}
+                >
+                  {i === 0 ? "Best fit · " : "Also great · "}
+                  {s}
+                </span>
+              ))}
+            </div>
+          </section>
+        </div>
+      ) : (
+        <div className="mt-5 space-y-4">
+          {(brief ?? "")
+            .split(/\n{2,}/)
+            .filter(Boolean)
+            .map((block, i) => (
+              <p key={i} className="font-body text-sm leading-relaxed text-bone/80">
+                {block}
+              </p>
+            ))}
+        </div>
+      )}
+
       <div className="mt-7 flex flex-wrap gap-3 border-t-2 border-dashed border-bone/15 pt-6">
         <InkButton onClick={onWhatsApp}>
-          <MessageCircle className="size-4" /> Send to the Studio
+          <MessageCircle className="size-4" /> Send Brief to Artist
+        </InkButton>
+        <InkButton onClick={onCopy} variant="outline">
+          {copied ? <Check className="size-4" /> : <Copy className="size-4" />} {copied ? "Copied!" : "Copy Brief"}
         </InkButton>
         <InkButton href="/book" variant="outline">
           Book This Idea
@@ -293,16 +460,34 @@ function BriefCard({ brief, onWhatsApp }: { brief: string; onWhatsApp: () => voi
   );
 }
 
+const PROCESSING_STAGES = [
+  "Decoding intent & meaning…",
+  "Mapping composition & placement…",
+  "Enhancing elements…",
+  "Polishing your brief…",
+];
+
 function BriefSkeleton() {
+  const [stage, setStage] = useState(0);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setStage((s) => (s + 1) % PROCESSING_STAGES.length);
+    }, 1900);
+    return () => window.clearInterval(id);
+  }, []);
+
   return (
-    <div className="border-2 border-bone/15 bg-white/[0.02] p-6 md:p-8">
+    <div className="border-2 border-bone/15 bg-white/[0.02] p-6 md:p-8" role="status" aria-live="polite">
       <div className="flex items-center gap-3">
         <Loader2 className="size-5 animate-spin text-blood" />
         <p className="font-display text-lg uppercase tracking-tight text-bone">
-          Your artist-brain is thinking…
+          Ink Lab Processing
         </p>
       </div>
-      <p className="mt-2 font-marker text-lg text-cream/60">studying your reference, weighing line weights</p>
+      <p className="mt-2 font-marker text-lg text-cream/60" key={stage}>
+        {PROCESSING_STAGES[stage]}
+      </p>
       <div className="mt-6 space-y-4">
         {[92, 78, 85, 60, 88].map((w, i) => (
           <div key={i} className="space-y-1.5">
@@ -333,11 +518,11 @@ function EmptyState() {
       </p>
       <ul className="mt-5 space-y-2 font-body text-sm text-bone/65">
         {[
-          "Concept name + the story behind it",
-          "Style & linework recommendations",
-          "Realistic size and session guidance",
-          "Karan vs Lucky — who fits your idea",
-          "3 questions to ask at your consultation",
+          "Refined concept summary — your story, sharpened",
+          "Visual breakdown: primary, accents & background",
+          "Placement, sizing and flow guidance",
+          "Top 2 style matches as quick badges",
+          "Send it straight to the studio on WhatsApp",
         ].map((t) => (
           <li key={t} className="flex items-start gap-2">
             <SparkMotif className="mt-1 size-3 shrink-0 text-blood" />

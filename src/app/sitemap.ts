@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = "https://streetculture.tattoo";
+const siteUrl = "https://www.streetculturetattoos.com";
 
 const routes = [
   ["/", 1, "weekly"],
@@ -26,6 +26,8 @@ const routes = [
   ["/careers", 0.6, "monthly"],
   ["/contact", 0.9, "monthly"],
   ["/concept", 0.8, "monthly"],
+  ["/privacy", 0.3, "yearly"],
+  ["/terms", 0.3, "yearly"],
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {

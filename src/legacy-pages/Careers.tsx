@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { InkButton, PageHero, Reveal, SectionHeading } from "@/components/ui-kit";
+import { Turnstile } from "@/components/Turnstile";
 import { breadcrumbSchema, pageMeta } from "@/config/seo";
 import { careerRoles } from "@/data/careers";
 import { useJsonLd, useSeo } from "@/hooks/use-seo";
@@ -43,6 +44,8 @@ export default function Careers() {
   });
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
   const valid = form.name.trim().length > 1 && /^\S+@\S+\.\S+$/.test(form.email.trim()) && form.whatsapp.trim().length >= 8;
@@ -68,20 +71,25 @@ export default function Careers() {
     if (form.portfolio && !/^https?:\/\//.test(form.portfolio.trim()))
       return setError("Portfolio link should start with https:// (or leave it empty).");
     setError("");
-    const result = await submitCareersApplication({ ...form });
-    // No Google Form endpoint configured yet — don't claim the application was
-    // received. The confirmation screen hands the user one explicit WhatsApp
-    // button so they choose when to send it.
-    if (!result.configured) {
+    setSending(true);
+    try {
+      const result = await submitCareersApplication({ ...form }, turnstileToken ?? undefined);
+      // No Google Form endpoint configured yet — don't claim the application was
+      // received. The confirmation screen hands the user one explicit WhatsApp
+      // button so they choose when to send it.
+      if (!result.configured) {
+        setSent(true);
+        return;
+      }
+      if (!result.ok) {
+        return setError(
+          result.error ?? "We couldn't send that just now. Please try WhatsApp instead.",
+        );
+      }
       setSent(true);
-      return;
+    } finally {
+      setSending(false);
     }
-    if (!result.ok) {
-      return setError(
-        result.error ?? "We couldn't send that just now. Please try WhatsApp instead.",
-      );
-    }
-    setSent(true);
   };
 
   return (
@@ -200,8 +208,9 @@ export default function Careers() {
                   </label>
                 </Field>
                 {error && <p role="alert" className="text-xs text-blood">{error}</p>}
+                <Turnstile onVerify={setTurnstileToken} />
                 <div className="flex flex-wrap gap-3">
-                  <InkButton type="submit">Submit Application</InkButton>
+                  <InkButton type="submit" disabled={sending}>{sending ? "Sending…" : "Submit Application"}</InkButton>
                   <InkButton variant="outline" onClick={onWhatsApp}>Apply via WhatsApp</InkButton>
                 </div>
               </form>

@@ -1,11 +1,11 @@
-import { articleSchema, breadcrumbSchema, localBusinessSchema, organizationSchema, pageMeta, personSchema } from "@/config/seo";
+import { articleSchema, breadcrumbSchema, educationalOrganizationSchema, localBusinessSchema, organizationSchema, pageMeta, personSchema } from "@/config/seo";
 import { artists } from "@/data/artists";
 import { blogPosts } from "@/data/blog";
 
 export const staticMetadata = pageMeta;
 
 export function homeJsonLd() {
-  return [organizationSchema(), localBusinessSchema(), breadcrumbSchema([{ name: "Home", path: "/" }])];
+  return [organizationSchema(), localBusinessSchema(), educationalOrganizationSchema(), breadcrumbSchema([{ name: "Home", path: "/" }])];
 }
 
 export function aboutJsonLd() {

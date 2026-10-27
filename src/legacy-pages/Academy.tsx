@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Fragment, useState } from "react";
 import { PenToolIcon, ShieldIcon, UserCheckIcon, WorkflowIcon } from "@/components/icons";
+import { Turnstile } from "@/components/Turnstile";
 import { InkButton, PageHero, Reveal, SectionHeading } from "@/components/ui-kit";
 import { breadcrumbSchema, faqSchema, pageMeta } from "@/config/seo";
 import { academyCourses, academyFaqs, academyWorkshopImages } from "@/data/courses";
@@ -315,6 +316,8 @@ function EnquireSection() {
   const [experience, setExperience] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [sending, setSending] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
 
   const valid = name.trim().length > 1 && age.trim().length > 0 && (email.includes("@") || whatsapp.trim().length >= 8);
@@ -331,20 +334,25 @@ function EnquireSection() {
     e.preventDefault();
     if (!valid) return setError("Add your name, age, and an email or WhatsApp number so we can reply.");
     setError("");
-    const result = await submitAcademyEnquiry(buildPayload());
-    // No Google Form endpoint configured yet — don't claim the enquiry was
-    // received. The confirmation screen hands the user one explicit WhatsApp
-    // button so they choose when to send it.
-    if (!result.configured) {
+    setSending(true);
+    try {
+      const result = await submitAcademyEnquiry(buildPayload(), turnstileToken ?? undefined);
+      // No Google Form endpoint configured yet — don't claim the enquiry was
+      // received. The confirmation screen hands the user one explicit WhatsApp
+      // button so they choose when to send it.
+      if (!result.configured) {
+        setSent(true);
+        return;
+      }
+      if (!result.ok) {
+        return setError(
+          result.error ?? "We couldn't send that just now. Please try WhatsApp instead.",
+        );
+      }
       setSent(true);
-      return;
+    } finally {
+      setSending(false);
     }
-    if (!result.ok) {
-      return setError(
-        result.error ?? "We couldn't send that just now. Please try WhatsApp instead.",
-      );
-    }
-    setSent(true);
   };
 
   return (
@@ -404,8 +412,9 @@ function EnquireSection() {
                 <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={3} className={inputCls} placeholder="Your goals or questions…" />
               </Field>
               {error && <p role="alert" className="text-xs text-blood">{error}</p>}
+              <Turnstile onVerify={setTurnstileToken} />
               <div className="flex flex-wrap gap-3">
-                <InkButton type="submit">Submit Enquiry</InkButton>
+                <InkButton type="submit" disabled={sending}>{sending ? "Sending…" : "Submit Enquiry"}</InkButton>
                 <InkButton variant="outline" onClick={onWhatsApp}>Ask on WhatsApp</InkButton>
               </div>
               <p className="text-[11px] leading-relaxed text-bone/40">
