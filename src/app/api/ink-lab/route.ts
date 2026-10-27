@@ -1,4 +1,5 @@
 import { generateText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
@@ -102,9 +103,26 @@ export async function POST(request: Request) {
   const language = parsed.language ?? "English";
   const languageInstruction = languageInstructionFor(language);
 
+  // Explicit, diagnosable failure when this deployment has no AI key yet —
+  // deliberately distinct from a model/API error so the two can't be
+  // confused when reading logs or the UI.
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json(
+      {
+        error:
+          "The Ink Lab's AI key isn't configured on this deployment yet — WhatsApp us your idea and we'll refine it by hand.",
+      },
+      { status: 503 },
+    );
+  }
+
   try {
+    // AI SDK v7 string model IDs route through the AI Gateway (needs
+    // AI_GATEWAY_API_KEY). We call OpenAI directly with OPENAI_API_KEY
+    // instead — one key, no gateway account.
+    const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const { text } = await generateText({
-      model: "openai/gpt-4o-mini",
+      model: openai.languageModel("gpt-4o-mini"),
       temperature: 0.5,
       system: systemPrompt(language, languageInstruction),
       prompt: `Refine this tattoo idea into a structured brief.
