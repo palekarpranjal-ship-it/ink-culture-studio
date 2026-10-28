@@ -1,5 +1,6 @@
 import { generateText } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
+import { gateway } from "@ai-sdk/gateway";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
@@ -103,10 +104,16 @@ export async function POST(request: Request) {
   const language = parsed.language ?? "English";
   const languageInstruction = languageInstructionFor(language);
 
+  // Two supported credentials, either one makes the Ink Lab live:
+  //   OPENAI_API_KEY    → direct OpenAI call (one key, no gateway account)
+  //   AI_GATEWAY_API_KEY → Vercel AI Gateway (`npx vercel@latest ai-gateway setup`)
+  const openAiKey = process.env.OPENAI_API_KEY;
+  const gatewayKey = process.env.AI_GATEWAY_API_KEY;
+
   // Explicit, diagnosable failure when this deployment has no AI key yet —
   // deliberately distinct from a model/API error so the two can't be
   // confused when reading logs or the UI.
-  if (!process.env.OPENAI_API_KEY) {
+  if (!openAiKey && !gatewayKey) {
     return NextResponse.json(
       {
         error:
@@ -117,12 +124,12 @@ export async function POST(request: Request) {
   }
 
   try {
-    // AI SDK v7 string model IDs route through the AI Gateway (needs
-    // AI_GATEWAY_API_KEY). We call OpenAI directly with OPENAI_API_KEY
-    // instead — one key, no gateway account.
-    const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const { text } = await generateText({
-      model: openai.languageModel("gpt-4o-mini"),
+      // Gateway key: model string resolves through the AI Gateway. OpenAI key:
+      // instantiate the OpenAI provider directly and bypass the gateway.
+      model: openAiKey
+        ? createOpenAI({ apiKey: openAiKey }).languageModel("gpt-4o-mini")
+        : gateway("openai/gpt-4o-mini"),
       temperature: 0.5,
       system: systemPrompt(language, languageInstruction),
       prompt: `Refine this tattoo idea into a structured brief.

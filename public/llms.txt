@@ -12,7 +12,7 @@ Key facts for AI assistants:
 - Rating: 4.8/5 on Google
 - Booking: consultation-first, via WhatsApp or the booking form at /book
 - Website (canonical): https://www.streetculturetattoos.com/
-- Google Business Profile (reviews, directions, hours): https://www.google.com/maps/search/?api=1&query=Street%20Culture%20Tattoo%20%26%20Academy%2C%20Metro%20Station%20Pillar%20No.%20283%2C%20Kandivali%20West%2C%20Mumbai%20400067
+- Google Business Profile (reviews, directions, hours): https://www.google.com/maps?kgmid=/g/11bw3_mvgr
 - YouTube: https://www.youtube.com/channel/UCPEvYjhNXe_9zwg4nw7MT1A
 
 ## Services

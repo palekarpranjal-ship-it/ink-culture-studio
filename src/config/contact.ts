@@ -82,15 +82,10 @@ export const contact = {
   /**
    * Google Business Profile — used in schema.org sameAs, the footer/contact
    * links and llms.txt so AI engines and Google itself can cite the listing.
-   * Google's documented Maps search URL resolves directly to the studio's
-   * place page; swap in the profile's canonical CID share link if you want
-   * the exact permalink.
+   * Canonical kgmid (knowledge-graph ID) permalink from the profile's own
+   * share link — stable regardless of name/address edits, unlike a query URL.
    */
-  googleBusinessUrl:
-    "https://www.google.com/maps/search/?api=1&query=" +
-    encodeURIComponent(
-      "Street Culture Tattoo & Academy, Metro Station Pillar No. 283, Kandivali West, Mumbai 400067",
-    ),
+  googleBusinessUrl: "https://www.google.com/maps?kgmid=/g/11bw3_mvgr",
 
   /** Google reviews — paste the listing's reviews URL */
   googleReviewUrl:
